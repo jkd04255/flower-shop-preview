@@ -115,6 +115,7 @@ window.addEventListener('hashchange',route);route();
     active=g;
     g.top=Math.max(0,Math.round(topOf(g.el)));
     g.visible=0;
+    g.lines.forEach(function(line){line.classList.remove('is-shown')});
     g.lastAction=performance.now();
     root.classList.add('story-panel-locked');
     g.el.classList.add('story-active');
