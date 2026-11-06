@@ -25,34 +25,63 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
 .dark h2{font-size:clamp(31px,8.4vw,43px);line-height:1.43}
 .head h2{font-size:clamp(50px,12.6vw,66px);line-height:1.07}
 .detailCopy h1{font-size:clamp(37px,10vw,55px)}
-}</style><style id="editorial-scroll-reveal-v07">
-/* v0.7 — Natural scrolling; reveal only four key headlines when they enter view. */
+}</style><style id="editorial-scroll-reveal-v08">
+/* v0.8 Apple-style scroll-linked editorial storytelling.
+   Scroll is always free; only key display headlines animate. */
 .reveal-copy .motion-line{display:block;white-space:normal}
+.scroll-story{position:relative;display:block!important;padding:0!important;min-height:190svh}
+.scroll-story .scroll-story-stage{
+  position:sticky;top:0;height:100svh;min-height:580px;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:76px 8%;overflow:hidden;
+}
+.manifesto.scroll-story{background:#eae5db}
+.manifesto.scroll-story .scroll-story-stage{align-items:stretch;background:#eae5db}
+.manifesto.scroll-story h2{margin:42px 0 25px}
+.visual.scroll-story{min-height:185svh;background:none}
+.visual.scroll-story .scroll-story-stage{
+  background:linear-gradient(90deg,#6b6b5c55,#6b6b5c11),url('https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1400&q=85') center/cover;
+  align-items:center;text-align:center;color:#fff
+}
+.visual.scroll-story h2{margin:0}
+.dark.scroll-story{background:none;text-align:center;color:#f4f2ea}
+.dark.scroll-story .scroll-story-stage{background:#343d35;align-items:center}
+.dark.scroll-story .scroll-story-stage>*{max-width:760px}
 @media(prefers-reduced-motion:no-preference){
-  html.motion-ready .reveal-copy .motion-line{
-    opacity:0;
-    transform:translate3d(0,22px,0);
-    transition:opacity 1.4s cubic-bezier(.22,1,.36,1), transform 1.4s cubic-bezier(.22,1,.36,1);
-  }
-  html.motion-ready .hero .reveal-copy .motion-line.is-shown,
-  html.motion-ready .reveal-copy.is-visible .motion-line{
-    opacity:1;transform:translate3d(0,0,0);
-  }
-  html.motion-ready .reveal-copy:not(.hero .reveal-copy) .motion-line:nth-child(2){transition-delay:650ms}
-  html.motion-ready .reveal-copy:not(.hero .reveal-copy) .motion-line:nth-child(3){transition-delay:1300ms}
+ html.motion-ready .hero .reveal-copy .motion-line{
+  opacity:0;transform:translate3d(0,22px,0);
+  transition:opacity 1.4s cubic-bezier(.22,1,.36,1),transform 1.4s cubic-bezier(.22,1,.36,1)
+ }
+ html.motion-ready .hero .reveal-copy .motion-line.is-shown{opacity:1;transform:none}
+ html.motion-ready .scroll-story .reveal-copy .motion-line{
+  opacity:var(--reveal-progress,0);
+  transform:translate3d(0,calc((1 - var(--reveal-progress,0))*28px),0);
+  transition:none;will-change:opacity,transform
+ }
+}
+@media(max-width:700px){
+ .scroll-story{min-height:180svh}
+ .visual.scroll-story{min-height:175svh}
+ .scroll-story .scroll-story-stage{height:100svh;min-height:0;padding:55px 6%}
+ .manifesto.scroll-story h2{margin:36px 0 25px}
+ .dark.scroll-story .scroll-story-stage{padding:65px 6%}
 }
 @media(prefers-reduced-motion:reduce){
-  .reveal-copy .motion-line{opacity:1!important;transform:none!important;transition:none!important}
+ .scroll-story,.visual.scroll-story{min-height:auto!important}
+ .scroll-story .scroll-story-stage{
+   position:relative!important;height:auto!important;min-height:85svh;
+ }
+ .reveal-copy .motion-line{opacity:1!important;transform:none!important;transition:none!important}
 }
 </style></head><body>
 <div class="banner">G3-01 · 합성 데이터 시안 · 실제 예약 불가</div><main id="home">
 <section class="hero"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
-<section class="section manifesto"><div class="tag"><span>A NOTE FROM THE ATELIER</span><span>01 / 05</span></div><h2 class="reveal-copy"><span class="motion-line">어떤 마음은</span><span class="motion-line">말보다 꽃이</span><span class="motion-line">더 잘 전해주니까.</span></h2><p class="muted">조금 느리더라도, 정성껏 한 송이씩.<br>우리의 계절을 담아 묶습니다.</p></section>
+<section class="scroll-story section manifesto"><div class="scroll-story-stage"><div class="tag"><span>A NOTE FROM THE ATELIER</span><span>01 / 05</span></div><h2 class="reveal-copy"><span class="motion-line">어떤 마음은</span><span class="motion-line">말보다 꽃이</span><span class="motion-line">더 잘 전해주니까.</span></h2><p class="muted">조금 느리더라도, 정성껏 한 송이씩.<br>우리의 계절을 담아 묶습니다.</p></div></section>
 <section class="section" id="curation"><div class="tag"><span>THE DAILY EDIT</span><span>02 / 05</span></div><div class="head"><h2>Today's<br><span class="upright">selection.</span></h2><p>오늘 가장 예쁜 세 가지</p></div><div class="cards" id="featured"></div><p class="muted">* 사진과 가격은 가상 자료입니다. 오늘의 추천은 최대 3개입니다.</p></section>
-<section class="visual"><h2 class="reveal-copy"><span class="motion-line">꽃을 건네는 순간,</span><span class="motion-line">조금 특별해져요.</span></h2></section>
+<section class="scroll-story visual"><div class="scroll-story-stage"><h2 class="reveal-copy"><span class="motion-line">꽃을 건네는 순간,</span><span class="motion-line">조금 특별해져요.</span></h2></div></section>
 <section class="section" id="arrivals"><div class="tag"><span>FROM THE FLOWER MARKET</span><span>03 / 05</span></div><div class="head"><h2>Just<br><span class="upright">arrived.</span></h2><p>최근 7일간 들어온 꽃 소식<br>입고 꽃은 예약 없이 문의만 가능합니다.</p></div><div id="arrivalList"></div></section>
 <section class="section other" id="other"><div class="tag"><span>THE FLOWER COLLECTION</span><span>04 / 05</span></div><div class="head"><h2>Everyday<br><span class="upright">flowers.</span></h2><p>오늘의 추천 외에도 만나볼 수 있는 꽃다발</p></div><div class="cards" id="regular"></div></section>
-<section class="section dark"><div class="micro">YOUR MOMENT, RESERVED.</div><h2 class="reveal-copy"><span class="motion-line">좋아하는 꽃을 고르고</span><span class="motion-line">원하는 날에</span><span class="motion-line">직접 만나보세요.</span></h2><p>예약 요청 후 매장 확인과 연락을 거쳐야 최종 확정됩니다.</p><button class="disabled" disabled>예약 기능 준비 중 ↗</button><p class="muted">G3-02 예약 기능은 미구현입니다.</p></section>
+<section class="scroll-story section dark"><div class="scroll-story-stage"><div class="micro">YOUR MOMENT, RESERVED.</div><h2 class="reveal-copy"><span class="motion-line">좋아하는 꽃을 고르고</span><span class="motion-line">원하는 날에</span><span class="motion-line">직접 만나보세요.</span></h2><p>예약 요청 후 매장 확인과 연락을 거쳐야 최종 확정됩니다.</p><button class="disabled" disabled>예약 기능 준비 중 ↗</button><p class="muted">G3-02 예약 기능은 미구현입니다.</p></div></section>
 <section class="section store" id="store"><div class="tag"><span>COME SAY HELLO</span><span>05 / 05</span></div><div class="head"><h2>Visit the<br><span class="upright">atelier.</span></h2></div><table><tr><td>ADDRESS</td><td>가상 매장 — 실제 주소 미등록</td></tr><tr><td>OPENING HOURS</td><td>월–금 11:00–20:00 (예시)</td></tr><tr><td>CONTACT</td><td>전화 문의 채널 미등록</td></tr><tr><td>PICKUP</td><td>예약 요청 → 매장 확인 → 고객 연락 → 수동 확정</td></tr></table></section></main>
 <section class="detail" id="detail"><div class="detailNav"><a href="#top" class="brand">AFTERNOON · 오후의 정원</a><a href="#curation">← 목록으로</a></div><div class="detailBody"><img id="dImage" alt=""><div class="detailCopy"><div class="micro">THE BOUQUET COLLECTION</div><h1 id="dTitle"></h1><span id="dLatin"></span><p class="muted" id="dStory"></p><div class="price" id="dPrice"></div><div class="spec"><b>구성</b><span id="dColor"></span></div><div class="spec"><b>준비시간</b><span id="dLead"></span></div><div class="spec"><b>상태</b><span id="dStatus"></span></div><button class="disabled" disabled>예약 기능 준비 중 ↗</button><p class="muted">현재는 합성 데이터 시안만 제공됩니다.</p></div></div></section>
 <footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-01 STATIC DEMO · 실제 매장/연락처/예약 시스템 없음</small></footer><div class="notice">이 공개 시안의 사진은 임시 이미지입니다.<br>승인 원본 이미지 6장은 별도 보존 중입니다.</div>
@@ -64,30 +93,50 @@ P.slice(0,3).forEach((p,i)=>document.querySelector('#featured').appendChild(card
 [['11.06 / TODAY','가든 로즈','6,000원 / 송이'],['11.04 / NEW','라넌큘러스','5,000원 / 송이'],['10.31 / NEW','라일락 튤립','4,500원 / 송이']].forEach((x,i)=>{let el=document.createElement('div');el.className='arrival';el.innerHTML='<img loading="lazy" alt="'+x[1]+'" src="'+U[i]+'"><div><small>'+x[0]+'</small><strong>'+x[1]+'</strong><small>'+x[2]+'</small></div><em>문의 전용</em>';document.querySelector('#arrivalList').appendChild(el)});
 function route(){let slug=location.hash.startsWith('#/flower/')?location.hash.substring(9):'';let i=P.findIndex(p=>p[0]===slug);let show=i>=0;document.querySelector('#home').style.display=show?'none':'block';document.querySelector('#detail').style.display=show?'block':'none';if(show){let p=P[i];for(let [id,v] of [['dImage',U[i]],['dTitle',p[1]],['dLatin',p[2]],['dStory',p[3]],['dPrice',p[4]+' KRW'],['dColor',p[5]],['dLead','최소 '+p[6]],['dStatus',p[7]?'합성 상품 · 실제 예약 불가':'품절 · 예약 불가']]){let el=document.getElementById(id);if(id==='dImage'){el.src=v;el.alt=p[1]+' 사진'}else el.textContent=v}window.scrollTo(0,0)}}
 window.addEventListener('hashchange',route);route();
-</script><script id="editorial-scroll-reveal-v07-script">
-/* v0.7: Free-flowing scroll — no wheel/touch interception or locking. */
+</script><script id="editorial-scroll-reveal-v08-script">
+/* v0.8 Scroll-linked opacity/position, with no scroll lock or artificial timers for stories. */
 (function(){
-  var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduced)return;
+  var prefersReduced=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(prefersReduced)return;
   var hero=document.querySelector('.hero .reveal-copy');
-  if(!hero)return;
-  var lines=hero.querySelectorAll('.motion-line');
-  var sections=[].slice.call(document.querySelectorAll('.manifesto .reveal-copy,.visual .reveal-copy,.dark .reveal-copy'));
-  document.documentElement.classList.add('motion-ready');
-  /* At page load: reveal first line at 1 second, second at 2 seconds. */
-  window.setTimeout(function(){if(lines[0])lines[0].classList.add('is-shown')},1000);
-  window.setTimeout(function(){if(lines[1])lines[1].classList.add('is-shown')},2000);
-  if(!('IntersectionObserver' in window)){
-    sections.forEach(function(el){el.classList.add('is-visible')});
-    return;
+  var panels=[].slice.call(document.querySelectorAll('.scroll-story'));
+  if(!hero || panels.length!==3)return;
+  var heroLines=hero.querySelectorAll('.motion-line');
+  var stages=panels.map(function(panel){
+    return {panel:panel,lines:[].slice.call(panel.querySelectorAll('.motion-line'))};
+  });
+  var clamp=function(n){return Math.max(0,Math.min(1,n))};
+  var rafPending=false;
+  function update(){
+    rafPending=false;
+    var viewH=window.innerHeight||document.documentElement.clientHeight||800;
+    for(var i=0;i<stages.length;i++){
+      var stage=stages[i];
+      var rect=stage.panel.getBoundingClientRect();
+      var travel=Math.max(1,stage.panel.offsetHeight-viewH);
+      /* Starts as the section enters the viewport; finishes as its sticky period ends. */
+      var p=clamp((viewH*0.5-rect.top)/(travel+viewH*0.5));
+      var count=stage.lines.length;
+      for(var j=0;j<count;j++){
+        var start=count===3?0.06+j*0.27:0.10+j*0.39;
+        var span=count===3?0.22:0.28;
+        var progress=clamp((p-start)/span);
+        stage.lines[j].style.setProperty('--reveal-progress',String(Math.round(progress*1000)/1000));
+      }
+    }
   }
-  var observer=new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(!entry.isIntersecting)return;
-      entry.target.classList.add('is-visible');
-      observer.unobserve(entry.target);
-    });
-  },{root:null,rootMargin:'0px 0px -8% 0px',threshold:0.12});
-  sections.forEach(function(el){observer.observe(el)});
+  function schedule(){
+    if(rafPending)return;
+    rafPending=true;
+    window.requestAnimationFrame(update);
+  }
+  document.documentElement.classList.add('motion-ready');
+  /* Keep previously approved gentle timed entrance on the hero. */
+  window.setTimeout(function(){if(heroLines[0])heroLines[0].classList.add('is-shown')},1000);
+  window.setTimeout(function(){if(heroLines[1])heroLines[1].classList.add('is-shown')},2000);
+  window.addEventListener('scroll',schedule,{passive:true});
+  window.addEventListener('resize',schedule,{passive:true});
+  window.addEventListener('pageshow',schedule,{passive:true});
+  update();
 })();
 </script></body></html>
