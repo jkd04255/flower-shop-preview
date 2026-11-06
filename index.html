@@ -140,7 +140,7 @@ window.addEventListener('hashchange',route);route();
     root.classList.remove('story-panel-locked');
     active=null;
     lastY=window.scrollY;
-    bypassUntil=performance.now()+360;
+    bypassUntil=direction<0?performance.now()+360:0;
     if(direction<0)window.scrollTo(0,Math.max(0,g.top-100));
   }
   function advance(direction){
