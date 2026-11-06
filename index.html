@@ -25,66 +25,80 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
 .dark h2{font-size:clamp(31px,8.4vw,43px);line-height:1.43}
 .head h2{font-size:clamp(50px,12.6vw,66px);line-height:1.07}
 .detailCopy h1{font-size:clamp(37px,10vw,55px)}
-}</style><style id="editorial-scroll-reveal-v08">
-/* v0.8 Apple-style scroll-linked editorial storytelling.
-   Scroll is always free; only key display headlines animate. */
-.reveal-copy .motion-line{display:block;white-space:normal}
-.scroll-story{position:relative;display:block!important;padding:0!important;min-height:190svh}
-.scroll-story .scroll-story-stage{
-  position:sticky;top:0;height:100svh;min-height:580px;
-  display:flex;flex-direction:column;justify-content:center;
-  padding:76px 8%;overflow:hidden;
+}</style><style id="editorial-product-flow-v09">
+/* G3-01 v0.9: photo & product-first layout, gradient section transitions.
+   No slogan-only sections, sticky panels, or scroll-driven text screens. */
+:root{--bg-cream:#f8f5ef;--bg-soft:#f2eee7;--bg-sand:#eae5db}
+#home{background:var(--bg-cream)}
+#home>.hero{isolation:isolate;position:relative;overflow:hidden}
+#home>.hero::after{
+ content:"";position:absolute;z-index:0;left:0;right:0;bottom:-1px;
+ height:clamp(135px,20vh,220px);
+ background:linear-gradient(to bottom,rgba(248,245,239,0) 0%,rgba(248,245,239,.2) 43%,var(--bg-cream) 100%);
+ pointer-events:none;
 }
-.manifesto.scroll-story{background:#eae5db}
-.manifesto.scroll-story .scroll-story-stage{align-items:stretch;background:#eae5db}
-.manifesto.scroll-story h2{margin:42px 0 25px}
-.visual.scroll-story{min-height:185svh;background:none}
-.visual.scroll-story .scroll-story-stage{
-  background:linear-gradient(90deg,#6b6b5c55,#6b6b5c11),url('https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1400&q=85') center/cover;
-  align-items:center;text-align:center;color:#fff
+#home>.hero .nav,#home>.hero .heroText{z-index:1}
+#home #curation,#home #arrivals,#home #other,#home #store{position:relative}
+#home #curation{background:var(--bg-cream)}
+#home #arrivals{background:var(--bg-soft)}
+#home #other{background:var(--bg-sand)}
+#home #store{background:var(--bg-cream)}
+#home #curation,#home #arrivals,#home #other{padding-bottom:112px}
+#home #curation::after,#home #arrivals::after,#home #other::after{
+ content:"";position:absolute;bottom:-1px;left:0;right:0;height:100px;
+ pointer-events:none;z-index:0
 }
-.visual.scroll-story h2{margin:0}
-.dark.scroll-story{background:none;text-align:center;color:#f4f2ea}
-.dark.scroll-story .scroll-story-stage{background:#343d35;align-items:center}
-.dark.scroll-story .scroll-story-stage>*{max-width:760px}
+#home #curation::after{background:linear-gradient(to bottom,transparent 0%,var(--bg-soft) 100%)}
+#home #arrivals::after{background:linear-gradient(to bottom,transparent 0%,var(--bg-sand) 100%)}
+#home #other::after{background:linear-gradient(to bottom,transparent 0%,var(--bg-cream) 100%)}
+#home #curation>*,
+#home #arrivals>*,
+#home #other>*{position:relative;z-index:1}
+#home .store .booking-info{
+ display:flex;align-items:center;justify-content:space-between;gap:24px;
+ border-block:1px solid #d3d3c9;margin:24px 0 10px;padding:24px 0;
+}
+#home .store .booking-info .booking-title{
+ margin:0 0 7px;font-weight:570;letter-spacing:-.04em;font-size:16px
+}
+#home .store .booking-info p{margin:0;line-height:1.75;font-size:12px;color:#737971}
+#home .store .booking-info .booking-disabled{
+ flex-shrink:0;border:1px solid #c6c9bf;border-radius:0;background:transparent;
+ padding:12px 16px;color:#858c80;font-size:12px;cursor:not-allowed;
+}
+#home .store .booking-info .booking-disabled:disabled{opacity:.85}
+#home .store table{margin-top:28px}
+#home>.hero .reveal-copy .motion-line{display:block;white-space:normal}
 @media(prefers-reduced-motion:no-preference){
- html.motion-ready .hero .reveal-copy .motion-line{
-  opacity:0;transform:translate3d(0,22px,0);
-  transition:opacity 1.4s cubic-bezier(.22,1,.36,1),transform 1.4s cubic-bezier(.22,1,.36,1)
+ html.motion-ready #home>.hero .reveal-copy .motion-line{
+   opacity:0;transform:translate3d(0,22px,0);
+   transition:opacity 1.4s cubic-bezier(.22,1,.36,1),transform 1.4s cubic-bezier(.22,1,.36,1)
  }
- html.motion-ready .hero .reveal-copy .motion-line.is-shown{opacity:1;transform:none}
- html.motion-ready .scroll-story .reveal-copy .motion-line{
-  opacity:var(--reveal-progress,0);
-  transform:translate3d(0,calc((1 - var(--reveal-progress,0))*28px),0);
-  transition:none;will-change:opacity,transform
- }
-}
-@media(max-width:700px){
- .scroll-story{min-height:180svh}
- .visual.scroll-story{min-height:175svh}
- .scroll-story .scroll-story-stage{height:100svh;min-height:0;padding:55px 6%}
- .manifesto.scroll-story h2{margin:36px 0 25px}
- .dark.scroll-story .scroll-story-stage{padding:65px 6%}
+ html.motion-ready #home>.hero .reveal-copy .motion-line.is-shown{opacity:1;transform:none}
 }
 @media(prefers-reduced-motion:reduce){
- .scroll-story,.visual.scroll-story{min-height:auto!important}
- .scroll-story .scroll-story-stage{
-   position:relative!important;height:auto!important;min-height:85svh;
- }
- .reveal-copy .motion-line{opacity:1!important;transform:none!important;transition:none!important}
+ #home>.hero .reveal-copy .motion-line{opacity:1!important;transform:none!important;transition:none!important}
+}
+@media(max-width:700px){
+ #home #curation,#home #arrivals,#home #other{padding-bottom:92px}
+ #home #curation::after,#home #arrivals::after,#home #other::after{height:78px}
+ #home>.hero::after{height:150px}
+ #home .store .booking-info{flex-direction:column;align-items:flex-start;gap:14px}
+ #home .store .booking-info .booking-disabled{width:100%}
 }
 </style></head><body>
 <div class="banner">G3-01 · 합성 데이터 시안 · 실제 예약 불가</div><main id="home">
-<section class="hero"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
-<section class="scroll-story section manifesto"><div class="scroll-story-stage"><div class="tag"><span>A NOTE FROM THE ATELIER</span><span>01 / 05</span></div><h2 class="reveal-copy"><span class="motion-line">어떤 마음은</span><span class="motion-line">말보다 꽃이</span><span class="motion-line">더 잘 전해주니까.</span></h2><p class="muted">조금 느리더라도, 정성껏 한 송이씩.<br>우리의 계절을 담아 묶습니다.</p></div></section>
-<section class="section" id="curation"><div class="tag"><span>THE DAILY EDIT</span><span>02 / 05</span></div><div class="head"><h2>Today's<br><span class="upright">selection.</span></h2><p>오늘 가장 예쁜 세 가지</p></div><div class="cards" id="featured"></div><p class="muted">* 사진과 가격은 가상 자료입니다. 오늘의 추천은 최대 3개입니다.</p></section>
-<section class="scroll-story visual"><div class="scroll-story-stage"><h2 class="reveal-copy"><span class="motion-line">꽃을 건네는 순간,</span><span class="motion-line">조금 특별해져요.</span></h2></div></section>
-<section class="section" id="arrivals"><div class="tag"><span>FROM THE FLOWER MARKET</span><span>03 / 05</span></div><div class="head"><h2>Just<br><span class="upright">arrived.</span></h2><p>최근 7일간 들어온 꽃 소식<br>입고 꽃은 예약 없이 문의만 가능합니다.</p></div><div id="arrivalList"></div></section>
-<section class="section other" id="other"><div class="tag"><span>THE FLOWER COLLECTION</span><span>04 / 05</span></div><div class="head"><h2>Everyday<br><span class="upright">flowers.</span></h2><p>오늘의 추천 외에도 만나볼 수 있는 꽃다발</p></div><div class="cards" id="regular"></div></section>
-<section class="scroll-story section dark"><div class="scroll-story-stage"><div class="micro">YOUR MOMENT, RESERVED.</div><h2 class="reveal-copy"><span class="motion-line">좋아하는 꽃을 고르고</span><span class="motion-line">원하는 날에</span><span class="motion-line">직접 만나보세요.</span></h2><p>예약 요청 후 매장 확인과 연락을 거쳐야 최종 확정됩니다.</p><button class="disabled" disabled>예약 기능 준비 중 ↗</button><p class="muted">G3-02 예약 기능은 미구현입니다.</p></div></section>
-<section class="section store" id="store"><div class="tag"><span>COME SAY HELLO</span><span>05 / 05</span></div><div class="head"><h2>Visit the<br><span class="upright">atelier.</span></h2></div><table><tr><td>ADDRESS</td><td>가상 매장 — 실제 주소 미등록</td></tr><tr><td>OPENING HOURS</td><td>월–금 11:00–20:00 (예시)</td></tr><tr><td>CONTACT</td><td>전화 문의 채널 미등록</td></tr><tr><td>PICKUP</td><td>예약 요청 → 매장 확인 → 고객 연락 → 수동 확정</td></tr></table></section></main>
+<section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
+<section class="section" id="curation"><div class="tag"><span>THE DAILY EDIT</span><span>01 / 04</span></div><div class="head"><h2>Today's<br><span class="upright">selection.</span></h2><p>오늘 가장 예쁜 세 가지</p></div><div class="cards" id="featured"></div><p class="muted">* 사진과 가격은 가상 자료입니다. 오늘의 추천은 최대 3개입니다.</p></section>
+<section class="section" id="arrivals"><div class="tag"><span>FROM THE FLOWER MARKET</span><span>02 / 04</span></div><div class="head"><h2>Just<br><span class="upright">arrived.</span></h2><p>최근 7일간 들어온 꽃 소식<br>입고 꽃은 예약 없이 문의만 가능합니다.</p></div><div id="arrivalList"></div></section>
+<section class="section other" id="other"><div class="tag"><span>THE FLOWER COLLECTION</span><span>03 / 04</span></div><div class="head"><h2>Everyday<br><span class="upright">flowers.</span></h2><p>오늘의 추천 외에도 만나볼 수 있는 꽃다발</p></div><div class="cards" id="regular"></div></section>
+<section class="section store" id="store"><div class="tag"><span>COME SAY HELLO</span><span>04 / 04</span></div><div class="head"><h2>Visit the<br><span class="upright">atelier.</span></h2></div>
+<div class="booking-info" aria-label="예약 안내">
+  <div><div class="booking-title">꽃다발 예약 안내</div><p>현재 시안에서는 예약을 접수하지 않습니다.<br>추후 예약 요청은 매장 확인 후에만 확정됩니다.</p></div>
+  <button type="button" class="booking-disabled" disabled aria-disabled="true">예약 기능 준비 중 ↗</button>
+</div><table><tr><td>ADDRESS</td><td>가상 매장 — 실제 주소 미등록</td></tr><tr><td>OPENING HOURS</td><td>월–금 11:00–20:00 (예시)</td></tr><tr><td>CONTACT</td><td>전화 문의 채널 미등록</td></tr><tr><td>PICKUP</td><td>예약 요청 → 매장 확인 → 고객 연락 → 수동 확정</td></tr></table></section></main>
 <section class="detail" id="detail"><div class="detailNav"><a href="#top" class="brand">AFTERNOON · 오후의 정원</a><a href="#curation">← 목록으로</a></div><div class="detailBody"><img id="dImage" alt=""><div class="detailCopy"><div class="micro">THE BOUQUET COLLECTION</div><h1 id="dTitle"></h1><span id="dLatin"></span><p class="muted" id="dStory"></p><div class="price" id="dPrice"></div><div class="spec"><b>구성</b><span id="dColor"></span></div><div class="spec"><b>준비시간</b><span id="dLead"></span></div><div class="spec"><b>상태</b><span id="dStatus"></span></div><button class="disabled" disabled>예약 기능 준비 중 ↗</button><p class="muted">현재는 합성 데이터 시안만 제공됩니다.</p></div></div></section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-01 STATIC DEMO · 실제 매장/연락처/예약 시스템 없음</small></footer><div class="notice">이 공개 시안의 사진은 임시 이미지입니다.<br>승인 원본 이미지 6장은 별도 보존 중입니다.</div>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-01 STATIC DEMO · 임시 사진 및 합성 데이터 · 실제 예약/연락 불가</small></footer>
 <script>
 const U=['https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900','https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900','https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900','https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900','https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900'];
 const P=[['rosy-moment','로지 모먼트','Rosy Moment','사랑을 가장 부드럽게 전하는 방법','39,000','로즈 · 아이보리','120분',true],['mellow-sunday','멜로우 선데이','Mellow Sunday','천천히 흘러가는 오후의 색','49,000','피치 · 크림','150분',true],['purple-letter','퍼플 레터','Purple Letter','계절의 인상을 담은 꽃다발','59,000','퍼플 · 라벤더','180분',true],['ivory-day','아이보리 데이','Ivory Day','맑고 담백한 마음을 전하는 꽃','45,000','화이트 · 그린','120분',true],['coral-diary','코랄 다이어리','Coral Diary','오늘의 빛을 모아 둔 작은 기록','55,000','코랄 · 피치','120분',false]];
@@ -93,50 +107,16 @@ P.slice(0,3).forEach((p,i)=>document.querySelector('#featured').appendChild(card
 [['11.06 / TODAY','가든 로즈','6,000원 / 송이'],['11.04 / NEW','라넌큘러스','5,000원 / 송이'],['10.31 / NEW','라일락 튤립','4,500원 / 송이']].forEach((x,i)=>{let el=document.createElement('div');el.className='arrival';el.innerHTML='<img loading="lazy" alt="'+x[1]+'" src="'+U[i]+'"><div><small>'+x[0]+'</small><strong>'+x[1]+'</strong><small>'+x[2]+'</small></div><em>문의 전용</em>';document.querySelector('#arrivalList').appendChild(el)});
 function route(){let slug=location.hash.startsWith('#/flower/')?location.hash.substring(9):'';let i=P.findIndex(p=>p[0]===slug);let show=i>=0;document.querySelector('#home').style.display=show?'none':'block';document.querySelector('#detail').style.display=show?'block':'none';if(show){let p=P[i];for(let [id,v] of [['dImage',U[i]],['dTitle',p[1]],['dLatin',p[2]],['dStory',p[3]],['dPrice',p[4]+' KRW'],['dColor',p[5]],['dLead','최소 '+p[6]],['dStatus',p[7]?'합성 상품 · 실제 예약 불가':'품절 · 예약 불가']]){let el=document.getElementById(id);if(id==='dImage'){el.src=v;el.alt=p[1]+' 사진'}else el.textContent=v}window.scrollTo(0,0)}}
 window.addEventListener('hashchange',route);route();
-</script><script id="editorial-scroll-reveal-v08-script">
-/* v0.8 Scroll-linked opacity/position, with no scroll lock or artificial timers for stories. */
+</script><script id="editorial-product-flow-v09-script">
+/* v0.9: only the hero's approved delayed text reveal remains. */
 (function(){
-  var prefersReduced=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(prefersReduced)return;
-  var hero=document.querySelector('.hero .reveal-copy');
-  var panels=[].slice.call(document.querySelectorAll('.scroll-story'));
-  if(!hero || panels.length!==3)return;
-  var heroLines=hero.querySelectorAll('.motion-line');
-  var stages=panels.map(function(panel){
-    return {panel:panel,lines:[].slice.call(panel.querySelectorAll('.motion-line'))};
-  });
-  var clamp=function(n){return Math.max(0,Math.min(1,n))};
-  var rafPending=false;
-  function update(){
-    rafPending=false;
-    var viewH=window.innerHeight||document.documentElement.clientHeight||800;
-    for(var i=0;i<stages.length;i++){
-      var stage=stages[i];
-      var rect=stage.panel.getBoundingClientRect();
-      var travel=Math.max(1,stage.panel.offsetHeight-viewH);
-      /* Starts as the section enters the viewport; finishes as its sticky period ends. */
-      var p=clamp((viewH*0.5-rect.top)/(travel+viewH*0.5));
-      var count=stage.lines.length;
-      for(var j=0;j<count;j++){
-        var start=count===3?0.06+j*0.27:0.10+j*0.39;
-        var span=count===3?0.22:0.28;
-        var progress=clamp((p-start)/span);
-        stage.lines[j].style.setProperty('--reveal-progress',String(Math.round(progress*1000)/1000));
-      }
-    }
-  }
-  function schedule(){
-    if(rafPending)return;
-    rafPending=true;
-    window.requestAnimationFrame(update);
-  }
-  document.documentElement.classList.add('motion-ready');
-  /* Keep previously approved gentle timed entrance on the hero. */
-  window.setTimeout(function(){if(heroLines[0])heroLines[0].classList.add('is-shown')},1000);
-  window.setTimeout(function(){if(heroLines[1])heroLines[1].classList.add('is-shown')},2000);
-  window.addEventListener('scroll',schedule,{passive:true});
-  window.addEventListener('resize',schedule,{passive:true});
-  window.addEventListener('pageshow',schedule,{passive:true});
-  update();
+ var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ if(reduce)return;
+ var hero=document.querySelector('#home>.hero .reveal-copy');
+ if(!hero)return;
+ var lines=hero.querySelectorAll('.motion-line');
+ document.documentElement.classList.add('motion-ready');
+ window.setTimeout(function(){if(lines[0])lines[0].classList.add('is-shown')},1000);
+ window.setTimeout(function(){if(lines[1])lines[1].classList.add('is-shown')},2000);
 })();
 </script></body></html>
