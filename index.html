@@ -25,39 +25,24 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
 .dark h2{font-size:clamp(31px,8.4vw,43px);line-height:1.43}
 .head h2{font-size:clamp(50px,12.6vw,66px);line-height:1.07}
 .detailCopy h1{font-size:clamp(37px,10vw,55px)}
-}</style><style id="editorial-scroll-reveal-v06">
-/* v0.6 — cinematic, line-by-line reveal only for the four key statements. */
+}</style><style id="editorial-scroll-reveal-v07">
+/* v0.7 — Natural scrolling; reveal only four key headlines when they enter view. */
 .reveal-copy .motion-line{display:block;white-space:normal}
-.story-active{position:relative}
-.manifesto.story-stage,.visual.story-stage,.dark.story-stage{min-height:88svh}
-.visual.story-stage{min-height:92svh}
-.story-stage.story-active::after{
-  content:"SCROLL TO REVEAL  ↓";
-  position:absolute;bottom:29px;left:8%;font-size:10px;letter-spacing:.17em;
-  font-weight:500;color:rgba(47,57,49,.55);pointer-events:none
-}
-.visual.story-active::after,.dark.story-active::after{color:rgba(255,255,255,.65)}
-html.story-panel-locked,html.hero-story-locked{scroll-behavior:auto!important;overscroll-behavior:contain}
-html.hero-story-locked,html.hero-story-locked body{overflow:hidden}
-@media (prefers-reduced-motion:no-preference){
+@media(prefers-reduced-motion:no-preference){
   html.motion-ready .reveal-copy .motion-line{
-    opacity:0;transform:translate3d(0,23px,0);
-    transition:opacity 1.35s cubic-bezier(.22,1,.36,1),
-               transform 1.35s cubic-bezier(.22,1,.36,1);
-    will-change:opacity,transform
+    opacity:0;
+    transform:translate3d(0,22px,0);
+    transition:opacity 1.4s cubic-bezier(.22,1,.36,1), transform 1.4s cubic-bezier(.22,1,.36,1);
   }
-  html.motion-ready .reveal-copy .motion-line.is-shown{
-    opacity:1;transform:translate3d(0,0,0)
+  html.motion-ready .hero .reveal-copy .motion-line.is-shown,
+  html.motion-ready .reveal-copy.is-visible .motion-line{
+    opacity:1;transform:translate3d(0,0,0);
   }
+  html.motion-ready .reveal-copy:not(.hero .reveal-copy) .motion-line:nth-child(2){transition-delay:650ms}
+  html.motion-ready .reveal-copy:not(.hero .reveal-copy) .motion-line:nth-child(3){transition-delay:1300ms}
 }
-@media (prefers-reduced-motion:reduce){
- .reveal-copy .motion-line{opacity:1!important;transform:none!important;transition:none!important}
- .story-stage.story-active::after{display:none}
-}
-@media(max-width:700px){
- .manifesto.story-stage,.dark.story-stage{min-height:89svh}
- .visual.story-stage{min-height:94svh}
- .story-stage.story-active::after{left:6%;bottom:24px}
+@media(prefers-reduced-motion:reduce){
+  .reveal-copy .motion-line{opacity:1!important;transform:none!important;transition:none!important}
 }
 </style></head><body>
 <div class="banner">G3-01 · 합성 데이터 시안 · 실제 예약 불가</div><main id="home">
@@ -79,156 +64,30 @@ P.slice(0,3).forEach((p,i)=>document.querySelector('#featured').appendChild(card
 [['11.06 / TODAY','가든 로즈','6,000원 / 송이'],['11.04 / NEW','라넌큘러스','5,000원 / 송이'],['10.31 / NEW','라일락 튤립','4,500원 / 송이']].forEach((x,i)=>{let el=document.createElement('div');el.className='arrival';el.innerHTML='<img loading="lazy" alt="'+x[1]+'" src="'+U[i]+'"><div><small>'+x[0]+'</small><strong>'+x[1]+'</strong><small>'+x[2]+'</small></div><em>문의 전용</em>';document.querySelector('#arrivalList').appendChild(el)});
 function route(){let slug=location.hash.startsWith('#/flower/')?location.hash.substring(9):'';let i=P.findIndex(p=>p[0]===slug);let show=i>=0;document.querySelector('#home').style.display=show?'none':'block';document.querySelector('#detail').style.display=show?'block':'none';if(show){let p=P[i];for(let [id,v] of [['dImage',U[i]],['dTitle',p[1]],['dLatin',p[2]],['dStory',p[3]],['dPrice',p[4]+' KRW'],['dColor',p[5]],['dLead','최소 '+p[6]],['dStatus',p[7]?'합성 상품 · 실제 예약 불가':'품절 · 예약 불가']]){let el=document.getElementById(id);if(id==='dImage'){el.src=v;el.alt=p[1]+' 사진'}else el.textContent=v}window.scrollTo(0,0)}}
 window.addEventListener('hashchange',route);route();
-</script><script id="editorial-scroll-reveal-v06-script">
-/* v0.6 editorial story scroll. Product cards and supporting copy never animate. */
+</script><script id="editorial-scroll-reveal-v07-script">
+/* v0.7: Free-flowing scroll — no wheel/touch interception or locking. */
 (function(){
-  var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce || !('IntersectionObserver' in window))return;
+  var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced)return;
   var hero=document.querySelector('.hero .reveal-copy');
-  var main=document.getElementById('home');
-  var panels=[document.querySelector('.manifesto'),document.querySelector('.visual'),document.querySelector('.dark')].filter(Boolean);
-  if(!hero || panels.length!==3 || !main)return;
-  var root=document.documentElement;
-  var now=performance.now();
-  var homeVisible=function(){return main.style.display!=='none'};
-  var gates=panels.map(function(el){
-    el.classList.add('story-stage');
-    return {el:el,lines:[].slice.call(el.querySelectorAll('.motion-line')),visible:0,done:false,lastAction:0,top:0,releaseAfter:0};
-  });
-  var active=null,lastY=window.scrollY,bypassUntil=0,touchY=null,touchUsed=false,heroDoneAt=now+3500;
-  var heroLocked=homeVisible() && window.scrollY<25 && !location.hash.startsWith('#/');
-  root.classList.add('motion-ready');
-  function showLine(line){if(line)line.classList.add('is-shown')}
-  function showAll(g){g.lines.forEach(showLine);g.visible=g.lines.length}
-  if(heroLocked)root.classList.add('hero-story-locked');
-  /* Page load: first line at 1s, second at 2s; 1.35s reveal each. */
-  window.setTimeout(function(){showLine(hero.querySelectorAll('.motion-line')[0])},1000);
-  window.setTimeout(function(){showLine(hero.querySelectorAll('.motion-line')[1])},2000);
-  window.setTimeout(function(){root.classList.remove('hero-story-locked');heroLocked=false},3500);
-  function topOf(el){return window.scrollY+el.getBoundingClientRect().top}
-  function pinScroll(){
-    if(active && homeVisible() && Math.abs(window.scrollY-active.top)>2)
-      window.scrollTo(0,active.top);
+  if(!hero)return;
+  var lines=hero.querySelectorAll('.motion-line');
+  var sections=[].slice.call(document.querySelectorAll('.manifesto .reveal-copy,.visual .reveal-copy,.dark .reveal-copy'));
+  document.documentElement.classList.add('motion-ready');
+  /* At page load: reveal first line at 1 second, second at 2 seconds. */
+  window.setTimeout(function(){if(lines[0])lines[0].classList.add('is-shown')},1000);
+  window.setTimeout(function(){if(lines[1])lines[1].classList.add('is-shown')},2000);
+  if(!('IntersectionObserver' in window)){
+    sections.forEach(function(el){el.classList.add('is-visible')});
+    return;
   }
-  function enter(g){
-    if(active || g.done || !homeVisible())return;
-    active=g;
-    g.top=Math.max(0,Math.round(topOf(g.el)));
-    g.visible=0;
-    g.lines.forEach(function(line){line.classList.remove('is-shown')});
-    g.lastAction=performance.now();
-    root.classList.add('story-panel-locked');
-    g.el.classList.add('story-active');
-    window.scrollTo(0,g.top);
-    lastY=g.top;
-    /* The arrival scroll reveals the first line; further gestures reveal the rest. */
-    window.setTimeout(function(){
-      if(active===g && !g.visible)nextLine(g);
-    },250);
-  }
-  function nextLine(g){
-    if(g.visible>=g.lines.length)return;
-    showLine(g.lines[g.visible]);
-    g.visible++;
-    g.lastAction=performance.now();
-    if(g.visible===g.lines.length)g.releaseAfter=g.lastAction+1450;
-  }
-  function exitPin(direction,completed){
-    if(!active)return;
-    var g=active;
-    if(completed){g.done=true;showAll(g)}
-    g.el.classList.remove('story-active');
-    root.classList.remove('story-panel-locked');
-    active=null;
-    lastY=window.scrollY;
-    bypassUntil=direction<0?performance.now()+360:0;
-    if(direction<0)window.scrollTo(0,Math.max(0,g.top-100));
-  }
-  function advance(direction){
-    if(!active)return;
-    if(direction<0){
-      /* Always allow intentional backwards navigation. */
-      exitPin(-1,false);return;
-    }
-    var g=active,t=performance.now();
-    if(g.visible<g.lines.length){
-      if(t-g.lastAction>=1050)nextLine(g);
-      return;
-    }
-    if(t>=g.releaseAfter)exitPin(1,true);
-  }
-  function onWheel(e){
-    if(!homeVisible())return;
-    if(heroLocked){
-      if(e.cancelable)e.preventDefault();return;
-    }
-    if(!active)return;
-    if(e.cancelable)e.preventDefault();
-    if(e.deltaY>7)advance(1);
-    else if(e.deltaY< -7)advance(-1);
-  }
-  document.addEventListener('wheel',onWheel,{passive:false});
-  document.addEventListener('touchstart',function(e){
-    if(e.touches.length===1){touchY=e.touches[0].clientY;touchUsed=false}
-  },{passive:true});
-  document.addEventListener('touchmove',function(e){
-    if(!homeVisible())return;
-    if(heroLocked){if(e.cancelable)e.preventDefault();return}
-    if(!active)return;
-    if(e.cancelable)e.preventDefault();
-    if(touchY===null || !e.touches.length || touchUsed)return;
-    var delta=touchY-e.touches[0].clientY;
-    if(Math.abs(delta)>34){touchUsed=true;advance(delta>0?1:-1)}
-  },{passive:false});
-  document.addEventListener('touchend',function(){touchY=null;touchUsed=false},{passive:true});
-  document.addEventListener('touchcancel',function(){touchY=null;touchUsed=false},{passive:true});
-  document.addEventListener('keydown',function(e){
-    if(!homeVisible())return;
-    if(e.key==='Escape' && active){exitPin(-1,false);return}
-    var forward=e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '||e.key==='End';
-    var back=e.key==='ArrowUp'||e.key==='PageUp'||e.key==='Home';
-    if(heroLocked && (forward||back)){e.preventDefault();return}
-    if(active&&(forward||back)){
-      e.preventDefault();advance(forward?1:-1)
-    }
-  },{passive:false});
-  /* Catch large wheel flings as they cross a story panel, then anchor it in place. */
-  function onScroll(){
-    if(!homeVisible())return;
-    if(heroLocked){if(window.scrollY>0)window.scrollTo(0,0);lastY=0;return}
-    if(active){pinScroll();lastY=active.top;return}
-    var y=window.scrollY,t=performance.now();
-    if(t<bypassUntil){lastY=y;return}
-    if(y<=lastY+1){lastY=y;return}
-    var view=window.innerHeight;
-    for(var i=0;i<gates.length;i++){
-      var g=gates[i];
-      if(g.done)continue;
-      var top=topOf(g.el);
-      if(y+view*.55>=top && lastY<=top+g.el.offsetHeight){
-        enter(g);return;
-      }
-    }
-    lastY=y;
-  }
-  window.addEventListener('scroll',onScroll,{passive:true});
-  /* Explicit link navigation must remain functional; don't trap anchor jumps. */
-  document.addEventListener('click',function(e){
-    var a=e.target.closest && e.target.closest('a[href^="#"]');
-    if(!a)return;
-    if(active)exitPin(1,true);
-    if(heroLocked){heroLocked=false;root.classList.remove('hero-story-locked')}
-    bypassUntil=performance.now()+1600;
-    window.setTimeout(function(){
-      var y=window.scrollY;
-      gates.forEach(function(g){
-        if(!g.done && topOf(g.el)<y-80){g.done=true;showAll(g)}
-      });
-      lastY=window.scrollY;
-    },90);
-  });
-  window.addEventListener('hashchange',function(){
-    if(!homeVisible() && active)exitPin(1,true)
-  });
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(!entry.isIntersecting)return;
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    });
+  },{root:null,rootMargin:'0px 0px -8% 0px',threshold:0.12});
+  sections.forEach(function(el){observer.observe(el)});
 })();
 </script></body></html>
