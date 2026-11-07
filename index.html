@@ -690,7 +690,7 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
  </div>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-12 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-13 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -816,6 +816,14 @@ function adminDetailPair(label,value){
  row.appendChild(adminText('dd','',value));
  return row;
 }
+/* Restore keyboard focus after a status action redraws the admin detail buttons. */
+function focusAdminAfterStatusChange(){
+ const detail=document.getElementById('adminDetail');
+ const action=[...detail.querySelectorAll('.admin-action')].find(button=>!button.disabled&&!button.hidden);
+ if(action){action.focus({preventScroll:true});return;}
+ const title=detail.querySelector('h3');
+ if(title){title.tabIndex=-1;title.focus({preventScroll:true});}
+}
 function updateAdminStatus(id,status){
  const request=adminRequests.find(item=>item.id===id);
  if(!request)return false;
@@ -855,13 +863,20 @@ function renderAdminDemo(){
    const b=adminText('button','admin-request','');
    b.type='button';
    b.setAttribute('aria-current',String(item.id===adminSelectedId));
+   b.dataset.requestId=item.id;
    const top=adminText('span','admin-request-top','');
    top.appendChild(adminText('span','admin-id',item.id+' · '+item.origin));
    top.appendChild(adminText('span','admin-status '+item.status,adminStatusText[item.status]));
    b.appendChild(top);
    b.appendChild(adminText('span','admin-request-name',P[item.productIndex][1]));
    b.appendChild(adminText('span','admin-request-meta',item.date+' · '+item.time+' · '+bookingAlias(item)+' · '+adminPaymentText[item.paymentState]));
-   b.addEventListener('click',function(){adminSelectedId=item.id;renderAdminDemo()});
+   b.addEventListener('click',function(){
+     adminSelectedId=item.id;
+     renderAdminDemo();
+     /* Selecting a booking replaces its button; return focus to its new instance. */
+     const replacement=[...document.querySelectorAll('#adminList .admin-request')].find(node=>node.dataset.requestId===item.id);
+     if(replacement)replacement.focus({preventScroll:true});
+   });
    list.appendChild(b);
  }
  if(!entries.length){
@@ -904,13 +919,17 @@ function renderAdminDemo(){
  const approve=adminText('button','admin-action',nextLabel);
  approve.type='button';
  approve.disabled=!nextStatus||(selected.status==='pending'&&(selected.paymentState!=='reported'||!selected.depositChecked||!demoSlotAvailable(selected.date,selected.time)));
- approve.addEventListener('click',function(){if(nextStatus)updateAdminStatus(selected.id,nextStatus)});
+ approve.addEventListener('click',function(){
+   if(nextStatus&&updateAdminStatus(selected.id,nextStatus))focusAdminAfterStatusChange();
+ });
  actions.appendChild(approve);
  const reject=adminText('button','admin-action reject','거절');
  reject.type='button';
  reject.disabled=selected.status!=='pending';
  reject.hidden=selected.status!=='pending';
- reject.addEventListener('click',function(){updateAdminStatus(selected.id,'rejected')});
+ reject.addEventListener('click',function(){
+   if(updateAdminStatus(selected.id,'rejected'))focusAdminAfterStatusChange();
+ });
  actions.appendChild(reject);
  detail.appendChild(actions);
  if(selected.status==='pending'&&selected.paymentState==='reported'){
@@ -1150,6 +1169,7 @@ function dayOffset(delta){
 const calendarExpandedItems=new Set();
 function calendarTimelineItem(item){
  const row=adminText('details','cal-timeline-item '+item.status,'');
+ row.dataset.requestId=item.id;
  row.open=calendarExpandedItems.has(item.id);
  row.addEventListener('toggle',function(){
   if(this.open)calendarExpandedItems.add(item.id);
@@ -1171,7 +1191,13 @@ function calendarTimelineItem(item){
   const next=item.status==='confirmed'?'ready':'completed';
   const b=adminText('button','',next==='ready'?'수령 전으로 변경':'수령 완료 처리');
   b.type='button';
-  b.addEventListener('click',()=>updateAdminStatus(item.id,next));
+  b.addEventListener('click',()=>{
+   if(!updateAdminStatus(item.id,next))return;
+   /* Day timeline rerenders: focus its replacement summary, never a detached button. */
+   const replacement=[...document.querySelectorAll('#calEvents .cal-timeline-item')].find(node=>node.dataset.requestId===item.id);
+   const summary=replacement&&replacement.querySelector('summary');
+   if(summary)summary.focus({preventScroll:true});
+  });
   actions.appendChild(b);
  }
  const detail=adminText('button','','상세 보기');
