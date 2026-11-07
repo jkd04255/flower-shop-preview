@@ -690,7 +690,7 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
  </div>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-11 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-12 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -721,6 +721,9 @@ let adminRequests=initialAdminRequests();
 let adminSequence=5;
 /* Synthetic booking metadata only; never persist the form's name, telephone or note. */
 const DEMO_BOOKINGS_KEY='afternoon-garden-calendar-demo-v1';
+/* G3-12: bounded, client-only synthetic history; reject new demo requests before saved data becomes unreadable. */
+const DEMO_BOOKINGS_LIMIT=500;
+const DEMO_ID_LIMIT=999999;
 function bookingAlias(request){
  const number=Number(request.id.substring(5))||0;
  const samples=['가상 고객 · 서하늘','가상 고객 · 지윤서','가상 고객 · 김보람','가상 고객 · 한다은'];
@@ -740,7 +743,7 @@ function restoreDemoBookings(){
   const raw=window.localStorage.getItem(DEMO_BOOKINGS_KEY);
   if(!raw){adminRequests=initialAdminRequests();adminSequence=5;return false;}
   const parsed=JSON.parse(raw);
-  if(parsed.version!==1||!Array.isArray(parsed.records)||parsed.records.length>150)throw Error('invalid storage');
+  if(!parsed||parsed.version!==1||!Array.isArray(parsed.records)||parsed.records.length>DEMO_BOOKINGS_LIMIT)throw Error('invalid storage');
   const allowedStatuses=['pending','confirmed','ready','completed','rejected'];
   const allowedPayments=['waiting','reported','verified'];
   const seen=new Set();
@@ -749,7 +752,11 @@ function restoreDemoBookings(){
       !Number.isInteger(x.productIndex)||x.productIndex<0||x.productIndex>=P.length||
       typeof x.date!=='string'||!dateFromLocalString(x.date)||
       typeof x.time!=='string'||!/^(?:1[1-9]):00$/.test(x.time)||
-      !allowedStatuses.includes(x.status)||!allowedPayments.includes(x.paymentState))throw Error('invalid record');
+      !allowedStatuses.includes(x.status)||!allowedPayments.includes(x.paymentState)||
+      /* A paid/confirmed booking cannot be restored with an unverified deposit. */
+      (['confirmed','ready','completed'].includes(x.status)&&x.paymentState!=='verified')||
+      (['pending','rejected'].includes(x.status)&&x.paymentState==='verified')||
+      (x.paymentState==='waiting'&&x.depositChecked===true))throw Error('invalid record');
    seen.add(x.id);
    return {id:x.id,productIndex:x.productIndex,date:x.date,time:x.time,status:x.status,
     paymentState:x.paymentState,depositChecked:x.depositChecked===true,
@@ -781,6 +788,8 @@ function updateBankPreview(){
  document.getElementById('adminAccountSummary').textContent=example?'예시 은행 · DEMO-ONLY (송금 불가능)':'계좌 미등록 · 실제 송금 불가';
 }
 function mockNewAdminRequest(index,date,time){
+ /* Preserve existing synthetic bookings instead of creating an ID/record that cannot survive refresh. */
+ if(adminRequests.length>=DEMO_BOOKINGS_LIMIT||adminSequence>DEMO_ID_LIMIT)return null;
  const record={id:'DEMO-'+String(adminSequence++).padStart(3,'0'),productIndex:index,date,time,status:'pending',paymentState:'waiting',origin:'방금 체험한 가상 요청'};
  adminRequests.unshift(record);
  adminSelectedId=record.id;
@@ -1009,10 +1018,12 @@ function updatePickupTimes(){
   }
   select.disabled=options.length===0;
   if(options.includes(selected))select.value=selected;
+  const previousSlotExpired=!!selected&&!options.includes(selected);
   const day=dateFromLocalString(field.value);
   if(!field.value)hint.textContent='날짜를 선택하면 가능한 시간이 표시됩니다.';
   else if(day&&(day.getDay()===0||day.getDay()===6))hint.textContent='토요일과 일요일은 픽업할 수 없습니다. 평일을 선택해 주세요.';
   else if(options.length===0)hint.textContent='해당 날짜에 이용 가능한 시간이 없습니다. 다른 날짜를 선택해 주세요.';
+  else if(previousSlotExpired)hint.textContent='선택했던 시간이 더 이상 가능하지 않습니다. 새로운 시간을 선택해 주세요.';
   else hint.textContent='픽업 가능 시간 '+options.length+'개 · 최소 준비시간 및 영업시간 반영';
 }
 function initReservation(index){
@@ -1065,11 +1076,16 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   if(name.length<2||name.length>30){showReservationError('예약자 이름을 2~30자로 입력해 주세요.');return;}
   if(!/^01[016789]\d{7,8}$/.test(phone)){showReservationError('휴대전화 형식의 예시 연락처를 입력해 주세요.');return;}
   /* Only write synthetic request metadata to the visible DOM. Never display or persist phone/name. */
+  const acceptedId=mockNewAdminRequest(idx,date,time);
+  if(!acceptedId){
+    showReservationError('이 브라우저의 가상 예약 저장 한도에 도달했습니다. 기존 기록은 삭제되지 않았습니다. 관리자 데모에서 가상 데이터를 초기화한 후 다시 시도해 주세요.');
+    return;
+  }
   document.getElementById('rrProduct').textContent=p[1];
   document.getElementById('rrDate').textContent=date;
   document.getElementById('rrTime').textContent=time;
   document.getElementById('rrAmount').textContent=p[4]+' KRW';
-  currentDemoRequestId=mockNewAdminRequest(idx,date,time);
+  currentDemoRequestId=acceptedId;
   this.hidden=true;
   const result=document.getElementById('reserveResult');
   result.hidden=false;
@@ -1199,7 +1215,13 @@ function renderCalendarDay(){
  const fullSlots=[...new Set(entries.filter(item=>['confirmed','ready','completed'].includes(item.status)).map(item=>item.time))].filter(time=>!demoSlotAvailable(calendarSelectedDate,time));
  const warningMessages=[];
  if(duplicates.length)warningMessages.push('같은 시간의 예약: '+duplicates.map(([time,count])=>time+' '+count+'건').join(' · '));
- if(fullSlots.length)warningMessages.push('가상 정원 마감(확정 3/3): '+fullSlots.join(' · ')+' — 추가 확정 및 신규 요청 차단');
+ if(fullSlots.length){
+  const counts=fullSlots.map(time=>time+' 확정 '+demoConfirmedSlotCount(calendarSelectedDate,time)+'/'+DEMO_SLOT_CAPACITY+'건');
+  warningMessages.push('가상 정원 마감: '+counts.join(' · ')+' — 추가 확정 및 신규 요청 차단');
+  if(fullSlots.some(time=>demoConfirmedSlotCount(calendarSelectedDate,time)>DEMO_SLOT_CAPACITY)){
+   warningMessages.push('정원 초과 가상 기록 발견 · 기존 기록은 보존하며 관리자 확인이 필요합니다');
+  }
+ }
  warning.hidden=warningMessages.length===0;
  warning.textContent=warningMessages.join(' / ')+' · 실제 수용 가능 수량과 동시 확정은 서버에서 별도 검증해야 합니다.';
  const strip=document.getElementById('calWeekStrip');
@@ -1313,6 +1335,27 @@ window.addEventListener('storage',function(event){
  restoreDemoBookings();
  if(document.getElementById('calendarDemo').style.display==='block')renderCalendar();
  if(document.getElementById('adminDemo').style.display==='block')renderAdminDemo();
+ /* G3-12: A second tab may fill the selected pickup slot or reset demo payment records. */
+ if(document.getElementById('reservation').style.display==='block'){
+  const form=document.getElementById('reserveForm');
+  if(!form.hidden){
+   updatePickupTimes();
+  }else if(currentDemoRequestId){
+   const item=adminRequests.find(x=>x.id===currentDemoRequestId&&x.productIndex===currentReservationIndex&&
+    x.date===document.getElementById('rrDate').textContent&&x.time===document.getElementById('rrTime').textContent);
+   const paid=document.getElementById('rMarkPaid');
+   const note=document.getElementById('rPaymentState');
+   if(!item){
+    paid.disabled=true;
+    paid.textContent='가상 기록을 찾을 수 없음';
+    note.textContent='다른 창에서 가상 예약 기록이 초기화되거나 변경되었습니다. 실제 송금·예약은 발생하지 않았습니다. 새 예약 체험을 시작해 주세요.';
+   }else if(item.paymentState!=='waiting'){
+    paid.disabled=true;
+    paid.textContent='가상 송금 완료 표시됨';
+    note.textContent=item.status==='pending'?'가상 송금 표시를 확인했습니다. 관리자의 입금 확인 및 확정은 별도 단계입니다.':'다른 창에서 가상 예약 상태가 '+adminStatusText[item.status]+'(으)로 변경되었습니다. 실제 거래는 발생하지 않았습니다.';
+   }
+  }
+ }
 });
 function route(){
   const hash=location.hash;
