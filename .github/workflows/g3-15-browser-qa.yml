@@ -1,0 +1,44 @@
+name: G3-15 real Chromium QA
+on:
+  push:
+    branches:
+      - feature/g3-15-calendar-week-focus-browser-qa
+  pull_request:
+    paths:
+      - index.html
+      - tests/g3-15-browser-qa.cjs
+      - .github/workflows/g3-15-browser-qa.yml
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout tested source
+        uses: actions/checkout@v4
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@v2
+      - name: Install Chromium QA driver
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright-core
+      - name: Existing synthetic regressions
+        run: |
+          node tests/g3-12-synthetic-qa.cjs
+          node tests/g3-13-integrated-qa.cjs
+          node tests/g3-14-form-a11y-qa.cjs
+      - name: Real Chromium UI checks
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-15-browser-qa.cjs
+      - name: Upload screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g3-15-chromium-evidence
+          path: qa-artifacts/
+          if-no-files-found: ignore
