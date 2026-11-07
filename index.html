@@ -26,6 +26,61 @@ html.hero-peek-immediate #home>.hero{transition:none}
 </style><style id="reservation-cta-v12">
 #detail .reservation-cta{display:inline-block;margin-top:23px;padding:17px 23px;background:#384a3b;color:#fff;font-size:13px;font-weight:560}
 #detail .reservation-cta:focus-visible{outline:2px solid #58785d;outline-offset:3px}
+</style><style id="calendar-day-view-v17">
+/* G3-07: day timeline view adapted from the supplied calendar screenshot. */
+#calendarDemo #calMonthView[hidden],#calendarDemo #calDetails[hidden]{display:none!important}
+#calendarDemo #calDetails{border:0;padding:0;margin:0}
+#calendarDemo .cal-day-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px}
+#calendarDemo .cal-back-month{background:#fff;border:1px solid #e3e7df;border-radius:999px;padding:11px 17px;font-family:inherit;font-size:13px;color:#34463a;cursor:pointer}
+#calendarDemo .cal-day-tools{display:flex;align-items:center;gap:8px}
+#calendarDemo .cal-day-tools button{background:#fff;border:1px solid #e1e6de;border-radius:999px;padding:11px 14px;font-family:inherit;color:#35483b;font-size:12px;cursor:pointer}
+#calendarDemo .cal-day-tools .cal-day-refresh{background:#425944;color:#fff}
+#calendarDemo .cal-week-strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;padding:9px 0 18px}
+#calendarDemo .cal-week-date{border:0;background:transparent;min-width:0;padding:6px 1px;display:flex;flex-direction:column;align-items:center;gap:11px;font-family:inherit;cursor:pointer;color:#273328}
+#calendarDemo .cal-week-date .cal-week-day{font-size:12px;font-weight:540;color:#717971}
+#calendarDemo .cal-week-date .cal-week-num{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:20px;font-weight:590}
+#calendarDemo .cal-week-date[aria-pressed="true"] .cal-week-num{background:#2e3c31;color:white}
+#calendarDemo .cal-week-date .cal-week-num.is-today:not(.is-current){color:#b4514e}
+#calendarDemo .cal-day-title{border-block:1px solid #e0e5dd;margin:0 calc(-5.6vw);padding:14px 5.6vw;text-align:center}
+#calendarDemo .cal-day-title h3{margin:0;font-weight:650;letter-spacing:-.045em;font-size:clamp(18px,3.3vw,26px)}
+#calendarDemo .cal-day-title .cal-day-count{display:block;margin-top:5px;font-size:11px;color:#738274}
+#calendarDemo .cal-hour-list{padding-top:15px}
+#calendarDemo .cal-hour-row{display:grid;grid-template-columns:95px minmax(0,1fr);min-height:105px;align-items:start}
+#calendarDemo .cal-hour-label{font-size:14px;color:#89918a;padding:0 13px 0 0;text-align:right;transform:translateY(-9px);white-space:nowrap}
+#calendarDemo .cal-hour-body{border-top:1px solid #dfe5dc;padding:7px 0 13px 10px;display:flex;flex-direction:column;gap:8px;min-height:105px}
+#calendarDemo .cal-timeline-item{position:relative;width:100%;min-width:0;padding:12px 15px 12px 18px;border-radius:12px;background:#e5dcf2;color:#594679;border-left:5px solid #936fc0}
+#calendarDemo .cal-timeline-item.pending{background:#f7e9d7;border-color:#d3933d;color:#7e592e}
+#calendarDemo .cal-timeline-item.confirmed{background:#e9dff4;border-color:#a47ecb;color:#604785}
+#calendarDemo .cal-timeline-item.ready{background:#e3eee2;border-color:#79ad78;color:#3d6e45}
+#calendarDemo .cal-timeline-item.completed{background:#eaeeea;border-color:#94a497;color:#526956}
+#calendarDemo .cal-timeline-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#calendarDemo .cal-timeline-name{font-weight:630;font-size:15px;letter-spacing:-.03em}
+#calendarDemo .cal-timeline-state{border-radius:999px;background:#ffffff88;padding:5px 9px;font-size:10px;font-weight:610;white-space:nowrap}
+#calendarDemo .cal-timeline-caption{font-size:12px;margin-top:4px;line-height:1.65}
+#calendarDemo .cal-timeline-meta{font-size:11px;opacity:.85;margin-top:6px;line-height:1.7}
+#calendarDemo .cal-timeline-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+#calendarDemo .cal-timeline-actions button{font-family:inherit;background:#ffffffb8;border:1px solid #ffffffb8;border-radius:6px;color:inherit;padding:7px 9px;font-size:11px;cursor:pointer}
+#calendarDemo .cal-timeline-actions button:focus-visible,#calendarDemo .cal-day-nav button:focus-visible,#calendarDemo .cal-week-date:focus-visible{outline:2px solid #54715b;outline-offset:3px}
+#calendarDemo .cal-zero{padding:34px 10px;color:#849084;font-size:13px;text-align:center;line-height:1.75}
+#calendarDemo .cal-day-footer{font-size:12px;color:#758577;padding:12px 0 20px;line-height:1.8}
+@media(max-width:800px){
+ #calendarDemo .cal-hour-row{grid-template-columns:66px minmax(0,1fr);min-height:88px}
+ #calendarDemo .cal-hour-label{font-size:12px;padding-right:8px}
+ #calendarDemo .cal-hour-body{padding-left:8px;min-height:88px}
+ #calendarDemo .cal-timeline-item{padding:10px 10px 10px 12px}
+ #calendarDemo .cal-timeline-name{font-size:13px}
+ #calendarDemo .cal-week-date .cal-week-num{width:38px;height:38px;font-size:18px}
+}
+@media(max-width:440px){
+ #calendarDemo .cal-day-nav{gap:7px}
+ #calendarDemo .cal-day-tools{gap:5px}
+ #calendarDemo .cal-day-tools button,#calendarDemo .cal-back-month{font-size:11px;padding:10px 11px}
+ #calendarDemo .cal-day-title{margin:0 -3vw;padding:13px 3vw}
+ #calendarDemo .cal-hour-row{grid-template-columns:60px minmax(0,1fr)}
+ #calendarDemo .cal-timeline-state{font-size:9px;padding:4px 6px}
+ #calendarDemo .cal-timeline-name{font-size:12px}
+ #calendarDemo .cal-timeline-caption{font-size:11px}
+}
 </style><style id="booking-calendar-v16">
 /* G3-06: full-width monthly booking calendar, inspired by mobile calendar layouts. */
 #calendarDemo{display:none;background:#fbfaf7;min-height:100svh;color:#27342d;padding:30px 5.6% 100px}
@@ -519,6 +574,7 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
  <div class="calendar-eyebrow">MANAGER CALENDAR · DEMO</div>
  <h1 id="calendarHeading" class="calendar-heading">예약 캘린더</h1>
  <p class="calendar-description">예약과 픽업 일정을 월별로 확인하세요. 날짜를 누르면 예약 시간, 가상 고객명, 꽃다발과 처리 상태가 나타납니다. 거절된 예약은 달력에서 제외합니다.</p>
+ <div id="calMonthView">
  <div class="cal-controls">
    <div class="cal-month-switcher">
     <button type="button" id="calPrev" aria-label="이전 달">‹</button>
@@ -538,9 +594,20 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
   <span><i class="ready"></i>수령 전</span>
   <span><i class="completed"></i>수령 완료</span>
  </div>
- <div class="cal-detail" id="calDetails" aria-live="polite">
-  <div class="cal-detail-top"><h3 id="calSelectedTitle"></h3><span id="calSelectedCount" class="cal-day-count"></span></div>
-  <div class="cal-events" id="calEvents"></div>
+ </div>
+ <div class="cal-detail" id="calDetails" aria-live="polite" hidden>
+  <div class="cal-day-nav">
+    <button type="button" class="cal-back-month" id="calBackMonth">← 월간 달력</button>
+    <div class="cal-day-tools">
+      <button type="button" id="calDayPrev" aria-label="전날">‹ 전날</button>
+      <button type="button" id="calDayNext" aria-label="다음날">다음날 ›</button>
+      <button type="button" class="cal-day-refresh" id="calDayRefresh">↻ 새로고침</button>
+    </div>
+  </div>
+  <div class="cal-week-strip" id="calWeekStrip" role="group" aria-label="선택 날짜의 주간 달력"></div>
+  <div class="cal-day-title"><h3 id="calSelectedTitle"></h3><span id="calSelectedCount" class="cal-day-count"></span></div>
+  <div class="cal-hour-list" id="calEvents" aria-label="시간별 예약 일정"></div>
+  <p class="cal-day-footer">일정을 선택해 관리자 예약 상세를 확인할 수 있습니다. 모든 예약과 고객 이름은 가상 데이터입니다.</p>
  </div>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
@@ -940,48 +1007,94 @@ function calendarChooseInitial(){
  calendarMonth=d.getMonth();
  calendarInitialized=true;
 }
+
+let calendarMode='month';
+function hourText(h){
+ if(h===12)return '정오';
+ return (h<12?'오전 ':'오후 ')+(h<=12?h:h-12)+'시';
+}
+function calendarSelectDay(date){
+ const selected=dateFromLocalString(date);
+ if(!selected)return;
+ calendarSelectedDate=date;
+ calendarYear=selected.getFullYear();
+ calendarMonth=selected.getMonth();
+ calendarMode='day';
+ renderCalendar();
+ if(window.scrollTo)window.scrollTo(0,0);
+}
+function dayOffset(delta){
+ const d=dateFromLocalString(calendarSelectedDate);
+ if(!d)return;
+ d.setDate(d.getDate()+delta);
+ calendarSelectDay(localDateString(d));
+}
+function calendarTimelineItem(item){
+ const row=adminText('article','cal-timeline-item '+item.status,'');
+ const top=adminText('div','cal-timeline-top','');
+ top.appendChild(adminText('strong','cal-timeline-name',bookingAlias(item)+' · '+P[item.productIndex][1]));
+ top.appendChild(adminText('span','cal-timeline-state',adminStatusText[item.status]));
+ row.appendChild(top);
+ const hour=Number.parseInt(item.time.slice(0,2),10);
+ row.appendChild(adminText('div','cal-timeline-caption',hourText(hour)+' ~ '+hourText(hour+1)+' · 예약 픽업'));
+ row.appendChild(adminText('div','cal-timeline-meta','예약 번호 '+item.id+' · '+P[item.productIndex][4]+' KRW · '+adminPaymentText[item.paymentState]));
+ const actions=adminText('div','cal-timeline-actions','');
+ if(item.status==='confirmed'||item.status==='ready'){
+  const next=item.status==='confirmed'?'ready':'completed';
+  const b=adminText('button','',next==='ready'?'수령 전으로 변경':'수령 완료 처리');
+  b.type='button';
+  b.addEventListener('click',()=>updateAdminStatus(item.id,next));
+  actions.appendChild(b);
+ }
+ const detail=adminText('button','','상세 보기');
+ detail.type='button';
+ detail.addEventListener('click',()=>{
+  adminSelectedId=item.id;adminFilter='all';location.hash='#/admin-demo';
+  if(document.getElementById('adminDemo').style.display==='block')renderAdminDemo();
+ });
+ actions.appendChild(detail);
+ row.appendChild(actions);
+ return row;
+}
 function renderCalendarDay(){
  const d=dateFromLocalString(calendarSelectedDate);
- const title=document.getElementById('calSelectedTitle');
+ if(!d)return;
+ const dow=['일','월','화','수','목','금','토'];
  const entries=calendarBookings(calendarSelectedDate);
- title.textContent=d?(d.getMonth()+1)+'월 '+d.getDate()+'일 · '+['일','월','화','수','목','금','토'][d.getDay()]+'요일':'선택 날짜';
+ document.getElementById('calSelectedTitle').textContent=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일 '+dow[d.getDay()]+'요일';
  document.getElementById('calSelectedCount').textContent=entries.length+'건의 예약 일정';
- const area=document.getElementById('calEvents');
- area.replaceChildren();
- if(!entries.length){
-  area.appendChild(adminText('div','cal-empty','선택한 날짜에 가상 예약 일정이 없습니다. 날짜를 바꿔 확인해 주세요.'));
-  return;
+ const strip=document.getElementById('calWeekStrip');
+ strip.replaceChildren();
+ const sun=new Date(d.getFullYear(),d.getMonth(),d.getDate()-d.getDay());
+ for(let offset=0;offset<7;offset++){
+  const day=new Date(sun.getFullYear(),sun.getMonth(),sun.getDate()+offset);
+  const value=localDateString(day);
+  const b=adminText('button','cal-week-date','');
+  b.type='button';b.setAttribute('aria-pressed',String(value===calendarSelectedDate));
+  b.setAttribute('aria-label',value+' '+dow[day.getDay()]+'요일');
+  b.appendChild(adminText('span','cal-week-day',dow[day.getDay()]));
+  const n=adminText('span','cal-week-num',String(day.getDate()));
+  if(value===localDateString(new Date()))n.classList.add('is-today');
+  b.appendChild(n);
+  b.addEventListener('click',()=>calendarSelectDay(value));
+  strip.appendChild(b);
  }
- for(const item of entries){
-  const card=adminText('article','cal-event','');
-  const top=adminText('div','cal-event-top','');
-  top.appendChild(adminText('strong','cal-event-time',item.time));
-  top.appendChild(adminText('span','cal-event-status '+item.status,adminStatusText[item.status]));
-  card.appendChild(top);
-  card.appendChild(adminText('p','cal-client',bookingAlias(item)));
-  card.appendChild(adminText('p','cal-event-meta',P[item.productIndex][1]+' · '+P[item.productIndex][4]+' KRW'));
-  card.appendChild(adminText('p','cal-event-meta','예약 번호 '+item.id+' · '+adminPaymentText[item.paymentState]));
-  const buttons=adminText('div','cal-event-actions','');
-  if(item.status==='confirmed'||item.status==='ready'){
-   const dest=item.status==='confirmed'?'ready':'completed';
-   const action=adminText('button','',dest==='ready'?'수령 전으로 변경':'수령 완료 처리');
-   action.type='button';
-   action.addEventListener('click',()=>updateAdminStatus(item.id,dest));
-   buttons.appendChild(action);
-  }
-  const link=adminText('button','secondary','관리자 상세 보기');
-  link.type='button';
-  link.addEventListener('click',function(){
-    adminSelectedId=item.id;adminFilter='all';
-    location.hash='#/admin-demo';
-    if(location.hash==='#/admin-demo'&&document.getElementById('adminDemo').style.display==='block')renderAdminDemo();
-  });
-  buttons.appendChild(link);
-  card.appendChild(buttons);
-  area.appendChild(card);
+ const timeline=document.getElementById('calEvents');
+ timeline.replaceChildren();
+ for(let hour=11;hour<=20;hour++){
+  const row=adminText('div','cal-hour-row','');
+  row.appendChild(adminText('span','cal-hour-label',hourText(hour)));
+  const body=adminText('div','cal-hour-body','');
+  const matches=entries.filter(item=>Number(item.time.slice(0,2))===hour);
+  for(const item of matches)body.appendChild(calendarTimelineItem(item));
+  row.appendChild(body);
+  timeline.appendChild(row);
  }
+ if(!entries.length)timeline.appendChild(adminText('div','cal-zero','해당 날짜에는 가상 예약이 없습니다.'));
 }
 function renderCalendar(){
+ document.getElementById('calMonthView').hidden=calendarMode==='day';
+ document.getElementById('calDetails').hidden=calendarMode!=='day';
  document.getElementById('calMonth').textContent=calendarYear+'년 '+(calendarMonth+1)+'월';
  const grid=document.getElementById('calGrid');
  grid.replaceChildren();
@@ -1011,16 +1124,14 @@ function renderCalendar(){
   }
   if(bookings.length>2)button.appendChild(adminText('span','cal-more','+'+(bookings.length-2)+'건 더'));
   button.addEventListener('click',function(){
-    calendarSelectedDate=date;
-    renderCalendar();
-    const box=document.getElementById('calDetails');
-    if(window.innerWidth<=800&&box.scrollIntoView)box.scrollIntoView({behavior:'smooth',block:'start'});
+    calendarSelectDay(date);
   });
   grid.appendChild(button);
  }
  renderCalendarDay();
 }
 function calendarGoMonth(delta){
+ calendarMode='month';
  const d=new Date(calendarYear,calendarMonth+delta,1);
  calendarYear=d.getFullYear();
  calendarMonth=d.getMonth();
@@ -1028,11 +1139,15 @@ function calendarGoMonth(delta){
  calendarSelectedDate=firstForMonth?firstForMonth.date:localDateString(d);
  renderCalendar();
 }
+document.getElementById('calBackMonth').addEventListener('click',function(){calendarMode='month';renderCalendar()});
+document.getElementById('calDayPrev').addEventListener('click',()=>dayOffset(-1));
+document.getElementById('calDayNext').addEventListener('click',()=>dayOffset(1));
+document.getElementById('calDayRefresh').addEventListener('click',function(){restoreDemoBookings();renderCalendar();this.textContent='✓ 갱신됨'});
 document.getElementById('calPrev').addEventListener('click',()=>calendarGoMonth(-1));
 document.getElementById('calNext').addEventListener('click',()=>calendarGoMonth(1));
 document.getElementById('calToday').addEventListener('click',function(){
  const d=new Date();calendarYear=d.getFullYear();calendarMonth=d.getMonth();
- calendarSelectedDate=localDateString(d);renderCalendar();
+ calendarMode='month';calendarSelectedDate=localDateString(d);renderCalendar();
 });
 document.getElementById('calRefresh').addEventListener('click',function(){
  restoreDemoBookings();
