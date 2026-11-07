@@ -171,12 +171,12 @@ window.addEventListener('hashchange',route);route();
     if(anchor && anchor.getAttribute('href')!=='#top')reveal(true);
   }
   /* Hero first line: 1s; second line: 2s plus 1.4s fade.
-     Wait another 1.5s after the second line finishes => ~4.9s from loading. */
+     Wait another 1.2s after the second line finishes => ~4.6s from loading. */
   var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(window.scrollY>6 || (location.hash&&location.hash!=='#top'&&isHome())||reduced){
     reveal(true);
   } else {
-    timer=window.setTimeout(function(){reveal(false)},4900);
+    timer=window.setTimeout(function(){reveal(false)},4600);
   }
   window.addEventListener('scroll',userScrolled,{passive:true});
   document.addEventListener('click',userTappedLink,{passive:true});
