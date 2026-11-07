@@ -66,6 +66,7 @@ const doc={
   if(q==='#calGrid .cal-day')return els.calGrid.children.filter(x=>x.className==='cal-day');
   if(q==='#adminList .admin-request')return els.adminList.children.filter(x=>x.className==='admin-request');
   if(q==='#calEvents .cal-timeline-item')return descendants(els.calEvents).filter(x=>x.className.split(' ').includes('cal-timeline-item'));
+  if(q==='#calWeekStrip .cal-week-date')return els.calWeekStrip.children.filter(x=>x.className==='cal-week-date');
   throw Error('unknown document collection '+q);
  }
 };
@@ -143,4 +144,9 @@ check('rejection restores focus to heading',doc.activeElement.isConnected&&doc.a
 check('existing G3-12 cap and storage invariants retained',html.includes('DEMO_BOOKINGS_LIMIT=500')&&html.includes('DEMO_SLOT_CAPACITY=3'));
 check('existing mobile CSS retained',html.includes('g3-11-mobile-a11y'));
 check('release is simulated only',html.includes('실제 접수·연락·결제 불가'));
-console.log('G3-13 integrated synthetic DOM QA PASS: '+checks.length+' checks. Not full browser/AT QA.');
+loc.hash='#/calendar-demo';app.calendarSelectDay(date);
+const otherWeekDate=els.calWeekStrip.children.find(x=>x.getAttribute('aria-pressed')==='false');
+check('other week date available for keyboard test',!!otherWeekDate);
+otherWeekDate.focus();otherWeekDate.dispatch('click');
+check('week button focus survives its day rerender',doc.activeElement.isConnected&&doc.activeElement.className==='cal-week-date'&&doc.activeElement.attributes['aria-pressed']==='true');
+console.log('G3-13 + G3-15 synthetic DOM QA PASS: '+checks.length+' checks. Not full browser/AT QA.');
