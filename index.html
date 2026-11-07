@@ -26,7 +26,26 @@ html.hero-peek-immediate #home>.hero{transition:none}
 </style><style id="reservation-cta-v12">
 #detail .reservation-cta{display:inline-block;margin-top:23px;padding:17px 23px;background:#384a3b;color:#fff;font-size:13px;font-weight:560}
 #detail .reservation-cta:focus-visible{outline:2px solid #58785d;outline-offset:3px}
-</style><style id="calendar-day-view-v17">
+</style><style id="calendar-collapsible-v18">
+/* G3-08: collapse the secondary reservation information on each timeline card. */
+#calendarDemo .cal-timeline-item{display:block}
+#calendarDemo .cal-timeline-item > summary{list-style:none;cursor:pointer;min-height:32px;outline-offset:5px}
+#calendarDemo .cal-timeline-item > summary::-webkit-details-marker{display:none}
+#calendarDemo .cal-timeline-item > summary:focus-visible{outline:2px solid #60785f;border-radius:5px}
+#calendarDemo .cal-timeline-name{flex:1;min-width:0;overflow-wrap:anywhere}
+#calendarDemo .cal-timeline-heading-actions{display:inline-flex;align-items:center;gap:7px;flex-shrink:0}
+#calendarDemo .cal-fold-indicator{font-size:11px;font-weight:600;white-space:nowrap;opacity:.82}
+#calendarDemo .cal-fold-indicator::after{content:"⌄";display:inline-block;font-size:15px;margin-left:4px;transition:transform .2s ease}
+#calendarDemo .cal-timeline-item[open] .cal-fold-indicator::after{transform:rotate(180deg)}
+#calendarDemo .cal-timeline-item[open] .cal-fold-indicator{opacity:1}
+#calendarDemo .cal-timeline-extra{margin-top:10px;padding-top:10px;border-top:1px solid #ffffff80}
+#calendarDemo .cal-timeline-extra .cal-timeline-caption{margin-top:0}
+#calendarDemo .cal-timeline-actions{margin-top:12px}
+@media(max-width:440px){
+ #calendarDemo .cal-timeline-heading-actions{gap:4px}
+ #calendarDemo .cal-fold-indicator{font-size:10px}
+ #calendarDemo .cal-timeline-state{font-size:9px;padding:4px 5px}
+}</style><style id="calendar-day-view-v17">
 /* G3-07: day timeline view adapted from the supplied calendar screenshot. */
 #calendarDemo #calMonthView[hidden],#calendarDemo #calDetails[hidden]{display:none!important}
 #calendarDemo #calDetails{border:0;padding:0;margin:0}
@@ -1029,15 +1048,26 @@ function dayOffset(delta){
  d.setDate(d.getDate()+delta);
  calendarSelectDay(localDateString(d));
 }
+/* Keep the open/closed state when an item changes pickup status. */
+const calendarExpandedItems=new Set();
 function calendarTimelineItem(item){
- const row=adminText('article','cal-timeline-item '+item.status,'');
- const top=adminText('div','cal-timeline-top','');
+ const row=adminText('details','cal-timeline-item '+item.status,'');
+ row.open=calendarExpandedItems.has(item.id);
+ row.addEventListener('toggle',function(){
+  if(this.open)calendarExpandedItems.add(item.id);
+  else calendarExpandedItems.delete(item.id);
+ });
+ const top=adminText('summary','cal-timeline-top','');
  top.appendChild(adminText('strong','cal-timeline-name',bookingAlias(item)+' · '+P[item.productIndex][1]));
- top.appendChild(adminText('span','cal-timeline-state',adminStatusText[item.status]));
+ const topRight=adminText('span','cal-timeline-heading-actions','');
+ topRight.appendChild(adminText('span','cal-timeline-state',adminStatusText[item.status]));
+ topRight.appendChild(adminText('span','cal-fold-indicator','상세'));
+ top.appendChild(topRight);
  row.appendChild(top);
+ const extra=adminText('div','cal-timeline-extra','');
  const hour=Number.parseInt(item.time.slice(0,2),10);
- row.appendChild(adminText('div','cal-timeline-caption',hourText(hour)+' ~ '+hourText(hour+1)+' · 예약 픽업'));
- row.appendChild(adminText('div','cal-timeline-meta','예약 번호 '+item.id+' · '+P[item.productIndex][4]+' KRW · '+adminPaymentText[item.paymentState]));
+ extra.appendChild(adminText('div','cal-timeline-caption',hourText(hour)+' ~ '+hourText(hour+1)+' · 예약 픽업'));
+ extra.appendChild(adminText('div','cal-timeline-meta','예약 번호 '+item.id+' · '+P[item.productIndex][4]+' KRW · '+adminPaymentText[item.paymentState]));
  const actions=adminText('div','cal-timeline-actions','');
  if(item.status==='confirmed'||item.status==='ready'){
   const next=item.status==='confirmed'?'ready':'completed';
@@ -1053,7 +1083,8 @@ function calendarTimelineItem(item){
   if(document.getElementById('adminDemo').style.display==='block')renderAdminDemo();
  });
  actions.appendChild(detail);
- row.appendChild(actions);
+ extra.appendChild(actions);
+ row.appendChild(extra);
  return row;
 }
 function renderCalendarDay(){
