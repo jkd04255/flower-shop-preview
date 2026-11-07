@@ -1112,8 +1112,14 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   if(!dateFromLocalString(date)||date<bounds.min||date>bounds.max){
     showReservationError('오늘부터 14일 이내의 올바른 픽업 날짜를 선택해 주세요.','rDate');return;
   }
-  if(!pickupSlots(idx,date).includes(time)){
-    showReservationError('영업일·영업시간·준비시간에 맞는 픽업 시간을 선택해 주세요.','rTime');return;
+  const availableTimes=pickupSlots(idx,date);
+  if(!availableTimes.includes(time)){
+    if(availableTimes.length===0){
+      showReservationError('선택한 날짜에는 픽업 가능한 시간이 없습니다. 다른 날짜를 선택해 주세요.','rDate');
+    }else{
+      showReservationError('이 날짜에 가능한 픽업 시간을 선택해 주세요.','rTime');
+    }
+    return;
   }
   if(name.length<2||name.length>30){showReservationError('예약자 이름을 2~30자로 입력해 주세요.','rName');return;}
   if(!/^01[016789]\d{7,8}$/.test(phone)){showReservationError('휴대전화 형식의 예시 연락처를 입력해 주세요.','rPhone');return;}
