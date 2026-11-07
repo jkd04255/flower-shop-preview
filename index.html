@@ -482,6 +482,16 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
 /* Informational only; existing editorial and admin layout stay intact. */
 #adminDemo .admin-capacity-warning{margin:18px 0;padding:14px 16px;border:1px solid #e8d2a9;background:#fff5e2;color:#865d2f;font-size:12px;line-height:1.75}
 </style>
+<style id="g3-11-mobile-a11y">
+/* G3-11: prevent calendar day controls from overflowing narrow mobile viewports. */
+@media(max-width:440px){
+ #calendarDemo .cal-day-nav{flex-wrap:wrap;align-items:stretch}
+ #calendarDemo .cal-day-tools{width:100%;flex:1 1 100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ #calendarDemo .cal-day-tools button{min-width:0;padding:10px 4px}
+ #calendarDemo .cal-week-date .cal-week-num{width:min(38px,100%);height:auto;aspect-ratio:1/1}
+}
+#calSelectedTitle:focus-visible{outline:2px solid #4d7053;outline-offset:4px}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -662,7 +672,7 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
     </div>
   </div>
   <div class="cal-week-strip" id="calWeekStrip" role="group" aria-label="선택 날짜의 주간 달력"></div>
-  <div class="cal-day-title"><h3 id="calSelectedTitle"></h3><span id="calSelectedCount" class="cal-day-count"></span></div>
+  <div class="cal-day-title"><h3 id="calSelectedTitle" tabindex="-1"></h3><span id="calSelectedCount" class="cal-day-count"></span></div>
   <div class="cal-daily-overview" aria-label="선택 날짜 예약 현황">
     <div class="cal-daily-heading"><h4>픽업 운영 현황</h4><span>가상 예약 기준 · 거절 제외</span></div>
     <div id="calDailyMetrics" class="cal-daily-metrics"></div>
@@ -675,12 +685,12 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
     <button type="button" data-cal-status="completed" aria-pressed="false">수령 완료</button>
   </div>
   <p id="calOverlapNotice" class="cal-overlap" role="status" hidden></p>
-  <div class="cal-hour-list" id="calEvents" aria-label="시간별 예약 일정"></div>
+  <div class="cal-hour-list" id="calEvents" role="region" aria-labelledby="calSelectedTitle"></div>
   <p class="cal-day-footer">일정을 선택해 관리자 예약 상세를 확인할 수 있습니다. 모든 예약과 고객 이름은 가상 데이터입니다.</p>
  </div>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-10 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-11 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -904,6 +914,9 @@ function renderAdminDemo(){
      selected.depositChecked=!!this.checked;
      saveDemoBookings();
      renderAdminDemo();
+     /* The checkbox was recreated during the status refresh: restore keyboard focus. */
+     const replacement=document.querySelector('#adminDetail .admin-verify input[type="checkbox"]');
+     if(replacement)replacement.focus({preventScroll:true});
    });
    label.appendChild(checkbox);
    label.appendChild(adminText('span','','입금액과 입금 내역을 확인했습니다 (가상 체크)'));
@@ -1100,6 +1113,7 @@ function hourText(h){
 function calendarSelectDay(date){
  const selected=dateFromLocalString(date);
  if(!selected)return;
+ const comingFromMonth=calendarMode==='month';
  calendarSelectedDate=date;
  calendarYear=selected.getFullYear();
  calendarMonth=selected.getMonth();
@@ -1107,6 +1121,8 @@ function calendarSelectDay(date){
  calendarStatusFilter='all';
  renderCalendar();
  if(window.scrollTo)window.scrollTo(0,0);
+ /* Month-grid buttons become hidden; move focus to the newly opened day heading. */
+ if(comingFromMonth)document.getElementById('calSelectedTitle').focus({preventScroll:true});
 }
 function dayOffset(delta){
  const d=dateFromLocalString(calendarSelectedDate);
@@ -1265,7 +1281,12 @@ function calendarGoMonth(delta){
  calendarSelectedDate=firstForMonth?firstForMonth.date:localDateString(d);
  renderCalendar();
 }
-document.getElementById('calBackMonth').addEventListener('click',function(){calendarMode='month';renderCalendar()});
+document.getElementById('calBackMonth').addEventListener('click',function(){
+ calendarMode='month';renderCalendar();
+ /* Return focus to the selected day after the day-view back button is hidden. */
+ const match=[...document.querySelectorAll('#calGrid .cal-day')].find(b=>b.getAttribute('aria-label')?.startsWith(calendarSelectedDate+' 예약 '));
+ if(match)match.focus({preventScroll:true});
+});
 document.getElementById('calDayPrev').addEventListener('click',()=>dayOffset(-1));
 document.getElementById('calDayNext').addEventListener('click',()=>dayOffset(1));
 document.getElementById('calDayRefresh').addEventListener('click',function(){restoreDemoBookings();renderCalendar();this.textContent='✓ 갱신됨'});
@@ -1337,7 +1358,16 @@ function route(){
     window.scrollTo(0,0);
   }
 }
-window.addEventListener('hashchange',route);
+window.addEventListener('hashchange',function(){
+ route();
+ /* Route links hide their old page: focus the visible destination title. */
+ const hash=location.hash;
+ const target=hash==='#/admin-demo'?document.getElementById('adminHeading'):
+              hash==='#/calendar-demo'?document.getElementById('calendarHeading'):
+              hash.startsWith('#/reserve/')?document.getElementById('reservationHeading'):
+              hash.startsWith('#/flower/')?document.getElementById('dTitle'):null;
+ if(target){target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}
+});
 route();
 </script><script id="editorial-product-flow-v09-script">
 /* v0.9: only the hero's approved delayed text reveal remains. */
