@@ -403,22 +403,30 @@ function sampleWeekday(afterDays){
 }
 function initialAdminRequests(){
  return [
-  {id:'DEMO-001',productIndex:0,date:sampleWeekday(2),time:'15:00',status:'pending',origin:'샘플 요청'},
-  {id:'DEMO-002',productIndex:1,date:sampleWeekday(3),time:'13:00',status:'pending',origin:'샘플 요청'},
-  {id:'DEMO-003',productIndex:2,date:sampleWeekday(4),time:'17:00',status:'confirmed',origin:'샘플 요청'},
-  {id:'DEMO-004',productIndex:3,date:sampleWeekday(5),time:'11:00',status:'rejected',origin:'샘플 요청'}
+  {id:'DEMO-001',productIndex:0,date:sampleWeekday(2),time:'15:00',status:'pending',paymentState:'reported',origin:'샘플 요청'},
+  {id:'DEMO-002',productIndex:1,date:sampleWeekday(3),time:'13:00',status:'pending',paymentState:'waiting',origin:'샘플 요청'},
+  {id:'DEMO-003',productIndex:2,date:sampleWeekday(4),time:'17:00',status:'confirmed',paymentState:'verified',origin:'샘플 요청'},
+  {id:'DEMO-004',productIndex:3,date:sampleWeekday(5),time:'11:00',status:'rejected',paymentState:'waiting',origin:'샘플 요청'}
  ];
 }
 let adminRequests=initialAdminRequests();
 let adminSequence=5;
 let adminFilter='all';
 let adminSelectedId='DEMO-001';
-const adminStatusText={pending:'처리 대기',confirmed:'수동 확정',rejected:'거절'};
+const adminStatusText={pending:'입금 확인 전',confirmed:'예약 확정',rejected:'거절'};
+const adminPaymentText={waiting:'입금 전',reported:'가상 송금 완료 · 입금 확인 필요',verified:'입금 확인 완료 (시연)'};
 function mockNewAdminRequest(index,date,time){
- const record={id:'DEMO-'+String(adminSequence++).padStart(3,'0'),productIndex:index,date,time,status:'pending',origin:'방금 체험한 가상 요청'};
+ const record={id:'DEMO-'+String(adminSequence++).padStart(3,'0'),productIndex:index,date,time,status:'pending',paymentState:'waiting',origin:'방금 체험한 가상 요청'};
  adminRequests.unshift(record);
  adminSelectedId=record.id;
  adminFilter='all';
+ return record.id;
+}
+function markDemoPayment(id){
+ const request=adminRequests.find(item=>item.id===id);
+ if(!request||request.status!=='pending'||request.paymentState!=='waiting')return false;
+ request.paymentState='reported';
+ return true;
 }
 function adminText(tag,className,textValue){
  const el=document.createElement(tag);
@@ -436,7 +444,10 @@ function updateAdminStatus(id,status){
  if(status!=='confirmed'&&status!=='rejected')return;
  const request=adminRequests.find(item=>item.id===id);
  if(!request||request.status!=='pending')return;
+ /* Synthetic payment report is a prerequisite only in this in-browser demo. */
+ if(status==='confirmed'&&request.paymentState!=='reported')return;
  request.status=status;
+ if(status==='confirmed')request.paymentState='verified';
  renderAdminDemo();
 }
 function renderAdminDemo(){
@@ -461,7 +472,7 @@ function renderAdminDemo(){
    top.appendChild(adminText('span','admin-status '+item.status,adminStatusText[item.status]));
    b.appendChild(top);
    b.appendChild(adminText('span','admin-request-name',P[item.productIndex][1]));
-   b.appendChild(adminText('span','admin-request-meta',item.date+' · '+item.time+' 픽업 요청'));
+   b.appendChild(adminText('span','admin-request-meta',item.date+' · '+item.time+' 픽업 요청 · '+adminPaymentText[item.paymentState]));
    b.addEventListener('click',function(){adminSelectedId=item.id;renderAdminDemo()});
    list.appendChild(b);
  }
@@ -486,6 +497,7 @@ function renderAdminDemo(){
    ['픽업 날짜',selected.date],
    ['픽업 시간',selected.time],
    ['상품 금액',P[selected.productIndex][4]+' KRW'],
+   ['입금 상태',adminPaymentText[selected.paymentState]],
    ['유입',selected.origin],
    ['상태',adminStatusText[selected.status]]
  ]){
@@ -493,9 +505,9 @@ function renderAdminDemo(){
  }
  detail.appendChild(dl);
  const actions=adminText('div','admin-actions','');
- const approve=adminText('button','admin-action','수동 확정');
+ const approve=adminText('button','admin-action','입금 확인 · 예약 확정');
  approve.type='button';
- approve.disabled=selected.status!=='pending';
+ approve.disabled=selected.status!=='pending'||selected.paymentState!=='reported';
  approve.addEventListener('click',function(){updateAdminStatus(selected.id,'confirmed')});
  actions.appendChild(approve);
  const reject=adminText('button','admin-action reject','거절');
@@ -504,7 +516,7 @@ function renderAdminDemo(){
  reject.addEventListener('click',function(){updateAdminStatus(selected.id,'rejected')});
  actions.appendChild(reject);
  detail.appendChild(actions);
- detail.appendChild(adminText('p','admin-disclaimer','실제 고객 연락이나 확정 알림은 발송되지 않습니다. 상태 변경은 이 화면에서만 시뮬레이션됩니다.'));
+ detail.appendChild(adminText('p','admin-disclaimer',selected.status==='pending'&&selected.paymentState==='waiting'?'가상 송금 완료 표시 이전에는 예약을 확정할 수 없습니다. 실제 입금 확인·은행 연동은 수행하지 않습니다.':'가상 송금 완료 표시와 실제 입금 내역은 다릅니다. 관리자 확정은 이 화면의 시뮬레이션이며 실제 연락·입금 확인·예약 확정은 발생하지 않습니다.'));
 }
 for(const button of document.querySelectorAll('#adminDemo .admin-filter')){
  button.addEventListener('click',function(){adminFilter=this.dataset.filter;renderAdminDemo()});
@@ -518,6 +530,7 @@ document.getElementById('adminReset').addEventListener('click',function(){
 });
 /* A booking has no ID, server request, network action, or persistent storage in this demo. */
 let currentReservationIndex=-1;
+let currentDemoRequestId=null;
 function localDateString(d){
   const pad=n=>String(n).padStart(2,'0');
   return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
@@ -575,6 +588,10 @@ function updatePickupTimes(){
 function initReservation(index){
   const p=P[index];
   currentReservationIndex=index;
+  currentDemoRequestId=null;
+  document.getElementById('rMarkPaid').disabled=false;
+  document.getElementById('rMarkPaid').textContent='가상 송금 완료 표시하기';
+  document.getElementById('rPaymentState').textContent='현재 가상 입금 전 상태입니다. 실제 예약은 확정되지 않았습니다.';
   document.getElementById('rImage').src=U[index];
   document.getElementById('rImage').alt=p[1]+' 가상 상품 사진';
   document.getElementById('rProduct').textContent=p[1];
@@ -620,13 +637,21 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   document.getElementById('rrProduct').textContent=p[1];
   document.getElementById('rrDate').textContent=date;
   document.getElementById('rrTime').textContent=time;
-  mockNewAdminRequest(idx,date,time);
+  document.getElementById('rrAmount').textContent=p[4]+' KRW';
+  currentDemoRequestId=mockNewAdminRequest(idx,date,time);
   this.hidden=true;
   const result=document.getElementById('reserveResult');
   result.hidden=false;
   result.scrollIntoView({block:'start',behavior:'smooth'});
   /* Discard typed contact details after the in-browser simulation. */
   this.reset();
+});
+/* A synthetic transfer report is not a banking transaction or proof of payment. */
+document.getElementById('rMarkPaid').addEventListener('click',function(){
+ if(!currentDemoRequestId||!markDemoPayment(currentDemoRequestId))return;
+ this.disabled=true;
+ this.textContent='가상 송금 완료 표시됨';
+ document.getElementById('rPaymentState').textContent='가상 송금 완료로 표시했습니다. 매장이 입금을 확인해야 예약이 확정됩니다. 실제 은행 거래나 송금은 발생하지 않았습니다.';
 });
 function route(){
   const hash=location.hash;
