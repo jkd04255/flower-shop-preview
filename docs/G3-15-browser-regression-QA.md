@@ -20,8 +20,8 @@
 | G3-13 통합·G3-15 새 주간 초점 합성 회귀 | **34/34 PASS** | 전체 메인 JS + 합성 DOM; 원본 32건에 G3-15 2건 추가 |
 | G3-14 예약 폼·가상 송금 안내 접근성 합성 회귀 | **38/38 PASS** | 전체 메인 JS + 합성 DOM |
 | 인라인 스크립트 구문 | **3/3 PASS** | JS 구문 파싱 |
-| 실제 Chromium 브랜치 HTML/모바일/예약/입금/관리자 QA | **GitHub Actions 테스트 실행 결과 확인 예정** | `tests/g3-15-browser-qa.cjs`; 가상 HTML을 localhost 웹서버로 제공하여 실제 Chromium으로 누르고 포커스/가로 넘침 확인. 공개 URL에 예약·입금 입력은 하지 않음 |
-| 실제 GitHub Pages 웹페이지 | **배포 후 확인 예정** | 공개 URL의 제공 버전/기본 홈 화면만 읽기 |
+| 실제 Chromium 브랜치 HTML/모바일/예약/입금/관리자 QA | **PASS: 실제 Chromium 14/14 항목** | `tests/g3-15-browser-qa.cjs`; 가상 HTML을 localhost 웹서버로 제공하여 실제 Chromium으로 누르고 포커스/가로 넘침 확인. 공개 URL에 예약·입금 입력은 하지 않음 |
+| 실제 GitHub Pages 웹페이지 | **PASS: 공개 G3-14 Pages 읽기 전용 홈·버전 확인** | 공개 URL의 제공 버전/기본 홈 화면만 읽기 |
 | 실제 휴대전화/iOS VoiceOver/Android TalkBack | **미실행** | 실제 실기기와 보조공학 환경 접근 불가 |
 | 실제 거래·인증·DB·결제·메일/문자·서버 동시성 | **미구현·미검증** | G2 전체 Gate HOLD |
 
@@ -39,6 +39,17 @@ CHROME_BIN=/usr/bin/google-chrome node tests/g3-15-browser-qa.cjs
 ```
 
 GitHub Actions: `.github/workflows/g3-15-browser-qa.yml`. 공개 저장소의 표준 GitHub-hosted 실행 환경만 사용하고 비밀키·실고객 데이터·실은행 시스템·실예약 엔드포인트를 사용하지 않습니다.
+
+## GitHub Actions 실제 브라우저 실행 증적
+
+- PR #6 기능 브랜치 테스트 실행: [Actions run #42400944086](https://github.com/jkd04255/flower-shop-preview/actions/runs/42400944086) — **job chromium success**, 모든 단계 완료.
+- 실제 GitHub 체크아웃의 `index.html`과 저장소 상대경로 자산을 Node HTTP 서버에서 제공한 뒤 **Chromium에서 직접 클릭/키보드 포커스/렌더링**을 검사한 결과 **14/14 PASS**.
+- 320·390·768·1280px에서 홈+예약 폼 가로 스크롤 및 메인 앱 JavaScript 오류 없음.
+- 390px에서 예약 입력 오류/날짜 재선택/예약 완료·결과 포커스/가상 송금 안내·포커스/관리자 입금 체크·수동 확정/일간·월간 캘린더/주간 날짜 새 버튼 포커스/수령 전·완료/새로고침 후 상태 복원까지 실제 Chromium에서 통과.
+- 공개 GitHub Pages `https://jkd04255.github.io/flower-shop-preview/`에서 **읽기 전용 홈페이지 및 G3-14 버전 표기**를 실제 Chromium으로 확인. 이 항목은 localhost 브랜치의 전체 상호작용과 별개로 기록.
+- Actions에서 `g3-15-chromium-evidence` 스크린샷 아티팩트 업로드 성공(원본 run에 첨부).
+- 기존 G3-12 31/31, G3-13+G3-15 합성 34/34, G3-14 38/38도 GitHub Actions에서 다시 PASS.
+- **실제 iPhone·Android 단말 테스트, VoiceOver/TalkBack, 공개 사이트 전체에서의 예약 클릭, 실서비스 서버 동시성/인증/송금 등은 여전히 미실행·범위 밖**.
 
 ## Gate 및 진행 경계
 
