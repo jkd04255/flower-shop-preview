@@ -26,6 +26,69 @@ html.hero-peek-immediate #home>.hero{transition:none}
 </style><style id="reservation-cta-v12">
 #detail .reservation-cta{display:inline-block;margin-top:23px;padding:17px 23px;background:#384a3b;color:#fff;font-size:13px;font-weight:560}
 #detail .reservation-cta:focus-visible{outline:2px solid #58785d;outline-offset:3px}
+</style><style id="admin-demo-v13">
+/* G3-03 in-browser admin preview. No real admin access control or server interaction. */
+#adminDemo{display:none;background:#f8f5ef;min-height:80svh;padding:32px 7% 90px}
+#adminDemo[hidden]{display:none!important}
+#adminDemo .admin-top{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-bottom:48px}
+#adminDemo .admin-back{font-size:13px;border-bottom:1px solid #9da89d;padding-bottom:5px}
+#adminDemo .admin-kicker{color:#667667;font-size:11px;letter-spacing:.13em}
+#adminDemo .admin-title{font-size:clamp(39px,6vw,70px);line-height:1.16;margin:14px 0 15px;letter-spacing:-.066em}
+#adminDemo .admin-intro{font-size:13px;line-height:1.85;color:#68716a;max-width:750px;margin:0 0 30px}
+#adminDemo .admin-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:42px}
+#adminDemo .admin-metric{background:#edeae1;padding:20px 20px 19px;border:1px solid #e0ded3}
+#adminDemo .admin-metric span{display:block;font-size:12px;color:#657065;margin-bottom:13px}
+#adminDemo .admin-metric b{font-size:35px;font-weight:570;letter-spacing:-.05em}
+#adminDemo .admin-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 19px}
+#adminDemo .admin-toolbar h2{font-size:23px;letter-spacing:-.045em;font-weight:560;margin:0}
+#adminDemo .admin-reset{border:0;background:none;color:#737c73;font-size:12px;cursor:pointer;text-decoration:underline;text-underline-offset:4px;padding:8px}
+#adminDemo .admin-filters{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 18px}
+#adminDemo .admin-filter{border:1px solid #bac1b5;background:none;font-family:inherit;font-size:12px;padding:9px 13px;color:#556154;cursor:pointer}
+#adminDemo .admin-filter[aria-pressed="true"]{background:#35483b;border-color:#35483b;color:#fff}
+#adminDemo .admin-panels{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.9fr);gap:21px;align-items:start}
+#adminDemo .admin-list{display:grid;gap:9px}
+#adminDemo .admin-request{
+ width:100%;text-align:left;border:1px solid #dddcd2;background:#fffefa;padding:20px;cursor:pointer;
+ display:grid;gap:12px;font-family:inherit;color:#364137
+}
+#adminDemo .admin-request[aria-current="true"]{border-color:#647c68;box-shadow:inset 3px 0 0 #647c68}
+#adminDemo .admin-request:focus-visible,#adminDemo .admin-action:focus-visible,
+#adminDemo .admin-filter:focus-visible,#adminDemo .admin-reset:focus-visible{outline:2px solid #4b6a52;outline-offset:2px}
+#adminDemo .admin-request-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+#adminDemo .admin-id{font-size:11px;letter-spacing:.06em;color:#7c887b}
+#adminDemo .admin-status{display:inline-block;font-size:11px;font-weight:560;padding:6px 9px;border:1px solid}
+#adminDemo .admin-status.pending{color:#6d653b;background:#f3f0dc;border-color:#dfd7a1}
+#adminDemo .admin-status.confirmed{color:#2b6540;background:#e5efe5;border-color:#b4d0b9}
+#adminDemo .admin-status.rejected{color:#895b5b;background:#f4e9e7;border-color:#e4c9c6}
+#adminDemo .admin-request-name{font-size:19px;font-weight:590;letter-spacing:-.043em}
+#adminDemo .admin-request-meta{font-size:12px;color:#757d73;line-height:1.7}
+#adminDemo .admin-empty{background:#fffefa;border:1px solid #dddcd2;padding:35px 23px;color:#6c756d;font-size:13px;line-height:1.8}
+#adminDemo .admin-side{background:#eeeae0;border:1px solid #e0dbce;padding:28px}
+#adminDemo .admin-side .micro{color:#667569}
+#adminDemo .admin-side h3{font-size:clamp(24px,3vw,31px);font-weight:580;line-height:1.2;letter-spacing:-.048em;margin:16px 0 15px}
+#adminDemo .admin-side .admin-summary{font-size:12px;color:#6b7469;line-height:1.85;margin:5px 0 22px}
+#adminDemo .admin-side dl{margin:20px 0 26px;border-top:1px solid #c9cabd}
+#adminDemo .admin-side dl>div{display:grid;grid-template-columns:90px 1fr;border-bottom:1px solid #c9cabd;padding:12px 0;gap:12px}
+#adminDemo .admin-side dt{font-size:12px;color:#798276}
+#adminDemo .admin-side dd{margin:0;font-weight:540;font-size:13px;overflow-wrap:anywhere}
+#adminDemo .admin-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+#adminDemo .admin-action{border:1px solid #475b48;padding:13px 8px;background:#475b48;color:#fff;font-size:12px;font-weight:550;font-family:inherit;cursor:pointer}
+#adminDemo .admin-action.reject{color:#7b5551;background:transparent;border-color:#bea9a4}
+#adminDemo .admin-action:disabled{opacity:.4;cursor:not-allowed}
+#adminDemo .admin-side .admin-disclaimer{font-size:11px;color:#788275;line-height:1.8;margin:20px 0 0}
+#adminDemo .admin-session-note{color:#697568;font-size:12px;line-height:1.8;margin:20px 0 0}
+#adminDemo .admin-session-note a{text-decoration:underline;text-underline-offset:4px}
+.foot .admin-footer-link{display:inline-block;color:#f8f6f1;text-decoration:underline;text-underline-offset:4px;font-size:12px;margin-top:14px}
+@media(max-width:810px){
+ #adminDemo{padding:23px 6% 70px}
+ #adminDemo .admin-top{padding-bottom:30px}
+ #adminDemo .admin-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:31px}
+ #adminDemo .admin-metric{padding:15px}
+ #adminDemo .admin-metric b{font-size:29px}
+ #adminDemo .admin-panels{grid-template-columns:1fr}
+ #adminDemo .admin-side{padding:23px}
+}
+@media(max-width:360px){#adminDemo .admin-actions{grid-template-columns:1fr}}
 </style><style id="reservation-demo-v12">
 /* G3-02 synthetic reservation demo. This UI does not send, store or confirm bookings. */
 #reservation{display:none;background:var(--bg-cream,#f8f5ef);min-height:80svh;padding:36px 7% 96px}
@@ -255,11 +318,37 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
        </dl>
        <a id="rAgain" class="result-link" href="#curation">다른 꽃다발 둘러보기 ↗</a>
        <a id="rResultBack" class="result-link light" href="#/flower/rosy-moment">꽃다발 상세로 돌아가기</a>
+       <a class="result-link light" href="#/admin-demo">관리자 데모에서 요청 상태 보기 ↗</a>
      </div>
    </div>
  </div>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-02 STATIC DEMO · 가상 상품/예약 시연 · 실제 접수·연락·결제 불가</small></footer>
+
+<section id="adminDemo" class="admin-demo" hidden aria-labelledby="adminHeading">
+ <div class="admin-top"><a class="brand" href="#top">AFTERNOON · 오후의 정원</a><a class="admin-back" href="#curation">← 고객 쇼윈도로</a></div>
+ <div class="admin-kicker">MANAGER WORKSPACE · DEMO</div>
+ <h1 class="admin-title" id="adminHeading">예약 요청 관리</h1>
+ <p class="admin-intro">가상의 예약 요청을 선택해 <b>수동 확정하거나 거절</b>하는 관리자 시연 화면입니다. 실제 고객 정보나 예약은 없으며, 로그인·알림·서버 저장 기능도 없습니다. 공개된 데모 페이지로 실제 관리자 시스템이 아닙니다.</p>
+ <div class="admin-metrics" aria-label="가상 예약 현황">
+  <div class="admin-metric"><span>전체 요청</span><b id="adminTotal">0</b></div>
+  <div class="admin-metric"><span>처리 대기</span><b id="adminPending">0</b></div>
+  <div class="admin-metric"><span>수동 확정</span><b id="adminConfirmed">0</b></div>
+  <div class="admin-metric"><span>거절</span><b id="adminRejected">0</b></div>
+ </div>
+ <div class="admin-toolbar"><h2>요청 목록</h2><button id="adminReset" type="button" class="admin-reset">가상 데이터 초기화</button></div>
+ <div class="admin-filters" role="group" aria-label="예약 상태별 필터">
+   <button type="button" class="admin-filter" data-filter="all" aria-pressed="true">전체</button>
+   <button type="button" class="admin-filter" data-filter="pending" aria-pressed="false">대기</button>
+   <button type="button" class="admin-filter" data-filter="confirmed" aria-pressed="false">확정</button>
+   <button type="button" class="admin-filter" data-filter="rejected" aria-pressed="false">거절</button>
+ </div>
+ <div class="admin-panels">
+  <div class="admin-list" id="adminList" aria-label="가상 예약 목록"></div>
+  <aside class="admin-side" id="adminDetail" aria-live="polite"></aside>
+ </div>
+ <p class="admin-session-note">이 페이지의 모든 상태 변경은 <b>현재 브라우저 탭에서만</b> 유효합니다. 새로고침하면 샘플 데이터로 돌아갑니다. 가상 예약을 추가하려면 <a href="#curation">꽃다발을 선택해 예약 체험</a>을 진행해 주세요.</p>
+</section>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-03 STATIC DEMO · 가상 상품/예약·관리자 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -268,6 +357,131 @@ function card(p,i){let a=document.createElement('a');a.className='card';a.href='
 P.slice(0,3).forEach((p,i)=>document.querySelector('#featured').appendChild(card(p,i)));P.slice(3).forEach((p,i)=>document.querySelector('#regular').appendChild(card(p,i+3)));
 [['11.06 / TODAY','가든 로즈','6,000원 / 송이'],['11.04 / NEW','라넌큘러스','5,000원 / 송이'],['10.31 / NEW','라일락 튤립','4,500원 / 송이']].forEach((x,i)=>{let el=document.createElement('div');el.className='arrival';el.innerHTML='<img loading="lazy" alt="'+x[1]+'" src="'+ARRIVAL_U[i]+'"><div><small>'+x[0]+'</small><strong>'+x[1]+'</strong><small>'+x[2]+'</small></div><em>문의 전용</em>';document.querySelector('#arrivalList').appendChild(el)});
 
+
+/* G3-03: synthetic manager workflow, held in tab memory only.
+ * Never copy demo contact details or notes into the manager view. */
+function sampleWeekday(afterDays){
+ const d=new Date();
+ d.setHours(12,0,0,0);
+ d.setDate(d.getDate()+afterDays);
+ while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);
+ return localDateString(d);
+}
+function initialAdminRequests(){
+ return [
+  {id:'DEMO-001',productIndex:0,date:sampleWeekday(2),time:'15:00',status:'pending',origin:'샘플 요청'},
+  {id:'DEMO-002',productIndex:1,date:sampleWeekday(3),time:'13:00',status:'pending',origin:'샘플 요청'},
+  {id:'DEMO-003',productIndex:2,date:sampleWeekday(4),time:'17:00',status:'confirmed',origin:'샘플 요청'},
+  {id:'DEMO-004',productIndex:3,date:sampleWeekday(5),time:'11:00',status:'rejected',origin:'샘플 요청'}
+ ];
+}
+let adminRequests=initialAdminRequests();
+let adminSequence=5;
+let adminFilter='all';
+let adminSelectedId='DEMO-001';
+const adminStatusText={pending:'처리 대기',confirmed:'수동 확정',rejected:'거절'};
+function mockNewAdminRequest(index,date,time){
+ const record={id:'DEMO-'+String(adminSequence++).padStart(3,'0'),productIndex:index,date,time,status:'pending',origin:'방금 체험한 가상 요청'};
+ adminRequests.unshift(record);
+ adminSelectedId=record.id;
+ adminFilter='all';
+}
+function adminText(tag,className,textValue){
+ const el=document.createElement(tag);
+ if(className)el.className=className;
+ el.textContent=textValue;
+ return el;
+}
+function adminDetailPair(label,value){
+ const row=document.createElement('div');
+ row.appendChild(adminText('dt','',label));
+ row.appendChild(adminText('dd','',value));
+ return row;
+}
+function updateAdminStatus(id,status){
+ if(status!=='confirmed'&&status!=='rejected')return;
+ const request=adminRequests.find(item=>item.id===id);
+ if(!request||request.status!=='pending')return;
+ request.status=status;
+ renderAdminDemo();
+}
+function renderAdminDemo(){
+ const total=adminRequests.length;
+ document.getElementById('adminTotal').textContent=total;
+ for(const status of ['pending','confirmed','rejected']){
+  const count=adminRequests.filter(item=>item.status===status).length;
+  document.getElementById('admin'+status.charAt(0).toUpperCase()+status.slice(1)).textContent=count;
+ }
+ for(const button of document.querySelectorAll('#adminDemo .admin-filter')){
+   button.setAttribute('aria-pressed',String(button.dataset.filter===adminFilter));
+ }
+ const entries=adminRequests.filter(item=>adminFilter==='all'||item.status===adminFilter);
+ const list=document.getElementById('adminList');
+ list.replaceChildren();
+ for(const item of entries){
+   const b=adminText('button','admin-request','');
+   b.type='button';
+   b.setAttribute('aria-current',String(item.id===adminSelectedId));
+   const top=adminText('span','admin-request-top','');
+   top.appendChild(adminText('span','admin-id',item.id+' · '+item.origin));
+   top.appendChild(adminText('span','admin-status '+item.status,adminStatusText[item.status]));
+   b.appendChild(top);
+   b.appendChild(adminText('span','admin-request-name',P[item.productIndex][1]));
+   b.appendChild(adminText('span','admin-request-meta',item.date+' · '+item.time+' 픽업 요청'));
+   b.addEventListener('click',function(){adminSelectedId=item.id;renderAdminDemo()});
+   list.appendChild(b);
+ }
+ if(!entries.length){
+   list.appendChild(adminText('p','admin-empty','해당 상태의 가상 예약 요청이 없습니다.'));
+ }
+ const detail=document.getElementById('adminDetail');
+ detail.replaceChildren();
+ const selected=entries.find(item=>item.id===adminSelectedId)||entries[0];
+ if(!selected){
+   detail.appendChild(adminText('p','admin-summary','목록에서 가상 요청을 선택하면 세부 정보가 표시됩니다.'));
+   return;
+ }
+ adminSelectedId=selected.id;
+ detail.appendChild(adminText('span','micro','REQUEST REVIEW · DEMO'));
+ detail.appendChild(adminText('h3','',P[selected.productIndex][1]));
+ detail.appendChild(adminText('span','admin-status '+selected.status,adminStatusText[selected.status]));
+ detail.appendChild(adminText('p','admin-summary','관리자 수동 처리 시연 · 실제 고객 정보가 없는 합성 예약입니다.'));
+ const dl=document.createElement('dl');
+ for(const [label,value] of [
+   ['가상 번호',selected.id],
+   ['픽업 날짜',selected.date],
+   ['픽업 시간',selected.time],
+   ['상품 금액',P[selected.productIndex][4]+' KRW'],
+   ['유입',selected.origin],
+   ['상태',adminStatusText[selected.status]]
+ ]){
+   dl.appendChild(adminDetailPair(label,value));
+ }
+ detail.appendChild(dl);
+ const actions=adminText('div','admin-actions','');
+ const approve=adminText('button','admin-action','수동 확정');
+ approve.type='button';
+ approve.disabled=selected.status!=='pending';
+ approve.addEventListener('click',function(){updateAdminStatus(selected.id,'confirmed')});
+ actions.appendChild(approve);
+ const reject=adminText('button','admin-action reject','거절');
+ reject.type='button';
+ reject.disabled=selected.status!=='pending';
+ reject.addEventListener('click',function(){updateAdminStatus(selected.id,'rejected')});
+ actions.appendChild(reject);
+ detail.appendChild(actions);
+ detail.appendChild(adminText('p','admin-disclaimer','실제 고객 연락이나 확정 알림은 발송되지 않습니다. 상태 변경은 이 화면에서만 시뮬레이션됩니다.'));
+}
+for(const button of document.querySelectorAll('#adminDemo .admin-filter')){
+ button.addEventListener('click',function(){adminFilter=this.dataset.filter;renderAdminDemo()});
+}
+document.getElementById('adminReset').addEventListener('click',function(){
+ adminRequests=initialAdminRequests();
+ adminSequence=5;
+ adminFilter='all';
+ adminSelectedId='DEMO-001';
+ renderAdminDemo();
+});
 /* A booking has no ID, server request, network action, or persistent storage in this demo. */
 let currentReservationIndex=-1;
 function localDateString(d){
@@ -372,6 +586,7 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   document.getElementById('rrProduct').textContent=p[1];
   document.getElementById('rrDate').textContent=date;
   document.getElementById('rrTime').textContent=time;
+  mockNewAdminRequest(idx,date,time);
   this.hidden=true;
   const result=document.getElementById('reserveResult');
   result.hidden=false;
@@ -386,14 +601,18 @@ function route(){
   const index=P.findIndex(p=>p[0]===(reservationSlug||detailSlug));
   const showReservation=reservationSlug!==null&&index>=0;
   const showDetail=detailSlug!==null&&index>=0;
+  const showAdmin=hash==='#/admin-demo';
   if(showReservation&&!P[index][7]){
     location.hash='#/flower/'+P[index][0];
     return;
   }
-  document.getElementById('home').style.display=(showReservation||showDetail)?'none':'block';
+  document.getElementById('home').style.display=(showReservation||showDetail||showAdmin)?'none':'block';
   document.getElementById('detail').style.display=showDetail?'block':'none';
   document.getElementById('reservation').style.display=showReservation?'block':'none';
   document.getElementById('reservation').hidden=!showReservation;
+  document.getElementById('adminDemo').style.display=showAdmin?'block':'none';
+  document.getElementById('adminDemo').hidden=!showAdmin;
+  if(showAdmin){renderAdminDemo();window.scrollTo(0,0);}
   if(showDetail){
     const p=P[index];
     for(const [id,v] of [
