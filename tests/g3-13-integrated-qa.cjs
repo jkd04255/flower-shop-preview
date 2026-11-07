@@ -26,6 +26,7 @@ class E {
  insertBefore(child,anchor){const idx=this.children.indexOf(anchor);if(idx<0)return this.appendChild(child);this.children.splice(idx,0,child);child.parentNode=this;child._connection(this.isConnected);return child}
  replaceChildren(...children){for(const c of this.children)c._connection(false);this.children=[];for(const c of children)this.appendChild(c)}
  setAttribute(k,v){this.attributes[k]=String(v)}
+ removeAttribute(k){delete this.attributes[k]}
  getAttribute(k){return this.attributes[k]||null}
  addEventListener(k,fn){(this.listeners[k] ||= []).push(fn)}
  dispatch(k,params={}){for(const fn of this.listeners[k]||[])fn.call(this,{target:this,preventDefault(){},...params})}
