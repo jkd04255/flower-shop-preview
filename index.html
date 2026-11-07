@@ -23,6 +23,77 @@ html.hero-peek-immediate #home>.hero{transition:none}
     height:calc(100svh - 30px);
   }
 }
+</style><style id="reservation-cta-v12">
+#detail .reservation-cta{display:inline-block;margin-top:23px;padding:17px 23px;background:#384a3b;color:#fff;font-size:13px;font-weight:560}
+#detail .reservation-cta:focus-visible{outline:2px solid #58785d;outline-offset:3px}
+</style><style id="reservation-demo-v12">
+/* G3-02 synthetic reservation demo. This UI does not send, store or confirm bookings. */
+#reservation{display:none;background:var(--bg-cream,#f8f5ef);min-height:80svh;padding:36px 7% 96px}
+#reservation .reserve-nav{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:56px}
+#reservation .reserve-nav>a:last-child{font-size:13px;color:#6a7267;border-bottom:1px solid #b0b5a7;padding-bottom:6px}
+#reservation .reserve-head{margin-bottom:38px}
+#reservation .reserve-head .micro{color:#6b786a;font-size:11px}
+#reservation .reserve-head h1{font-size:clamp(38px,5vw,65px);line-height:1.2;letter-spacing:-.065em;margin:18px 0 12px}
+#reservation .reserve-head p{font-size:13px;color:#687063;max-width:720px;line-height:1.8;margin:0}
+#reservation .reserve-layout{display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:clamp(28px,5vw,80px);max-width:1170px;align-items:start}
+#reservation .reserve-product{background:#eee9df;padding:0 0 25px}
+#reservation .reserve-product img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
+#reservation .reserve-product-copy{padding:23px 25px 0}
+#reservation .reserve-product-copy h2{font-weight:590;letter-spacing:-.05em;font-size:25px;margin:0 0 12px}
+#reservation .reserve-product-copy .reserve-price{font-size:20px;font-weight:600;margin:0 0 8px}
+#reservation .reserve-product-copy .muted{margin:0;line-height:1.75}
+#reservation .booking-form{padding-top:5px}
+#reservation .booking-form .form-title{font-size:21px;letter-spacing:-.04em;font-weight:580;margin:0 0 18px}
+#reservation .booking-form .form-hint{margin:0 0 28px;color:#657061;font-size:12px;line-height:1.85}
+#reservation .booking-form .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+#reservation .booking-form .form-field{margin-bottom:20px}
+#reservation .booking-form label{display:block;font-size:13px;font-weight:560;margin:0 0 9px}
+#reservation .booking-form input,#reservation .booking-form select,#reservation .booking-form textarea{
+ appearance:none;width:100%;background:#fffdfa;border:1px solid #c8cbbf;border-radius:0;padding:14px 15px;
+ color:#353d33;font-family:inherit;font-size:15px;min-height:51px;outline-offset:2px;
+}
+#reservation .booking-form select{appearance:auto}
+#reservation .booking-form textarea{min-height:92px;resize:vertical}
+#reservation .booking-form input:focus-visible,#reservation .booking-form select:focus-visible,#reservation .booking-form textarea:focus-visible{
+ outline:2px solid #54705c;border-color:#54705c
+}
+#reservation .booking-form input:disabled,#reservation .booking-form select:disabled{opacity:.65;background:#f2f0e9}
+#reservation .booking-form .field-note{font-size:12px;color:#737b70;margin:8px 0 0;line-height:1.65}
+#reservation .booking-form .form-error{font-size:13px;color:#a43630;margin:4px 0 17px;line-height:1.7}
+#reservation .booking-form .form-error:empty{display:none}
+#reservation .booking-form .form-submit{
+ border:1px solid #354538;background:#354538;color:#fffdfa;font-weight:570;
+ font-family:inherit;font-size:14px;padding:17px 20px;display:block;width:100%;cursor:pointer
+}
+#reservation .booking-form .form-submit:focus-visible,#reservation .result-link:focus-visible{outline:2px solid #5b7458;outline-offset:3px}
+#reservation .booking-form .submit-note{margin:13px 0 0;color:#677166;font-size:12px;line-height:1.7}
+#reservation .reservation-result{border-top:2px solid #475e48;padding-top:26px}
+#reservation .reservation-result h2{font-size:clamp(26px,3.4vw,37px);line-height:1.3;margin:12px 0 16px}
+#reservation .reservation-result p{font-size:13px;line-height:1.8;color:#5c695d}
+#reservation .reservation-result dl{border-block:1px solid #c7ccc0;margin:25px 0;padding:12px 0}
+#reservation .reservation-result dl>div{display:grid;grid-template-columns:100px 1fr;padding:10px 0;gap:12px}
+#reservation .reservation-result dt{font-size:12px;color:#667367}
+#reservation .reservation-result dd{font-size:14px;font-weight:550;margin:0;word-break:keep-all}
+#reservation .result-link{display:inline-block;padding:14px 18px;background:#354538;color:#fffdfa;font-size:13px;margin:8px 8px 4px 0}
+#reservation .result-link.light{background:transparent;color:#354538;border:1px solid #aab7a8}
+#reservation [hidden],#detail [hidden]{display:none!important}
+#home .store .booking-info .booking-demo-link{
+ flex-shrink:0;display:inline-block;border:1px solid #435b46;border-radius:0;background:#435b46;
+ padding:13px 16px;color:#fffdf8;font-size:12px;font-weight:540;text-decoration:none;
+}
+@media(max-width:750px){
+ #reservation{padding:22px 6% 75px}
+ #reservation .reserve-nav{margin-bottom:34px}
+ #reservation .reserve-layout{grid-template-columns:1fr;gap:31px}
+ #reservation .reserve-product{display:grid;grid-template-columns:minmax(110px,.45fr) minmax(0,.55fr);align-items:center;padding:0}
+ #reservation .reserve-product img{aspect-ratio:4/5;height:100%}
+ #reservation .reserve-product-copy{padding:15px}
+ #reservation .reserve-product-copy h2{font-size:21px}
+ #reservation .reserve-product-copy .reserve-price{font-size:17px}
+ #reservation .reserve-head{margin-bottom:25px}
+ #home .store .booking-info .booking-demo-link{width:100%;text-align:center}
+}
+@media(max-width:370px){#reservation .booking-form .form-row{grid-template-columns:1fr;gap:0}}
 </style><style id="section-label-cleanup-v10">#home>.section>.head{margin-top:0}#home>.section.store>.head{margin-top:0}</style><style id="typography-modern-upright-v04">
 /* G3-01 approved v0.4: straight modern Korean typography, no italics */
 @font-face{font-family:"Pretendard Site";src:url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/woff2/PretendardVariable.woff2") format("woff2");font-style:normal;font-weight:100 900;font-display:swap}
@@ -109,18 +180,86 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
  #home .store .booking-info .booking-disabled{width:100%}
 }
 </style></head><body>
-<div class="banner">G3-01 · 합성 데이터 시안 · 실제 예약 불가</div><main id="home">
+<div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
 <section class="section" id="curation"><div class="head"><h2>Today's<br><span class="upright">selection.</span></h2><p>오늘 가장 예쁜 세 가지</p></div><div class="cards" id="featured"></div><p class="muted">* 사진과 가격은 가상 자료입니다. 오늘의 추천은 최대 3개입니다.</p></section>
 <section class="section" id="arrivals"><div class="head"><h2>Just<br><span class="upright">arrived.</span></h2><p>최근 7일간 들어온 꽃 소식<br>입고 꽃은 예약 없이 문의만 가능합니다.</p></div><div id="arrivalList"></div></section>
 <section class="section other" id="other"><div class="head"><h2>Everyday<br><span class="upright">flowers.</span></h2><p>오늘의 추천 외에도 만나볼 수 있는 꽃다발</p></div><div class="cards" id="regular"></div></section>
 <section class="section store" id="store"><div class="head"><h2>Visit the<br><span class="upright">atelier.</span></h2></div>
 <div class="booking-info" aria-label="예약 안내">
-  <div><div class="booking-title">꽃다발 예약 안내</div><p>현재 시안에서는 예약을 접수하지 않습니다.<br>추후 예약 요청은 매장 확인 후에만 확정됩니다.</p></div>
-  <button type="button" class="booking-disabled" disabled aria-disabled="true">예약 기능 준비 중 ↗</button>
+  <div><div class="booking-title">꽃다발 예약 안내</div><p>꽃다발을 선택해 가상 예약 요청 과정을 체험할 수 있습니다.<br>실제 접수되지 않으며, 실제 예약은 매장 확인 후에만 확정됩니다.</p></div>
+  <a class="booking-demo-link" href="#curation">꽃다발 선택하고 예약 체험 ↗</a>
 </div><table><tr><td>ADDRESS</td><td>가상 매장 — 실제 주소 미등록</td></tr><tr><td>OPENING HOURS</td><td>월–금 11:00–20:00 (예시)</td></tr><tr><td>CONTACT</td><td>전화 문의 채널 미등록</td></tr><tr><td>PICKUP</td><td>예약 요청 → 매장 확인 → 고객 연락 → 수동 확정</td></tr></table></section></main>
-<section class="detail" id="detail"><div class="detailNav"><a href="#top" class="brand">AFTERNOON · 오후의 정원</a><a href="#curation">← 목록으로</a></div><div class="detailBody"><img id="dImage" alt=""><div class="detailCopy"><div class="micro">THE BOUQUET COLLECTION</div><h1 id="dTitle"></h1><span id="dLatin"></span><p class="muted" id="dStory"></p><div class="price" id="dPrice"></div><div class="spec"><b>구성</b><span id="dColor"></span></div><div class="spec"><b>준비시간</b><span id="dLead"></span></div><div class="spec"><b>상태</b><span id="dStatus"></span></div><button class="disabled" disabled>예약 기능 준비 중 ↗</button><p class="muted">현재는 합성 데이터 시안만 제공됩니다.</p></div></div></section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-01 STATIC DEMO · 임시 사진 및 합성 데이터 · 실제 예약/연락 불가</small></footer>
+<section class="detail" id="detail"><div class="detailNav"><a href="#top" class="brand">AFTERNOON · 오후의 정원</a><a href="#curation">← 목록으로</a></div><div class="detailBody"><img id="dImage" alt=""><div class="detailCopy"><div class="micro">THE BOUQUET COLLECTION</div><h1 id="dTitle"></h1><span id="dLatin"></span><p class="muted" id="dStory"></p><div class="price" id="dPrice"></div><div class="spec"><b>구성</b><span id="dColor"></span></div><div class="spec"><b>준비시간</b><span id="dLead"></span></div><div class="spec"><b>상태</b><span id="dStatus"></span></div><a id="dReserve" class="reservation-cta" href="#/reserve/rosy-moment">가상 예약 요청하기 ↗</a><button id="dSoldout" type="button" class="disabled" disabled hidden>품절 · 예약 불가</button><p class="muted">가상 예약 시연만 가능합니다. 실제 접수·결제·연락은 발생하지 않습니다.</p></div></div></section>
+
+<section class="reservation" id="reservation" aria-labelledby="reservationHeading" hidden>
+ <nav class="reserve-nav" aria-label="예약 화면 탐색">
+   <a href="#top" class="brand">AFTERNOON · 오후의 정원</a>
+   <a id="rBack" href="#curation">← 꽃다발로 돌아가기</a>
+ </nav>
+ <div class="reserve-head">
+   <div class="micro">YOUR FLOWERS, YOUR DAY.</div>
+   <h1 id="reservationHeading">꽃다발 예약 요청</h1>
+   <p>원하는 픽업 날짜와 시간을 골라 보세요. 이 페이지는 가상 시연용이며 <b>예약이 접수되거나 확정되지 않습니다.</b></p>
+ </div>
+ <div class="reserve-layout">
+   <aside class="reserve-product" aria-label="선택한 꽃다발">
+     <img id="rImage" src="" alt="">
+     <div class="reserve-product-copy">
+       <h2 id="rProduct"></h2><p id="rPrice" class="reserve-price"></p>
+       <p id="rLead" class="muted"></p>
+     </div>
+   </aside>
+   <div>
+     <form id="reserveForm" class="booking-form" autocomplete="off" novalidate>
+       <h2 class="form-title">픽업 정보 입력</h2>
+       <p class="form-hint">매장 예시 영업시간은 월–금 11:00–20:00입니다. 픽업은 11:00–19:00 사이 1시간 단위로 선택하며, 꽃다발별 최소 준비시간을 적용합니다. 오늘부터 14일 이내의 영업일만 선택할 수 있습니다.</p>
+       <div class="form-row">
+         <div class="form-field">
+           <label for="rDate">픽업 날짜 *</label>
+           <input id="rDate" type="date" required>
+         </div>
+         <div class="form-field">
+           <label for="rTime">픽업 시간 *</label>
+           <select id="rTime" required disabled><option value="">날짜를 먼저 선택해 주세요</option></select>
+         </div>
+       </div>
+       <p id="rTimeHint" class="field-note" aria-live="polite">날짜를 선택하면 가능한 시간이 표시됩니다.</p>
+       <div class="form-row" style="margin-top:22px">
+         <div class="form-field">
+           <label for="rName">예약자 이름 *</label>
+           <input id="rName" type="text" minlength="2" maxlength="30" placeholder="예: 홍길동" required autocomplete="off">
+         </div>
+         <div class="form-field">
+           <label for="rPhone">연락처 *</label>
+           <input id="rPhone" type="tel" inputmode="tel" maxlength="14" placeholder="예: 010-0000-0000" required autocomplete="off">
+         </div>
+       </div>
+       <div class="form-field">
+         <label for="rMemo">전달 사항 (선택)</label>
+         <textarea id="rMemo" maxlength="120" placeholder="선호 색상이나 전달할 내용을 적어 보세요."></textarea>
+       </div>
+       <p id="rError" class="form-error" role="alert"></p>
+       <button class="form-submit" type="submit">가상 예약 요청서 확인 ↗</button>
+       <p class="submit-note">안내: 실제 개인정보 대신 예시 정보를 입력해 주세요. 입력 내용은 브라우저 내 시연에만 사용되며, 서버에 전송하거나 저장하지 않습니다. 실제 주문·결제·예약 확정은 불가능합니다.</p>
+     </form>
+     <div id="reserveResult" class="reservation-result" hidden aria-live="polite">
+       <div class="micro">DEMO REQUEST · NOT SUBMITTED</div>
+       <h2>가상 예약 요청서가 완성됐습니다.</h2>
+       <p><b>실제 매장으로 접수되지 않았습니다.</b> 매장 확인 후 수동 확정하는 절차를 보여주기 위한 시연 결과입니다.</p>
+       <dl>
+         <div><dt>꽃다발</dt><dd id="rrProduct"></dd></div>
+         <div><dt>픽업 날짜</dt><dd id="rrDate"></dd></div>
+         <div><dt>픽업 시간</dt><dd id="rrTime"></dd></div>
+         <div><dt>상태</dt><dd>시연 완료 · 실제 접수 없음</dd></div>
+       </dl>
+       <a id="rAgain" class="result-link" href="#curation">다른 꽃다발 둘러보기 ↗</a>
+       <a id="rResultBack" class="result-link light" href="#/flower/rosy-moment">꽃다발 상세로 돌아가기</a>
+     </div>
+   </div>
+ </div>
+</section>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-02 STATIC DEMO · 가상 상품/예약 시연 · 실제 접수·연락·결제 불가</small></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -128,8 +267,156 @@ const P=[['rosy-moment','로지 모먼트','Rosy Moment','사랑을 가장 부�
 function card(p,i){let a=document.createElement('a');a.className='card';a.href='#/flower/'+p[0];a.innerHTML='<img alt="'+p[1]+' 가상 꽃다발 사진" loading="lazy" src="'+U[i]+'"><div class="row"><div><strong>'+p[1]+'</strong><small>'+p[3]+'</small>'+(p[7]?'':'<small>현재 품절 · 예약 불가</small>')+'</div><span>'+p[4]+' KRW</span></div>';return a}
 P.slice(0,3).forEach((p,i)=>document.querySelector('#featured').appendChild(card(p,i)));P.slice(3).forEach((p,i)=>document.querySelector('#regular').appendChild(card(p,i+3)));
 [['11.06 / TODAY','가든 로즈','6,000원 / 송이'],['11.04 / NEW','라넌큘러스','5,000원 / 송이'],['10.31 / NEW','라일락 튤립','4,500원 / 송이']].forEach((x,i)=>{let el=document.createElement('div');el.className='arrival';el.innerHTML='<img loading="lazy" alt="'+x[1]+'" src="'+ARRIVAL_U[i]+'"><div><small>'+x[0]+'</small><strong>'+x[1]+'</strong><small>'+x[2]+'</small></div><em>문의 전용</em>';document.querySelector('#arrivalList').appendChild(el)});
-function route(){let slug=location.hash.startsWith('#/flower/')?location.hash.substring(9):'';let i=P.findIndex(p=>p[0]===slug);let show=i>=0;document.querySelector('#home').style.display=show?'none':'block';document.querySelector('#detail').style.display=show?'block':'none';if(show){let p=P[i];for(let [id,v] of [['dImage',U[i]],['dTitle',p[1]],['dLatin',p[2]],['dStory',p[3]],['dPrice',p[4]+' KRW'],['dColor',p[5]],['dLead','최소 '+p[6]],['dStatus',p[7]?'합성 상품 · 실제 예약 불가':'품절 · 예약 불가']]){let el=document.getElementById(id);if(id==='dImage'){el.src=v;el.alt=p[1]+' 사진'}else el.textContent=v}window.scrollTo(0,0)}}
-window.addEventListener('hashchange',route);route();
+
+/* A booking has no ID, server request, network action, or persistent storage in this demo. */
+let currentReservationIndex=-1;
+function localDateString(d){
+  const pad=n=>String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+}
+function dateFromLocalString(s){
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return null;
+  const parts=s.split('-').map(Number);
+  const d=new Date(parts[0],parts[1]-1,parts[2]);
+  if(d.getFullYear()!==parts[0]||d.getMonth()!==parts[1]-1||d.getDate()!==parts[2])return null;
+  return d;
+}
+function pickupBounds(){
+  const now=new Date();
+  const first=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const last=new Date(first);
+  last.setDate(last.getDate()+14);
+  return {now,min:localDateString(first),max:localDateString(last)};
+}
+function pickupSlots(productIndex,dateStr){
+  const product=P[productIndex],day=dateFromLocalString(dateStr),bounds=pickupBounds();
+  if(!product||!product[7]||!day||dateStr<bounds.min||dateStr>bounds.max)return [];
+  if(day.getDay()===0||day.getDay()===6)return [];
+  const leadMinutes=Math.max(120,Number.parseInt(product[6],10)||120);
+  const slots=[];
+  for(let h=11;h<=19;h++){
+    const pickup=new Date(day.getFullYear(),day.getMonth(),day.getDate(),h);
+    if(pickup.getTime()-bounds.now.getTime() >= leadMinutes*60*1000){
+      slots.push(String(h).padStart(2,'0')+':00');
+    }
+  }
+  return slots;
+}
+function updatePickupTimes(){
+  const field=document.getElementById('rDate');
+  const select=document.getElementById('rTime');
+  const hint=document.getElementById('rTimeHint');
+  const selected=select.value;
+  select.replaceChildren();
+  const options=currentReservationIndex<0?[]:pickupSlots(currentReservationIndex,field.value);
+  const empty=document.createElement('option');
+  empty.value='';
+  empty.textContent=options.length?'시간을 선택해 주세요':'선택할 수 있는 시간이 없습니다';
+  select.appendChild(empty);
+  for(const t of options){
+    const o=document.createElement('option');o.value=t;o.textContent=t;select.appendChild(o);
+  }
+  select.disabled=options.length===0;
+  if(options.includes(selected))select.value=selected;
+  const day=dateFromLocalString(field.value);
+  if(!field.value)hint.textContent='날짜를 선택하면 가능한 시간이 표시됩니다.';
+  else if(day&&(day.getDay()===0||day.getDay()===6))hint.textContent='토요일과 일요일은 픽업할 수 없습니다. 평일을 선택해 주세요.';
+  else if(options.length===0)hint.textContent='해당 날짜에 이용 가능한 시간이 없습니다. 다른 날짜를 선택해 주세요.';
+  else hint.textContent='픽업 가능 시간 '+options.length+'개 · 최소 준비시간 및 영업시간 반영';
+}
+function initReservation(index){
+  const p=P[index];
+  currentReservationIndex=index;
+  document.getElementById('rImage').src=U[index];
+  document.getElementById('rImage').alt=p[1]+' 가상 상품 사진';
+  document.getElementById('rProduct').textContent=p[1];
+  document.getElementById('rPrice').textContent=p[4]+' KRW';
+  document.getElementById('rLead').textContent=p[5]+' · 최소 준비시간 '+p[6];
+  document.getElementById('rBack').href='#/flower/'+p[0];
+  document.getElementById('rResultBack').href='#/flower/'+p[0];
+  document.getElementById('rError').textContent='';
+  const form=document.getElementById('reserveForm');
+  form.reset();
+  form.hidden=false;
+  document.getElementById('reserveResult').hidden=true;
+  const bounds=pickupBounds();
+  const date=document.getElementById('rDate');
+  date.min=bounds.min;
+  date.max=bounds.max;
+  updatePickupTimes();
+}
+function showReservationError(message){
+  document.getElementById('rError').textContent=message;
+}
+document.getElementById('rDate').addEventListener('change',()=>{
+  document.getElementById('rError').textContent='';
+  updatePickupTimes();
+});
+document.getElementById('reserveForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const idx=currentReservationIndex,p=P[idx],date=document.getElementById('rDate').value;
+  const time=document.getElementById('rTime').value;
+  const name=document.getElementById('rName').value.trim();
+  const phone=document.getElementById('rPhone').value.trim().replace(/[\s-]/g,'');
+  const bounds=pickupBounds();
+  if(!p||!p[7]){showReservationError('예약 시연이 불가능한 꽃다발입니다.');return;}
+  if(!dateFromLocalString(date)||date<bounds.min||date>bounds.max){
+    showReservationError('오늘부터 14일 이내의 올바른 픽업 날짜를 선택해 주세요.');return;
+  }
+  if(!pickupSlots(idx,date).includes(time)){
+    showReservationError('영업일·영업시간·준비시간에 맞는 픽업 시간을 선택해 주세요.');return;
+  }
+  if(name.length<2||name.length>30){showReservationError('예약자 이름을 2~30자로 입력해 주세요.');return;}
+  if(!/^01[016789]\d{7,8}$/.test(phone)){showReservationError('휴대전화 형식의 예시 연락처를 입력해 주세요.');return;}
+  /* Only write synthetic request metadata to the visible DOM. Never display or persist phone/name. */
+  document.getElementById('rrProduct').textContent=p[1];
+  document.getElementById('rrDate').textContent=date;
+  document.getElementById('rrTime').textContent=time;
+  this.hidden=true;
+  const result=document.getElementById('reserveResult');
+  result.hidden=false;
+  result.scrollIntoView({block:'start',behavior:'smooth'});
+  /* Discard typed contact details after the in-browser simulation. */
+  this.reset();
+});
+function route(){
+  const hash=location.hash;
+  const detailSlug=hash.startsWith('#/flower/')?hash.substring(9):null;
+  const reservationSlug=hash.startsWith('#/reserve/')?hash.substring(10):null;
+  const index=P.findIndex(p=>p[0]===(reservationSlug||detailSlug));
+  const showReservation=reservationSlug!==null&&index>=0;
+  const showDetail=detailSlug!==null&&index>=0;
+  if(showReservation&&!P[index][7]){
+    location.hash='#/flower/'+P[index][0];
+    return;
+  }
+  document.getElementById('home').style.display=(showReservation||showDetail)?'none':'block';
+  document.getElementById('detail').style.display=showDetail?'block':'none';
+  document.getElementById('reservation').style.display=showReservation?'block':'none';
+  document.getElementById('reservation').hidden=!showReservation;
+  if(showDetail){
+    const p=P[index];
+    for(const [id,v] of [
+      ['dImage',U[index]],['dTitle',p[1]],['dLatin',p[2]],['dStory',p[3]],
+      ['dPrice',p[4]+' KRW'],['dColor',p[5]],['dLead','최소 '+p[6]],
+      ['dStatus',p[7]?'가상 예약 시연 가능 · 실제 접수 불가':'품절 · 예약 불가']
+    ]){
+      const el=document.getElementById(id);
+      if(id==='dImage'){el.src=v;el.alt=p[1]+' 사진';}else el.textContent=v;
+    }
+    const reserveLink=document.getElementById('dReserve');
+    reserveLink.hidden=!p[7];
+    reserveLink.href='#/reserve/'+p[0];
+    document.getElementById('dSoldout').hidden=!!p[7];
+    window.scrollTo(0,0);
+  }
+  if(showReservation){
+    initReservation(index);
+    window.scrollTo(0,0);
+  }
+}
+window.addEventListener('hashchange',route);
+route();
 </script><script id="editorial-product-flow-v09-script">
 /* v0.9: only the hero's approved delayed text reveal remains. */
 (function(){
