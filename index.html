@@ -530,11 +530,11 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
        <div class="form-row">
          <div class="form-field">
            <label for="rDate">픽업 날짜 *</label>
-           <input id="rDate" type="date" required>
+           <input id="rDate" type="date" required aria-describedby="rTimeHint">
          </div>
          <div class="form-field">
            <label for="rTime">픽업 시간 *</label>
-           <select id="rTime" required disabled><option value="">날짜를 먼저 선택해 주세요</option></select>
+           <select id="rTime" required disabled aria-describedby="rTimeHint"><option value="">날짜를 먼저 선택해 주세요</option></select>
          </div>
        </div>
        <p id="rTimeHint" class="field-note" aria-live="polite">날짜를 선택하면 가능한 시간이 표시됩니다.</p>
@@ -556,13 +556,13 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
  <div class="transfer-tag">BANK TRANSFER · DEPOSIT REQUIRED</div>
  <h3>송금 완료 후 입금이 확인되면 예약 확정</h3>
  <p>예약 요청 후 지정 계좌로 송금하고, 매장에서 실제 입금 내역을 확인해야 예약이 최종 확정됩니다. 현재 계좌번호는 미등록 상태이므로 실제 송금하지 마세요.</p>
-</div><p id="rError" class="form-error" role="alert"></p>
+</div><p id="rError" class="form-error" role="alert" tabindex="-1"></p>
        <button class="form-submit" type="submit">가상 예약 요청서 확인 ↗</button>
        <p class="submit-note">안내: 실제 개인정보 대신 예시 정보를 입력해 주세요. 입력 내용은 브라우저 내 시연에만 사용되며, 서버에 전송하거나 저장하지 않습니다. 실제 주문·결제·예약 확정은 불가능합니다.</p>
      </form>
      <div id="reserveResult" class="reservation-result" hidden aria-live="polite">
        <div class="micro">DEMO REQUEST · NOT SUBMITTED</div>
-       <h2>가상 예약 요청이 준비됐습니다.</h2>
+       <h2 id="reserveResultTitle" tabindex="-1">가상 예약 요청이 준비됐습니다.</h2>
        <p><b>실제 매장으로 접수되지 않았습니다.</b> 정식 운영 시에는 계좌이체 후 매장에서 입금이 확인되면 예약이 확정됩니다.</p>
        <dl>
          <div><dt>꽃다발</dt><dd id="rrProduct"></dd></div>
@@ -579,8 +579,8 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
     <dt>계좌번호</dt><dd id="rrBankNumber">미등록 · 실제 송금 불가</dd>
     <dt>입금 금액</dt><dd id="rrAmount"></dd>
   </dl>
-  <button type="button" id="rMarkPaid" class="transfer-demo-button">가상 송금 완료 표시하기</button>
-  <p id="rPaymentState" aria-live="polite">현재 가상 입금 전 상태입니다. 실제 예약은 확정되지 않았습니다.</p>
+  <button type="button" id="rMarkPaid" class="transfer-demo-button" aria-describedby="rPaymentState">가상 송금 완료 표시하기</button>
+  <p id="rPaymentState" aria-live="polite" tabindex="-1">현재 가상 입금 전 상태입니다. 실제 예약은 확정되지 않았습니다.</p>
  </div>
  <a id="rAgain" class="result-link" href="#curation">다른 꽃다발 둘러보기 ↗</a>
        <a id="rResultBack" class="result-link light" href="#/flower/rosy-moment">꽃다발 상세로 돌아가기</a>
@@ -690,7 +690,7 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
  </div>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-13 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-14 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -1021,7 +1021,7 @@ function pickupSlots(productIndex,dateStr){
   }
   return slots;
 }
-function updatePickupTimes(){
+function updatePickupTimes(resetSelection=false){
   const field=document.getElementById('rDate');
   const select=document.getElementById('rTime');
   const hint=document.getElementById('rTimeHint');
@@ -1036,12 +1036,14 @@ function updatePickupTimes(){
     const o=document.createElement('option');o.value=t;o.textContent=t;select.appendChild(o);
   }
   select.disabled=options.length===0;
-  if(options.includes(selected))select.value=selected;
-  const previousSlotExpired=!!selected&&!options.includes(selected);
+  /* A changed date must never silently reuse its previous pickup hour. */
+  select.value=!resetSelection&&options.includes(selected)?selected:'';
+  const previousSlotExpired=!resetSelection&&!!selected&&!options.includes(selected);
   const day=dateFromLocalString(field.value);
   if(!field.value)hint.textContent='날짜를 선택하면 가능한 시간이 표시됩니다.';
   else if(day&&(day.getDay()===0||day.getDay()===6))hint.textContent='토요일과 일요일은 픽업할 수 없습니다. 평일을 선택해 주세요.';
   else if(options.length===0)hint.textContent='해당 날짜에 이용 가능한 시간이 없습니다. 다른 날짜를 선택해 주세요.';
+  else if(resetSelection&&!!selected)hint.textContent='날짜가 변경되었습니다. 이 날짜의 픽업 시간을 다시 선택해 주세요.';
   else if(previousSlotExpired)hint.textContent='선택했던 시간이 더 이상 가능하지 않습니다. 새로운 시간을 선택해 주세요.';
   else hint.textContent='픽업 가능 시간 '+options.length+'개 · 최소 준비시간 및 영업시간 반영';
 }
@@ -1059,7 +1061,7 @@ function initReservation(index){
   document.getElementById('rLead').textContent=p[5]+' · 최소 준비시간 '+p[6];
   document.getElementById('rBack').href='#/flower/'+p[0];
   document.getElementById('rResultBack').href='#/flower/'+p[0];
-  document.getElementById('rError').textContent='';
+  clearReservationError();
   const form=document.getElementById('reserveForm');
   form.reset();
   updateBankPreview();
@@ -1071,13 +1073,34 @@ function initReservation(index){
   date.max=bounds.max;
   updatePickupTimes();
 }
-function showReservationError(message){
-  document.getElementById('rError').textContent=message;
+/* G3-14: field-oriented validation; keep the existing alert for spoken errors. */
+function clearReservationError(){
+ document.getElementById('rError').textContent='';
+ for(const id of ['rDate','rTime','rName','rPhone']){
+  const field=document.getElementById(id);
+  field.removeAttribute('aria-invalid');
+  if(id==='rDate'||id==='rTime')field.setAttribute('aria-describedby','rTimeHint');
+  else field.removeAttribute('aria-describedby');
+ }
+}
+function showReservationError(message,fieldId){
+ clearReservationError();
+ const note=document.getElementById('rError');
+ note.textContent=message;
+ const field=fieldId?document.getElementById(fieldId):note;
+ if(fieldId){
+  field.setAttribute('aria-invalid','true');
+  field.setAttribute('aria-describedby',(fieldId==='rDate'||fieldId==='rTime'?'rTimeHint ':'')+'rError');
+ }
+ field.focus();
 }
 document.getElementById('rDate').addEventListener('change',()=>{
-  document.getElementById('rError').textContent='';
-  updatePickupTimes();
+ clearReservationError();
+ updatePickupTimes(true);
 });
+for(const id of ['rTime','rName','rPhone']){
+ document.getElementById(id).addEventListener(id==='rTime'?'change':'input',clearReservationError);
+}
 document.getElementById('reserveForm').addEventListener('submit',function(e){
   e.preventDefault();
   const idx=currentReservationIndex,p=P[idx],date=document.getElementById('rDate').value;
@@ -1087,13 +1110,13 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   const bounds=pickupBounds();
   if(!p||!p[7]){showReservationError('예약 시연이 불가능한 꽃다발입니다.');return;}
   if(!dateFromLocalString(date)||date<bounds.min||date>bounds.max){
-    showReservationError('오늘부터 14일 이내의 올바른 픽업 날짜를 선택해 주세요.');return;
+    showReservationError('오늘부터 14일 이내의 올바른 픽업 날짜를 선택해 주세요.','rDate');return;
   }
   if(!pickupSlots(idx,date).includes(time)){
-    showReservationError('영업일·영업시간·준비시간에 맞는 픽업 시간을 선택해 주세요.');return;
+    showReservationError('영업일·영업시간·준비시간에 맞는 픽업 시간을 선택해 주세요.','rTime');return;
   }
-  if(name.length<2||name.length>30){showReservationError('예약자 이름을 2~30자로 입력해 주세요.');return;}
-  if(!/^01[016789]\d{7,8}$/.test(phone)){showReservationError('휴대전화 형식의 예시 연락처를 입력해 주세요.');return;}
+  if(name.length<2||name.length>30){showReservationError('예약자 이름을 2~30자로 입력해 주세요.','rName');return;}
+  if(!/^01[016789]\d{7,8}$/.test(phone)){showReservationError('휴대전화 형식의 예시 연락처를 입력해 주세요.','rPhone');return;}
   /* Only write synthetic request metadata to the visible DOM. Never display or persist phone/name. */
   const acceptedId=mockNewAdminRequest(idx,date,time);
   if(!acceptedId){
@@ -1109,6 +1132,7 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   const result=document.getElementById('reserveResult');
   result.hidden=false;
   result.scrollIntoView({block:'start',behavior:'smooth'});
+  document.getElementById('reserveResultTitle').focus({preventScroll:true});
   /* Discard typed contact details after the in-browser simulation. */
   this.reset();
 });
@@ -1117,7 +1141,9 @@ document.getElementById('rMarkPaid').addEventListener('click',function(){
  if(!currentDemoRequestId||!markDemoPayment(currentDemoRequestId))return;
  this.disabled=true;
  this.textContent='가상 송금 완료 표시됨';
- document.getElementById('rPaymentState').textContent='가상 송금 완료로 표시했습니다. 매장이 입금을 확인해야 예약이 확정됩니다. 실제 은행 거래나 송금은 발생하지 않았습니다.';
+ const notice=document.getElementById('rPaymentState');
+ notice.textContent='가상 송금 완료로 표시했습니다. 매장이 입금을 확인해야 예약이 확정됩니다. 실제 은행 거래나 송금은 발생하지 않았습니다.';
+ notice.focus({preventScroll:true});
 });
 
 /* G3-06 separate calendar view; a day reveals synthetic customer, time and pickup state. */
