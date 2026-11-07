@@ -26,6 +26,24 @@ html.hero-peek-immediate #home>.hero{transition:none}
 </style><style id="reservation-cta-v12">
 #detail .reservation-cta{display:inline-block;margin-top:23px;padding:17px 23px;background:#384a3b;color:#fff;font-size:13px;font-weight:560}
 #detail .reservation-cta:focus-visible{outline:2px solid #58785d;outline-offset:3px}
+</style><style id="bank-transfer-demo-v14">
+/* G3-04: account-transfer explanation only. No real bank account, payment detection or booking. */
+#detail .transfer-condition{border-left:2px solid #a9b4a4;padding:10px 0 10px 15px;margin:19px 0 0;color:#556358;font-size:12px;line-height:1.8}
+#reservation .transfer-explainer{background:#eae9dc;border-left:3px solid #657f66;padding:21px 22px;margin:8px 0 25px}
+#reservation .transfer-explainer h3{margin:6px 0 10px;font-size:19px;line-height:1.4;font-weight:600;letter-spacing:-.04em}
+#reservation .transfer-explainer p{margin:0;color:#5c6b5c;font-size:12px;line-height:1.85}
+#reservation .transfer-explainer .transfer-tag{font-size:10px;letter-spacing:.12em;color:#596c5d}
+#reservation .transfer-result{margin:24px 0 18px;padding:22px;background:#ecebdf;border:1px solid #d4d5c9}
+#reservation .transfer-result h3{font-weight:610;font-size:21px;line-height:1.4;margin:10px 0 12px}
+#reservation .transfer-result p{font-size:12px;line-height:1.85;color:#5d6c5f;margin:9px 0}
+#reservation .transfer-result .transfer-details{display:grid;grid-template-columns:74px 1fr;gap:11px 15px;margin:17px 0;padding:15px 0;border-block:1px solid #c7cabc;font-size:12px}
+#reservation .transfer-result .transfer-details dt{color:#7a8679}
+#reservation .transfer-result .transfer-details dd{margin:0;word-break:keep-all;font-weight:600}
+#reservation .transfer-result .transfer-demo-button{width:100%;margin-top:6px;padding:14px;background:#425847;border:1px solid #425847;color:white;font-family:inherit;font-size:13px;cursor:pointer}
+#reservation .transfer-result .transfer-demo-button:disabled{opacity:.55;cursor:not-allowed}
+#reservation .transfer-result .transfer-demo-button:focus-visible{outline:2px solid #66866e;outline-offset:3px}
+#reservation .transfer-result #rPaymentState{font-weight:590;color:#47604a}
+@media(max-width:700px){#reservation .transfer-explainer,#reservation .transfer-result{padding:18px}}
 </style><style id="admin-demo-v13">
 /* G3-03 in-browser admin preview. No real admin access control or server interaction. */
 #adminDemo{display:none;background:#f8f5ef;min-height:80svh;padding:32px 7% 90px}
@@ -250,10 +268,10 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
 <section class="section other" id="other"><div class="head"><h2>Everyday<br><span class="upright">flowers.</span></h2><p>오늘의 추천 외에도 만나볼 수 있는 꽃다발</p></div><div class="cards" id="regular"></div></section>
 <section class="section store" id="store"><div class="head"><h2>Visit the<br><span class="upright">atelier.</span></h2></div>
 <div class="booking-info" aria-label="예약 안내">
-  <div><div class="booking-title">꽃다발 예약 안내</div><p>꽃다발을 선택해 가상 예약 요청 과정을 체험할 수 있습니다.<br>실제 접수되지 않으며, 실제 예약은 매장 확인 후에만 확정됩니다.</p></div>
+  <div><div class="booking-title">꽃다발 예약 안내</div><p>꽃다발 예약 요청 후 계좌이체를 완료하면, 매장에서 입금을 확인한 뒤 예약이 확정됩니다.<br>현재는 실제 계좌번호가 없는 가상 시연입니다.</p></div>
   <a class="booking-demo-link" href="#curation">꽃다발 선택하고 예약 체험 ↗</a>
-</div><table><tr><td>ADDRESS</td><td>가상 매장 — 실제 주소 미등록</td></tr><tr><td>OPENING HOURS</td><td>월–금 11:00–20:00 (예시)</td></tr><tr><td>CONTACT</td><td>전화 문의 채널 미등록</td></tr><tr><td>PICKUP</td><td>예약 요청 → 매장 확인 → 고객 연락 → 수동 확정</td></tr></table></section></main>
-<section class="detail" id="detail"><div class="detailNav"><a href="#top" class="brand">AFTERNOON · 오후의 정원</a><a href="#curation">← 목록으로</a></div><div class="detailBody"><img id="dImage" alt=""><div class="detailCopy"><div class="micro">THE BOUQUET COLLECTION</div><h1 id="dTitle"></h1><span id="dLatin"></span><p class="muted" id="dStory"></p><div class="price" id="dPrice"></div><div class="spec"><b>구성</b><span id="dColor"></span></div><div class="spec"><b>준비시간</b><span id="dLead"></span></div><div class="spec"><b>상태</b><span id="dStatus"></span></div><a id="dReserve" class="reservation-cta" href="#/reserve/rosy-moment">가상 예약 요청하기 ↗</a><button id="dSoldout" type="button" class="disabled" disabled hidden>품절 · 예약 불가</button><p class="muted">가상 예약 시연만 가능합니다. 실제 접수·결제·연락은 발생하지 않습니다.</p></div></div></section>
+</div><table><tr><td>ADDRESS</td><td>가상 매장 — 실제 주소 미등록</td></tr><tr><td>OPENING HOURS</td><td>월–금 11:00–20:00 (예시)</td></tr><tr><td>CONTACT</td><td>전화 문의 채널 미등록</td></tr><tr><td>PICKUP</td><td>예약 요청 → 계좌이체 → 매장 입금 확인 → 예약 확정</td></tr></table></section></main>
+<section class="detail" id="detail"><div class="detailNav"><a href="#top" class="brand">AFTERNOON · 오후의 정원</a><a href="#curation">← 목록으로</a></div><div class="detailBody"><img id="dImage" alt=""><div class="detailCopy"><div class="micro">THE BOUQUET COLLECTION</div><h1 id="dTitle"></h1><span id="dLatin"></span><p class="muted" id="dStory"></p><div class="price" id="dPrice"></div><div class="spec"><b>구성</b><span id="dColor"></span></div><div class="spec"><b>준비시간</b><span id="dLead"></span></div><div class="spec"><b>상태</b><span id="dStatus"></span></div><p class="transfer-condition"><strong>계좌이체 안내</strong><br>송금이 완료되고 매장에서 입금을 확인하면 예약이 확정됩니다.<br>현재는 가상 시연으로 실제 송금할 수 없습니다.</p><a id="dReserve" class="reservation-cta" href="#/reserve/rosy-moment">가상 예약 요청하기 ↗</a><button id="dSoldout" type="button" class="disabled" disabled hidden>품절 · 예약 불가</button><p class="muted">가상 예약 시연만 가능합니다. 실제 접수·결제·연락은 발생하지 않습니다.</p></div></div></section>
 
 <section class="reservation" id="reservation" aria-labelledby="reservationHeading" hidden>
  <nav class="reserve-nav" aria-label="예약 화면 탐색">
@@ -263,7 +281,7 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
  <div class="reserve-head">
    <div class="micro">YOUR FLOWERS, YOUR DAY.</div>
    <h1 id="reservationHeading">꽃다발 예약 요청</h1>
-   <p>원하는 픽업 날짜와 시간을 골라 보세요. 이 페이지는 가상 시연용이며 <b>예약이 접수되거나 확정되지 않습니다.</b></p>
+   <p>원하는 픽업 날짜와 시간을 골라 보세요. <b>계좌이체 후 매장에서 입금이 확인되면 예약이 확정됩니다.</b> 현재 페이지는 가상 시연용으로 실제 접수·송금·예약 확정은 불가능합니다.</p>
  </div>
  <div class="reserve-layout">
    <aside class="reserve-product" aria-label="선택한 꽃다발">
@@ -302,21 +320,37 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
          <label for="rMemo">전달 사항 (선택)</label>
          <textarea id="rMemo" maxlength="120" placeholder="선호 색상이나 전달할 내용을 적어 보세요."></textarea>
        </div>
-       <p id="rError" class="form-error" role="alert"></p>
+       <div class="transfer-explainer" role="note">
+ <div class="transfer-tag">BANK TRANSFER · DEPOSIT REQUIRED</div>
+ <h3>송금 완료 후 입금이 확인되면 예약 확정</h3>
+ <p>예약 요청 후 지정 계좌로 송금하고, 매장에서 실제 입금 내역을 확인해야 예약이 최종 확정됩니다. 현재 계좌번호는 미등록 상태이므로 실제 송금하지 마세요.</p>
+</div><p id="rError" class="form-error" role="alert"></p>
        <button class="form-submit" type="submit">가상 예약 요청서 확인 ↗</button>
        <p class="submit-note">안내: 실제 개인정보 대신 예시 정보를 입력해 주세요. 입력 내용은 브라우저 내 시연에만 사용되며, 서버에 전송하거나 저장하지 않습니다. 실제 주문·결제·예약 확정은 불가능합니다.</p>
      </form>
      <div id="reserveResult" class="reservation-result" hidden aria-live="polite">
        <div class="micro">DEMO REQUEST · NOT SUBMITTED</div>
-       <h2>가상 예약 요청서가 완성됐습니다.</h2>
-       <p><b>실제 매장으로 접수되지 않았습니다.</b> 매장 확인 후 수동 확정하는 절차를 보여주기 위한 시연 결과입니다.</p>
+       <h2>가상 예약 요청이 준비됐습니다.</h2>
+       <p><b>실제 매장으로 접수되지 않았습니다.</b> 정식 운영 시에는 계좌이체 후 매장에서 입금이 확인되면 예약이 확정됩니다.</p>
        <dl>
          <div><dt>꽃다발</dt><dd id="rrProduct"></dd></div>
          <div><dt>픽업 날짜</dt><dd id="rrDate"></dd></div>
          <div><dt>픽업 시간</dt><dd id="rrTime"></dd></div>
-         <div><dt>상태</dt><dd>시연 완료 · 실제 접수 없음</dd></div>
+         <div><dt>예약 상태</dt><dd>가상 예약 · 입금 확인 전 (실제 접수 없음)</dd></div>
        </dl>
-       <a id="rAgain" class="result-link" href="#curation">다른 꽃다발 둘러보기 ↗</a>
+       <div class="transfer-result" role="note">
+  <div class="micro">ACCOUNT TRANSFER · DEMO ONLY</div>
+  <h3>입금 확인 후 예약이 확정됩니다.</h3>
+  <p>아래는 예약 절차 설명을 위한 시연 영역입니다. <b>실제 계좌번호가 등록되지 않았으므로 송금하지 마세요.</b></p>
+  <dl class="transfer-details">
+    <dt>은행</dt><dd>미등록 · 시연용</dd>
+    <dt>계좌번호</dt><dd>미등록 · 실제 송금 불가</dd>
+    <dt>입금 금액</dt><dd id="rrAmount"></dd>
+  </dl>
+  <button type="button" id="rMarkPaid" class="transfer-demo-button">가상 송금 완료 표시하기</button>
+  <p id="rPaymentState" aria-live="polite">현재 가상 입금 전 상태입니다. 실제 예약은 확정되지 않았습니다.</p>
+ </div>
+ <a id="rAgain" class="result-link" href="#curation">다른 꽃다발 둘러보기 ↗</a>
        <a id="rResultBack" class="result-link light" href="#/flower/rosy-moment">꽃다발 상세로 돌아가기</a>
        <a class="result-link light" href="#/admin-demo">관리자 데모에서 요청 상태 보기 ↗</a>
      </div>
@@ -328,17 +362,17 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
  <div class="admin-top"><a class="brand" href="#top">AFTERNOON · 오후의 정원</a><a class="admin-back" href="#curation">← 고객 쇼윈도로</a></div>
  <div class="admin-kicker">MANAGER WORKSPACE · DEMO</div>
  <h1 class="admin-title" id="adminHeading">예약 요청 관리</h1>
- <p class="admin-intro">가상의 예약 요청을 선택해 <b>수동 확정하거나 거절</b>하는 관리자 시연 화면입니다. 실제 고객 정보나 예약은 없으며, 로그인·알림·서버 저장 기능도 없습니다. 공개된 데모 페이지로 실제 관리자 시스템이 아닙니다.</p>
+ <p class="admin-intro">예약 고객의 <b>계좌이체가 완료되고 실제 입금이 확인된 후에만 예약을 확정</b>하는 운영 방식을 시연합니다. 이 데모에서는 가상 송금 표시 후 관리자가 수동 확정합니다. 실제 은행 거래 내역 확인·고객 정보·로그인·알림·서버 저장 기능은 없으며, 공개된 시연 화면이지 실제 관리자 시스템이 아닙니다.</p>
  <div class="admin-metrics" aria-label="가상 예약 현황">
   <div class="admin-metric"><span>전체 요청</span><b id="adminTotal">0</b></div>
-  <div class="admin-metric"><span>처리 대기</span><b id="adminPending">0</b></div>
-  <div class="admin-metric"><span>수동 확정</span><b id="adminConfirmed">0</b></div>
+  <div class="admin-metric"><span>입금 확인 전</span><b id="adminPending">0</b></div>
+  <div class="admin-metric"><span>예약 확정</span><b id="adminConfirmed">0</b></div>
   <div class="admin-metric"><span>거절</span><b id="adminRejected">0</b></div>
  </div>
  <div class="admin-toolbar"><h2>요청 목록</h2><button id="adminReset" type="button" class="admin-reset">가상 데이터 초기화</button></div>
  <div class="admin-filters" role="group" aria-label="예약 상태별 필터">
    <button type="button" class="admin-filter" data-filter="all" aria-pressed="true">전체</button>
-   <button type="button" class="admin-filter" data-filter="pending" aria-pressed="false">대기</button>
+   <button type="button" class="admin-filter" data-filter="pending" aria-pressed="false">입금 확인 전</button>
    <button type="button" class="admin-filter" data-filter="confirmed" aria-pressed="false">확정</button>
    <button type="button" class="admin-filter" data-filter="rejected" aria-pressed="false">거절</button>
  </div>
