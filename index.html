@@ -26,6 +26,99 @@ html.hero-peek-immediate #home>.hero{transition:none}
 </style><style id="reservation-cta-v12">
 #detail .reservation-cta{display:inline-block;margin-top:23px;padding:17px 23px;background:#384a3b;color:#fff;font-size:13px;font-weight:560}
 #detail .reservation-cta:focus-visible{outline:2px solid #58785d;outline-offset:3px}
+</style><style id="booking-calendar-v16">
+/* G3-06: full-width monthly booking calendar, inspired by mobile calendar layouts. */
+#calendarDemo{display:none;background:#fbfaf7;min-height:100svh;color:#27342d;padding:30px 5.6% 100px}
+#calendarDemo[hidden]{display:none!important}
+#calendarDemo .calendar-header{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:36px}
+#calendarDemo .calendar-header .brand{font-size:13px}
+#calendarDemo .calendar-header .calendar-back{color:#4b5d4e;font-size:13px;border-bottom:1px solid #b9c4b6;padding-bottom:5px}
+#calendarDemo .calendar-eyebrow{font-size:11px;letter-spacing:.14em;color:#6b806c}
+#calendarDemo .calendar-heading{font-size:clamp(34px,5vw,61px);line-height:1.15;font-weight:620;letter-spacing:-.075em;margin:10px 0 13px}
+#calendarDemo .calendar-description{font-size:12px;line-height:1.85;color:#667369;margin:0 0 27px}
+#calendarDemo .cal-controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-bottom:16px}
+#calendarDemo .cal-month-switcher{display:flex;align-items:center;gap:11px}
+#calendarDemo .cal-month-switcher button,#calendarDemo .cal-tools button{
+ font-family:inherit;background:#fff;border:1px solid #dbdfd5;border-radius:999px;
+ padding:10px 13px;cursor:pointer;color:#344739;min-height:41px;font-size:12px
+}
+#calendarDemo .cal-month-switcher button{width:43px;font-size:20px;padding:5px}
+#calendarDemo .cal-month-switcher h2{margin:0 4px;min-width:145px;text-align:center;font-size:clamp(19px,2.8vw,26px);font-weight:650;letter-spacing:-.05em}
+#calendarDemo .cal-tools{display:flex;align-items:center;gap:7px}
+#calendarDemo .cal-tools button.refresh{background:#3b5442;color:#fff;border-color:#3b5442}
+#calendarDemo button:focus-visible,#calendarDemo .calendar-back:focus-visible{outline:2px solid #466b53;outline-offset:3px}
+#calendarDemo .cal-weekdays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid #d2d9d0}
+#calendarDemo .cal-weekdays span{font-size:12px;font-weight:610;text-align:center;color:#414b41;padding:12px 0}
+#calendarDemo .cal-weekdays span:first-child,#calendarDemo .cal-weekdays span:last-child{color:#969d98}
+#calendarDemo .cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-left:1px solid #e6e9e2}
+#calendarDemo .cal-gap,#calendarDemo .cal-day{border:0;border-right:1px solid #e6e9e2;border-bottom:1px solid #e2e6df;min-width:0;min-height:126px;background:#fffdfa}
+#calendarDemo .cal-gap{background:#faf9f6}
+#calendarDemo .cal-day{font:inherit;cursor:pointer;text-align:left;display:flex;flex-direction:column;padding:11px 8px;gap:7px;color:#243528;transition:background .18s}
+#calendarDemo .cal-day:hover{background:#f1f5ec}
+#calendarDemo .cal-day[aria-pressed="true"]{background:#e9f0e6;box-shadow:inset 0 0 0 2px #5b795e}
+#calendarDemo .cal-day .cal-number{font-size:18px;font-weight:620;margin-bottom:2px;line-height:1.2}
+#calendarDemo .cal-day .cal-number.is-today{background:#d94e43;color:#fff;border-radius:50%;width:32px;height:32px;display:grid;place-items:center;margin:-5px 0 -3px -4px}
+#calendarDemo .cal-day .cal-number.is-weekend{color:#a5aaa4}
+#calendarDemo .cal-day .cal-pill{display:block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;border-radius:9px;padding:5px 6px;font-size:10px;font-weight:570;line-height:1.35}
+#calendarDemo .cal-pill.pending{background:#f6eddb;color:#76603a}
+#calendarDemo .cal-pill.confirmed{background:#e5dcf2;color:#624d86}
+#calendarDemo .cal-pill.ready{background:#d7e7df;color:#386e55}
+#calendarDemo .cal-pill.completed{background:#e2e6e3;color:#5c6c60}
+#calendarDemo .cal-more{font-size:10px;color:#647769;padding-left:3px}
+#calendarDemo .cal-legend{display:flex;flex-wrap:wrap;gap:9px 18px;margin:15px 0 36px}
+#calendarDemo .cal-legend span{font-size:11px;color:#607165;display:inline-flex;align-items:center;gap:7px}
+#calendarDemo .cal-legend i{display:inline-block;width:10px;height:10px;border-radius:50%}
+#calendarDemo .cal-legend .pending{background:#e6ce9b}
+#calendarDemo .cal-legend .confirmed{background:#a58cce}
+#calendarDemo .cal-legend .ready{background:#81b79b}
+#calendarDemo .cal-legend .completed{background:#a9b9ad}
+#calendarDemo .cal-detail{border-top:2px solid #59735e;padding-top:25px;scroll-margin-top:20px}
+#calendarDemo .cal-detail-top{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:20px}
+#calendarDemo .cal-detail h3{font-size:clamp(24px,3.2vw,35px);letter-spacing:-.06em;margin:0;font-weight:590}
+#calendarDemo .cal-detail .cal-day-count{font-size:12px;color:#67786b}
+#calendarDemo .cal-events{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+#calendarDemo .cal-event{padding:19px;background:#f2f0e9;border:1px solid #e1e0d5;min-width:0}
+#calendarDemo .cal-event-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+#calendarDemo .cal-event .cal-event-time{font-size:21px;font-weight:650;letter-spacing:-.035em}
+#calendarDemo .cal-event .cal-event-status{border-radius:7px;padding:5px 7px;font-size:11px;font-weight:600;background:#d9e1d4;color:#486148}
+#calendarDemo .cal-event .cal-event-status.pending{background:#f6eddb;color:#76603a}
+#calendarDemo .cal-event .cal-event-status.confirmed{background:#e5dcf2;color:#624d86}
+#calendarDemo .cal-event .cal-event-status.ready{background:#d7e7df;color:#386e55}
+#calendarDemo .cal-event .cal-event-status.completed{background:#e2e6e3;color:#5c6c60}
+#calendarDemo .cal-event .cal-client{font-size:16px;font-weight:590;margin:13px 0 5px}
+#calendarDemo .cal-event .cal-event-meta{font-size:12px;color:#68786b;line-height:1.85;margin:0}
+#calendarDemo .cal-event-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}
+#calendarDemo .cal-event-actions button{background:#46624d;border:1px solid #46624d;color:#fff;font-size:12px;font-family:inherit;padding:10px 12px;cursor:pointer}
+#calendarDemo .cal-event-actions button.secondary{background:transparent;color:#45644b;border-color:#9eada1}
+#calendarDemo .cal-event-actions button:disabled{opacity:.5;cursor:not-allowed}
+#calendarDemo .cal-empty{font-size:13px;background:#f2f0e9;color:#758174;padding:31px 23px;line-height:1.8;grid-column:1/-1}
+#calendarDemo .cal-persist-note{font-size:12px;line-height:1.8;color:#758275;margin:24px 0 0}
+#adminDemo .admin-toolbar .admin-calendar-link{background:#455f4b;color:#fff;padding:10px 14px;font-size:12px;font-weight:560;text-decoration:none;display:inline-flex;align-items:center}
+#adminDemo .admin-toolbar .admin-calendar-link:focus-visible{outline:2px solid #4b6a52;outline-offset:3px}
+#adminDemo .admin-status.ready{background:#d7e7df;color:#386e55;border-color:#a6c9b6}
+#adminDemo .admin-status.completed{background:#e2e6e3;color:#5c6c60;border-color:#c4d2c6}
+@media(max-width:800px){
+ #calendarDemo{padding:22px 4% 70px}
+ #calendarDemo .cal-day,#calendarDemo .cal-gap{min-height:111px}
+ #calendarDemo .cal-day{padding:9px 5px;gap:5px}
+ #calendarDemo .cal-day .cal-number{font-size:17px}
+ #calendarDemo .cal-day .cal-pill{font-size:9px;padding:5px 3px}
+ #calendarDemo .cal-events{grid-template-columns:1fr}
+}
+@media(max-width:440px){
+ #calendarDemo{padding:21px 3% 65px}
+ #calendarDemo .calendar-header{margin-bottom:27px}
+ #calendarDemo .cal-month-switcher h2{min-width:114px;font-size:21px}
+ #calendarDemo .cal-month-switcher{gap:5px}
+ #calendarDemo .cal-controls{gap:13px}
+ #calendarDemo .cal-day,#calendarDemo .cal-gap{min-height:103px}
+ #calendarDemo .cal-day{padding:9px 3px;gap:4px}
+ #calendarDemo .cal-day .cal-number{font-size:16px}
+ #calendarDemo .cal-day .cal-number.is-today{width:28px;height:28px}
+ #calendarDemo .cal-day .cal-pill{font-size:8px;padding:4px 3px;border-radius:6px}
+ #calendarDemo .cal-more{font-size:9px}
+ #calendarDemo .cal-event{padding:18px}
+}
 </style><style id="account-notice-demo-v15">
 /* G3-05: synthetic bank display settings, payment verification and unsent notice preview. */
 #adminDemo .account-preview{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:22px;align-items:center;margin:0 0 38px;padding:24px;background:#e8eade;border:1px solid #d8dcce}
@@ -399,13 +492,15 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
   <div class="admin-metric"><span>전체 요청</span><b id="adminTotal">0</b></div>
   <div class="admin-metric"><span>입금 확인 전</span><b id="adminPending">0</b></div>
   <div class="admin-metric"><span>예약 확정</span><b id="adminConfirmed">0</b></div>
-  <div class="admin-metric"><span>거절</span><b id="adminRejected">0</b></div>
+  <div class="admin-metric"><span>수령 완료</span><b id="adminCompleted">0</b></div>
  </div>
- <div class="admin-toolbar"><h2>요청 목록</h2><button id="adminReset" type="button" class="admin-reset">가상 데이터 초기화</button></div>
+ <div class="admin-toolbar"><h2>요청 목록</h2><a class="admin-calendar-link" href="#/calendar-demo">예약 캘린더 열기 ↗</a><button id="adminReset" type="button" class="admin-reset">가상 데이터 초기화</button></div>
  <div class="admin-filters" role="group" aria-label="예약 상태별 필터">
    <button type="button" class="admin-filter" data-filter="all" aria-pressed="true">전체</button>
    <button type="button" class="admin-filter" data-filter="pending" aria-pressed="false">입금 확인 전</button>
-   <button type="button" class="admin-filter" data-filter="confirmed" aria-pressed="false">확정</button>
+   <button type="button" class="admin-filter" data-filter="confirmed" aria-pressed="false">예약 확정</button>
+   <button type="button" class="admin-filter" data-filter="ready" aria-pressed="false">수령 전</button>
+   <button type="button" class="admin-filter" data-filter="completed" aria-pressed="false">수령 완료</button>
    <button type="button" class="admin-filter" data-filter="rejected" aria-pressed="false">거절</button>
  </div>
  <div class="admin-panels">
@@ -413,9 +508,43 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
   <aside class="admin-side" id="adminDetail" aria-live="polite"></aside>
  </div>
  <p class="admin-session-note">실제 예약 확정 안내 문자·알림은 발송되지 않고, 아래 상세 화면에서 문안만 미리볼 수 있습니다.</p>
- <p class="admin-session-note">이 페이지의 모든 상태 변경은 <b>현재 브라우저 탭에서만</b> 유효합니다. 새로고침하면 샘플 데이터로 돌아갑니다. 가상 예약을 추가하려면 <a href="#curation">꽃다발을 선택해 예약 체험</a>을 진행해 주세요.</p>
+ <p class="admin-session-note">이 페이지의 가상 예약 정보(고객 실명·연락처 제외)는 <b>현재 브라우저에만</b> 저장되어 새로고침 후에도 유지됩니다. 관리자 화면의 ‘가상 데이터 초기화’로 삭제할 수 있습니다. 가상 예약을 추가하려면 <a href="#curation">꽃다발을 선택해 예약 체험</a>을 진행해 주세요.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-05 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a></footer>
+
+<section id="calendarDemo" hidden aria-labelledby="calendarHeading">
+ <div class="calendar-header">
+  <a href="#/admin-demo" class="brand">AFTERNOON · 오후의 정원</a>
+  <a href="#/admin-demo" class="calendar-back">← 관리자 목록으로</a>
+ </div>
+ <div class="calendar-eyebrow">MANAGER CALENDAR · DEMO</div>
+ <h1 id="calendarHeading" class="calendar-heading">예약 캘린더</h1>
+ <p class="calendar-description">예약과 픽업 일정을 월별로 확인하세요. 날짜를 누르면 예약 시간, 가상 고객명, 꽃다발과 처리 상태가 나타납니다. 거절된 예약은 달력에서 제외합니다.</p>
+ <div class="cal-controls">
+   <div class="cal-month-switcher">
+    <button type="button" id="calPrev" aria-label="이전 달">‹</button>
+    <h2 id="calMonth" aria-live="polite"></h2>
+    <button type="button" id="calNext" aria-label="다음 달">›</button>
+   </div>
+   <div class="cal-tools">
+    <button type="button" id="calToday">이번 달</button>
+    <button type="button" id="calRefresh" class="refresh">↻ 새로고침</button>
+   </div>
+ </div>
+ <div class="cal-weekdays" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+ <div class="cal-grid" id="calGrid" aria-label="월간 예약 달력"></div>
+ <div class="cal-legend" aria-label="예약 상태 색상">
+  <span><i class="pending"></i>입금 전</span>
+  <span><i class="confirmed"></i>예약 확정</span>
+  <span><i class="ready"></i>수령 전</span>
+  <span><i class="completed"></i>수령 완료</span>
+ </div>
+ <div class="cal-detail" id="calDetails" aria-live="polite">
+  <div class="cal-detail-top"><h3 id="calSelectedTitle"></h3><span id="calSelectedCount" class="cal-day-count"></span></div>
+  <div class="cal-events" id="calEvents"></div>
+ </div>
+ <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
+</section>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-06 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -444,9 +573,51 @@ function initialAdminRequests(){
 }
 let adminRequests=initialAdminRequests();
 let adminSequence=5;
+/* Synthetic booking metadata only; never persist the form's name, telephone or note. */
+const DEMO_BOOKINGS_KEY='afternoon-garden-calendar-demo-v1';
+function bookingAlias(request){
+ const number=Number(request.id.substring(5))||0;
+ const samples=['가상 고객 · 서하늘','가상 고객 · 지윤서','가상 고객 · 김보람','가상 고객 · 한다은'];
+ return number>=1&&number<=4?samples[number-1]:'체험 고객 '+String(number).padStart(3,'0')+' (가상)';
+}
+function saveDemoBookings(){
+ try{
+  const records=adminRequests.map(item=>({
+   id:item.id,productIndex:item.productIndex,date:item.date,time:item.time,
+   status:item.status,paymentState:item.paymentState,depositChecked:!!item.depositChecked
+  }));
+  window.localStorage.setItem(DEMO_BOOKINGS_KEY,JSON.stringify({version:1,records,sequence:adminSequence}));
+ }catch(err){/* Private browsing or storage denial: in-memory demo still works. */}
+}
+function restoreDemoBookings(){
+ try{
+  const raw=window.localStorage.getItem(DEMO_BOOKINGS_KEY);
+  if(!raw){adminRequests=initialAdminRequests();adminSequence=5;return false;}
+  const parsed=JSON.parse(raw);
+  if(parsed.version!==1||!Array.isArray(parsed.records)||parsed.records.length>150)throw Error('invalid storage');
+  const allowedStatuses=['pending','confirmed','ready','completed','rejected'];
+  const allowedPayments=['waiting','reported','verified'];
+  const seen=new Set();
+  const records=parsed.records.map(x=>{
+   if(!x||typeof x.id!=='string'||!/^DEMO-\d{3,6}$/.test(x.id)||seen.has(x.id)||
+      !Number.isInteger(x.productIndex)||x.productIndex<0||x.productIndex>=P.length||
+      typeof x.date!=='string'||!dateFromLocalString(x.date)||
+      typeof x.time!=='string'||!/^(?:1[1-9]):00$/.test(x.time)||
+      !allowedStatuses.includes(x.status)||!allowedPayments.includes(x.paymentState))throw Error('invalid record');
+   seen.add(x.id);
+   return {id:x.id,productIndex:x.productIndex,date:x.date,time:x.time,status:x.status,
+    paymentState:x.paymentState,depositChecked:x.depositChecked===true,
+    origin:Number(x.id.substring(5))<=4?'샘플 요청':'방금 체험한 가상 요청'};
+  });
+  adminRequests=records;
+  adminSequence=Math.max(5,...records.map(x=>Number(x.id.substring(5))+1));
+  return true;
+ }catch(err){adminRequests=initialAdminRequests();adminSequence=5;return false;}
+}
+restoreDemoBookings();
 let adminFilter='all';
 let adminSelectedId='DEMO-001';
-const adminStatusText={pending:'입금 확인 전',confirmed:'예약 확정',rejected:'거절'};
+const adminStatusText={pending:'입금 전',confirmed:'예약 확정',ready:'수령 전',completed:'수령 완료',rejected:'거절'};
 const adminPaymentText={waiting:'입금 전',reported:'가상 송금 완료 · 입금 확인 필요',verified:'입금 확인 완료 (시연)'};
 let demoAccountMode='off';
 function updateBankPreview(){
@@ -460,12 +631,14 @@ function mockNewAdminRequest(index,date,time){
  adminRequests.unshift(record);
  adminSelectedId=record.id;
  adminFilter='all';
+ saveDemoBookings();
  return record.id;
 }
 function markDemoPayment(id){
  const request=adminRequests.find(item=>item.id===id);
  if(!request||request.status!=='pending'||request.paymentState!=='waiting')return false;
  request.paymentState='reported';
+ saveDemoBookings();
  return true;
 }
 function adminText(tag,className,textValue){
@@ -481,20 +654,32 @@ function adminDetailPair(label,value){
  return row;
 }
 function updateAdminStatus(id,status){
- if(status!=='confirmed'&&status!=='rejected')return;
  const request=adminRequests.find(item=>item.id===id);
- if(!request||request.status!=='pending')return;
- /* A synthetic transfer report and an explicit verification checklist are both required. */
- if(status==='confirmed'&&(request.paymentState!=='reported'||!request.depositChecked))return;
- request.status=status;
- if(status==='confirmed')request.paymentState='verified';
+ if(!request)return false;
+ if(status==='confirmed'){
+  if(request.status!=='pending'||request.paymentState!=='reported'||!request.depositChecked)return false;
+  request.status='confirmed';
+  request.paymentState='verified';
+ }else if(status==='rejected'){
+  if(request.status!=='pending')return false;
+  request.status='rejected';
+ }else if(status==='ready'){
+  if(request.status!=='confirmed')return false;
+  request.status='ready';
+ }else if(status==='completed'){
+  if(request.status!=='ready')return false;
+  request.status='completed';
+ }else return false;
+ saveDemoBookings();
  renderAdminDemo();
+ if(document.getElementById('calendarDemo').style.display==='block')renderCalendar();
+ return true;
 }
 function renderAdminDemo(){
  const total=adminRequests.length;
  document.getElementById('adminTotal').textContent=total;
- for(const status of ['pending','confirmed','rejected']){
-  const count=adminRequests.filter(item=>item.status===status).length;
+ for(const status of ['pending','confirmed','completed']){
+  const count=adminRequests.filter(item=>status==='confirmed'?['confirmed','ready','completed'].includes(item.status):item.status===status).length;
   document.getElementById('admin'+status.charAt(0).toUpperCase()+status.slice(1)).textContent=count;
  }
  for(const button of document.querySelectorAll('#adminDemo .admin-filter')){
@@ -512,7 +697,7 @@ function renderAdminDemo(){
    top.appendChild(adminText('span','admin-status '+item.status,adminStatusText[item.status]));
    b.appendChild(top);
    b.appendChild(adminText('span','admin-request-name',P[item.productIndex][1]));
-   b.appendChild(adminText('span','admin-request-meta',item.date+' · '+item.time+' 픽업 요청 · '+adminPaymentText[item.paymentState]));
+   b.appendChild(adminText('span','admin-request-meta',item.date+' · '+item.time+' · '+bookingAlias(item)+' · '+adminPaymentText[item.paymentState]));
    b.addEventListener('click',function(){adminSelectedId=item.id;renderAdminDemo()});
    list.appendChild(b);
  }
@@ -534,6 +719,7 @@ function renderAdminDemo(){
  const dl=document.createElement('dl');
  for(const [label,value] of [
    ['가상 번호',selected.id],
+   ['가상 예약자',bookingAlias(selected)],
    ['픽업 날짜',selected.date],
    ['픽업 시간',selected.time],
    ['상품 금액',P[selected.productIndex][4]+' KRW'],
@@ -545,14 +731,17 @@ function renderAdminDemo(){
  }
  detail.appendChild(dl);
  const actions=adminText('div','admin-actions','');
- const approve=adminText('button','admin-action','입금 확인 · 예약 확정');
+ const nextStatus=selected.status==='pending'?'confirmed':selected.status==='confirmed'?'ready':selected.status==='ready'?'completed':null;
+ const nextLabel=selected.status==='pending'?'입금 확인 · 예약 확정':selected.status==='confirmed'?'수령 전으로 변경':selected.status==='ready'?'수령 완료 처리':'처리 완료';
+ const approve=adminText('button','admin-action',nextLabel);
  approve.type='button';
- approve.disabled=selected.status!=='pending'||selected.paymentState!=='reported'||!selected.depositChecked;
- approve.addEventListener('click',function(){updateAdminStatus(selected.id,'confirmed')});
+ approve.disabled=!nextStatus||(selected.status==='pending'&&(selected.paymentState!=='reported'||!selected.depositChecked));
+ approve.addEventListener('click',function(){if(nextStatus)updateAdminStatus(selected.id,nextStatus)});
  actions.appendChild(approve);
  const reject=adminText('button','admin-action reject','거절');
  reject.type='button';
  reject.disabled=selected.status!=='pending';
+ reject.hidden=selected.status!=='pending';
  reject.addEventListener('click',function(){updateAdminStatus(selected.id,'rejected')});
  actions.appendChild(reject);
  detail.appendChild(actions);
@@ -564,6 +753,7 @@ function renderAdminDemo(){
    checkbox.checked=!!selected.depositChecked;
    checkbox.addEventListener('change',function(){
      selected.depositChecked=!!this.checked;
+     saveDemoBookings();
      renderAdminDemo();
    });
    label.appendChild(checkbox);
@@ -575,8 +765,8 @@ function renderAdminDemo(){
  const notice=adminText('section','admin-notification','');
  notice.appendChild(adminText('h4','','고객 안내 문구 미리보기 · 미발송'));
  let noticeText='';
- if(selected.status==='confirmed'){
-   noticeText='[오후의 정원 · 예약 확정 안내]\n'+P[selected.productIndex][1]+' 예약이 확정되었습니다.\n픽업: '+selected.date+' '+selected.time+'\n안내: 입금 확인 및 예약 확정 완료 (가상 시연)';
+ if(['confirmed','ready','completed'].includes(selected.status)){
+   noticeText='[오후의 정원 · 예약 상태 안내]\n'+bookingAlias(selected)+'님, '+P[selected.productIndex][1]+'\n픽업: '+selected.date+' '+selected.time+'\n상태: '+adminStatusText[selected.status]+'\n입금 확인 및 예약 상태 변경 (가상 시연 · 미발송)';
  }else if(selected.status==='rejected'){
    noticeText='[오후의 정원 · 예약 요청 안내]\n'+P[selected.productIndex][1]+' 예약 요청을 진행할 수 없습니다.\n안내: 매장 확인 후 별도 안내 예정 (가상 시연)';
  }else{
@@ -600,6 +790,7 @@ document.getElementById('adminReset').addEventListener('click',function(){
  updateBankPreview();
  adminRequests=initialAdminRequests();
  adminSequence=5;
+ saveDemoBookings();
  adminFilter='all';
  adminSelectedId='DEMO-001';
  renderAdminDemo();
@@ -730,6 +921,130 @@ document.getElementById('rMarkPaid').addEventListener('click',function(){
  this.textContent='가상 송금 완료 표시됨';
  document.getElementById('rPaymentState').textContent='가상 송금 완료로 표시했습니다. 매장이 입금을 확인해야 예약이 확정됩니다. 실제 은행 거래나 송금은 발생하지 않았습니다.';
 });
+
+/* G3-06 separate calendar view; a day reveals synthetic customer, time and pickup state. */
+let calendarYear=new Date().getFullYear();
+let calendarMonth=new Date().getMonth();
+let calendarSelectedDate=localDateString(new Date());
+let calendarInitialized=false;
+function calendarBookings(date){
+ return adminRequests.filter(item=>item.date===date&&item.status!=='rejected').sort((a,b)=>a.time.localeCompare(b.time));
+}
+function calendarChooseInitial(){
+ const now=new Date();
+ const current=localDateString(now);
+ const upcoming=adminRequests.filter(x=>x.status!=='rejected'&&x.date>=current).sort((a,b)=>a.date.localeCompare(b.date))[0];
+ calendarSelectedDate=upcoming?upcoming.date:current;
+ const d=dateFromLocalString(calendarSelectedDate);
+ calendarYear=d.getFullYear();
+ calendarMonth=d.getMonth();
+ calendarInitialized=true;
+}
+function renderCalendarDay(){
+ const d=dateFromLocalString(calendarSelectedDate);
+ const title=document.getElementById('calSelectedTitle');
+ const entries=calendarBookings(calendarSelectedDate);
+ title.textContent=d?(d.getMonth()+1)+'월 '+d.getDate()+'일 · '+['일','월','화','수','목','금','토'][d.getDay()]+'요일':'선택 날짜';
+ document.getElementById('calSelectedCount').textContent=entries.length+'건의 예약 일정';
+ const area=document.getElementById('calEvents');
+ area.replaceChildren();
+ if(!entries.length){
+  area.appendChild(adminText('div','cal-empty','선택한 날짜에 가상 예약 일정이 없습니다. 날짜를 바꿔 확인해 주세요.'));
+  return;
+ }
+ for(const item of entries){
+  const card=adminText('article','cal-event','');
+  const top=adminText('div','cal-event-top','');
+  top.appendChild(adminText('strong','cal-event-time',item.time));
+  top.appendChild(adminText('span','cal-event-status '+item.status,adminStatusText[item.status]));
+  card.appendChild(top);
+  card.appendChild(adminText('p','cal-client',bookingAlias(item)));
+  card.appendChild(adminText('p','cal-event-meta',P[item.productIndex][1]+' · '+P[item.productIndex][4]+' KRW'));
+  card.appendChild(adminText('p','cal-event-meta','예약 번호 '+item.id+' · '+adminPaymentText[item.paymentState]));
+  const buttons=adminText('div','cal-event-actions','');
+  if(item.status==='confirmed'||item.status==='ready'){
+   const dest=item.status==='confirmed'?'ready':'completed';
+   const action=adminText('button','',dest==='ready'?'수령 전으로 변경':'수령 완료 처리');
+   action.type='button';
+   action.addEventListener('click',()=>updateAdminStatus(item.id,dest));
+   buttons.appendChild(action);
+  }
+  const link=adminText('button','secondary','관리자 상세 보기');
+  link.type='button';
+  link.addEventListener('click',function(){
+    adminSelectedId=item.id;adminFilter='all';
+    location.hash='#/admin-demo';
+    if(location.hash==='#/admin-demo'&&document.getElementById('adminDemo').style.display==='block')renderAdminDemo();
+  });
+  buttons.appendChild(link);
+  card.appendChild(buttons);
+  area.appendChild(card);
+ }
+}
+function renderCalendar(){
+ document.getElementById('calMonth').textContent=calendarYear+'년 '+(calendarMonth+1)+'월';
+ const grid=document.getElementById('calGrid');
+ grid.replaceChildren();
+ const first=new Date(calendarYear,calendarMonth,1);
+ const lastDay=new Date(calendarYear,calendarMonth+1,0).getDate();
+ const start=first.getDay();
+ const rows=Math.ceil((start+lastDay)/7);
+ for(let i=0;i<rows*7;i++){
+  const day=i-start+1;
+  if(day<1||day>lastDay){
+   grid.appendChild(adminText('div','cal-gap',''));
+   continue;
+  }
+  const date=localDateString(new Date(calendarYear,calendarMonth,day));
+  const bookings=calendarBookings(date);
+  const button=adminText('button','cal-day','');
+  button.type='button';
+  button.setAttribute('aria-label',date+' 예약 '+bookings.length+'건');
+  button.setAttribute('aria-pressed',String(date===calendarSelectedDate));
+  const num=adminText('span','cal-number',String(day));
+  const weekday=i%7;
+  if(weekday===0||weekday===6)num.classList.add('is-weekend');
+  if(date===localDateString(new Date()))num.classList.add('is-today');
+  button.appendChild(num);
+  for(const item of bookings.slice(0,2)){
+   button.appendChild(adminText('span','cal-pill '+item.status,item.time+' '+bookingAlias(item)));
+  }
+  if(bookings.length>2)button.appendChild(adminText('span','cal-more','+'+(bookings.length-2)+'건 더'));
+  button.addEventListener('click',function(){
+    calendarSelectedDate=date;
+    renderCalendar();
+    const box=document.getElementById('calDetails');
+    if(window.innerWidth<=800&&box.scrollIntoView)box.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  grid.appendChild(button);
+ }
+ renderCalendarDay();
+}
+function calendarGoMonth(delta){
+ const d=new Date(calendarYear,calendarMonth+delta,1);
+ calendarYear=d.getFullYear();
+ calendarMonth=d.getMonth();
+ const firstForMonth=adminRequests.filter(x=>x.status!=='rejected'&&x.date.startsWith(calendarYear+'-'+String(calendarMonth+1).padStart(2,'0')+'-')).sort((a,b)=>a.date.localeCompare(b.date))[0];
+ calendarSelectedDate=firstForMonth?firstForMonth.date:localDateString(d);
+ renderCalendar();
+}
+document.getElementById('calPrev').addEventListener('click',()=>calendarGoMonth(-1));
+document.getElementById('calNext').addEventListener('click',()=>calendarGoMonth(1));
+document.getElementById('calToday').addEventListener('click',function(){
+ const d=new Date();calendarYear=d.getFullYear();calendarMonth=d.getMonth();
+ calendarSelectedDate=localDateString(d);renderCalendar();
+});
+document.getElementById('calRefresh').addEventListener('click',function(){
+ restoreDemoBookings();
+ renderCalendar();
+ this.textContent='✓ 갱신됨';
+});
+window.addEventListener('storage',function(event){
+ if(event.key!==DEMO_BOOKINGS_KEY)return;
+ restoreDemoBookings();
+ if(document.getElementById('calendarDemo').style.display==='block')renderCalendar();
+ if(document.getElementById('adminDemo').style.display==='block')renderAdminDemo();
+});
 function route(){
   const hash=location.hash;
   const detailSlug=hash.startsWith('#/flower/')?hash.substring(9):null;
@@ -738,16 +1053,20 @@ function route(){
   const showReservation=reservationSlug!==null&&index>=0;
   const showDetail=detailSlug!==null&&index>=0;
   const showAdmin=hash==='#/admin-demo';
+  const showCalendar=hash==='#/calendar-demo';
   if(showReservation&&!P[index][7]){
     location.hash='#/flower/'+P[index][0];
     return;
   }
-  document.getElementById('home').style.display=(showReservation||showDetail||showAdmin)?'none':'block';
+  document.getElementById('home').style.display=(showReservation||showDetail||showAdmin||showCalendar)?'none':'block';
   document.getElementById('detail').style.display=showDetail?'block':'none';
   document.getElementById('reservation').style.display=showReservation?'block':'none';
   document.getElementById('reservation').hidden=!showReservation;
   document.getElementById('adminDemo').style.display=showAdmin?'block':'none';
   document.getElementById('adminDemo').hidden=!showAdmin;
+  document.getElementById('calendarDemo').style.display=showCalendar?'block':'none';
+  document.getElementById('calendarDemo').hidden=!showCalendar;
+  if(showCalendar){if(!calendarInitialized)calendarChooseInitial();renderCalendar();window.scrollTo(0,0);}
   if(showAdmin){updateBankPreview();renderAdminDemo();window.scrollTo(0,0);}
   if(showDetail){
     const p=P[index];
