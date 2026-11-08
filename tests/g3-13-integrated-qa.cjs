@@ -32,6 +32,7 @@ class E {
  dispatch(k,params={}){for(const fn of this.listeners[k]||[])fn.call(this,{target:this,preventDefault(){},...params})}
  focus(){doc.activeElement=this}
  scrollIntoView(){}
+ requestSubmit(){this.dispatch('submit')}
  reset(){for(const id of ['rDate','rTime','rName','rPhone','rMemo'])doc.getElementById(id).value=''}
  querySelectorAll(q){
   const nodes=descendants(this);
@@ -94,6 +95,9 @@ const slots=app.pickupSlots(0,date);
 check('weekday pickup slot available',slots.length>0);
 els.rTime.value=slots[0];els.rName.value='가상 고객';els.rPhone.value='01000000000';
 els.reserveForm.dispatch('submit');
+check('G3-24 review appears without booking',els.reserveForm.hidden&&!els.reserveReview.hidden&&app.getBookings().length===4&&!app.getRequestId());
+check('G3-24 review shows correct synthetic details',els.rReviewProduct.textContent.includes('')&&els.rReviewDate.textContent===date&&els.rReviewTime.textContent===slots[0]&&els.rReviewName.textContent==='가상 고객'&&els.rReviewPhone.textContent==='01000000000');
+els.rReviewConfirm.dispatch('click');
 const id=app.getRequestId();
 check('new synthetic booking created',!!id&&app.getBookings().length===5);
 check('booking result visible',els.reserveForm.hidden&&els.reserveResult.hidden===false);
