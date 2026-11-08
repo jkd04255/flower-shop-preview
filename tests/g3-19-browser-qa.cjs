@@ -167,8 +167,9 @@ async function run(){
   pass('Chrome manager detail live-region and reset status remain accessible without duplicate nodes');
 
 
-  // G3-19: confirm readability on actual 320/390px mobile browser viewport.
+  // G3-19: an earlier test may leave calendarMode='day'; return to month first.
   await A.evaluate(()=>location.hash='#/calendar-demo');
+  if(await A.locator('#calDetails').isVisible())await A.locator('#calBackMonth').click();
   await A.locator('#calMonthView').waitFor({state:'visible'});
   for(const width of [320,390]){
     await A.setViewportSize({width,height:844});
