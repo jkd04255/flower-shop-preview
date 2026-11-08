@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium QA · G3-26
+name: Flower shop consolidated Chromium QA · G3-27
 on:
   pull_request:
     paths:
@@ -80,6 +80,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-26-booking-progress-qa.cjs
+      - name: G3-27 product detail heading focus and visible keyboard controls
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-27-detail-focus-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
