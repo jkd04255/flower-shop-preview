@@ -38,9 +38,16 @@ async function run(){
  pass('real Chrome: reservation heading Tab → date input');
  const date=await A.evaluate(()=>{const d=new Date();d.setDate(d.getDate()+4);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);const pad=x=>String(x).padStart(2,'0');return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())});
  await A.locator('#rDate').fill(date);
- await A.keyboard.press('Tab');
- assert.equal((await focused(A)).id,'rTime');
- pass('real Chrome: date Tab → enabled time select');
+ // Native date inputs use segmented internal focus in Chrome; inspect the Tab sequence,
+ // rather than assuming one Tab always exits the date widget.
+ const tabTrail=[];
+ for(let i=0;i<6;i++){
+  await A.keyboard.press('Tab');
+  const active=await focused(A);tabTrail.push(active.id||active.tag);
+  if(active.id==='rTime')break;
+ }
+ assert.equal((await focused(A)).id,'rTime','time selection not reachable from date via Tab: '+tabTrail.join(' > '));
+ pass('real Chrome: date widget Tab sequence reaches enabled time select ('+tabTrail.join(' > ')+')');
  const options=await A.locator('#rTime option').evaluateAll(xs=>xs.map(x=>x.value).filter(Boolean));
  assert.ok(options.length>0,'no available test time');
  const time=options[0];
