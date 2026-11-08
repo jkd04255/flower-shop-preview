@@ -575,11 +575,20 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
 #reservation .reservation-review button:focus-visible{outline:3px solid #627c61;outline-offset:3px}
 @media(max-width:420px){#reservation .reservation-review .review-actions{grid-template-columns:1fr}#reservation .reservation-review .review-list{padding:8px 13px}}
 </style>
+<style id="g3-25-card-wayfinding">
+/* No new CTA button: the existing entire product card remains the one link. */
+#home .card .card-detail-link{
+  display:inline-block;margin-top:10px;padding-bottom:2px;
+  border-bottom:1px solid currentColor;color:#435944;
+  font-family:inherit;font-size:12px;font-weight:650;line-height:1.5;white-space:normal;
+}
+#home .card:hover .card-detail-link,#home .card:focus-visible .card-detail-link{color:#304434}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
-<section class="section" id="curation"><div class="head"><h2>Today's<br><span class="upright">selection.</span></h2><p>오늘 가장 예쁜 세 가지</p></div><div class="cards" id="featured"></div><p class="muted">* 사진과 가격은 가상 자료입니다. 오늘의 추천은 최대 3개입니다.</p></section>
-<section class="section" id="arrivals"><div class="head"><h2>Just<br><span class="upright">arrived.</span></h2><p>최근 7일간 들어온 꽃 소식<br>입고 꽃은 예약 없이 문의만 가능합니다.</p></div><div id="arrivalList"></div></section>
+<section class="section" id="curation"><div class="head"><h2>Today's<br><span class="upright">selection.</span></h2><p>오늘의 추천 꽃다발 · 사진을 눌러 상품 보기</p></div><div class="cards" id="featured"></div><p class="muted">* 사진과 가격은 가상 자료입니다. 오늘의 추천은 최대 3개입니다.</p></section>
+<section class="section" id="arrivals"><div class="head"><h2>Just<br><span class="upright">arrived.</span></h2><p>최근 입고된 꽃 소식 · 문의 전용<br>예약 상품이 아니며, 문의만 가능합니다.</p></div><div id="arrivalList"></div></section>
 <section class="section other" id="other"><div class="head"><h2>Everyday<br><span class="upright">flowers.</span></h2><p>오늘의 추천 외에도 만나볼 수 있는 꽃다발</p></div><div class="cards" id="regular"></div></section>
 <section class="section store" id="store"><div class="head"><h2>Visit the<br><span class="upright">atelier.</span></h2></div>
 <div class="booking-info" role="group" aria-label="예약 안내">
@@ -793,12 +802,12 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-24 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-25 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
 const P=[['rosy-moment','로지 모먼트','Rosy Moment','사랑을 가장 부드럽게 전하는 방법','39,000','로즈 · 아이보리','120분',true],['mellow-sunday','멜로우 선데이','Mellow Sunday','천천히 흘러가는 오후의 색','49,000','피치 · 크림','150분',true],['purple-letter','퍼플 레터','Purple Letter','계절의 인상을 담은 꽃다발','59,000','퍼플 · 라벤더','180분',true],['ivory-day','아이보리 데이','Ivory Day','맑고 담백한 마음을 전하는 꽃','45,000','화이트 · 그린','120분',true],['coral-diary','코랄 다이어리','Coral Diary','오늘의 빛을 모아 둔 작은 기록','55,000','코랄 · 피치','120분',false]];
-function card(p,i){let a=document.createElement('a');a.className='card';a.href='#/flower/'+p[0];a.innerHTML='<img alt="'+p[1]+' 가상 꽃다발 사진" loading="lazy" src="'+U[i]+'"><div class="row"><div><strong>'+p[1]+'</strong><small>'+p[3]+'</small>'+(p[7]?'':'<small>현재 품절 · 예약 불가</small>')+'</div><span>'+p[4]+' KRW</span></div>';return a}
+function card(p,i){let a=document.createElement('a');a.className='card';a.href='#/flower/'+p[0];a.innerHTML='<img alt="'+p[1]+' 가상 꽃다발 사진" loading="lazy" src="'+U[i]+'"><div class="row"><div><strong>'+p[1]+'</strong><small>'+p[3]+'</small>'+(p[7]?'':'<small>현재 품절 · 예약 불가</small>')+'</div><span>'+p[4]+' KRW</span></div><span class="card-detail-link">상품 상세 보기 ↗</span>';return a}
 P.slice(0,3).forEach((p,i)=>document.querySelector('#featured').appendChild(card(p,i)));P.slice(3).forEach((p,i)=>document.querySelector('#regular').appendChild(card(p,i+3)));
 [['11.06 / TODAY','가든 로즈','6,000원 / 송이'],['11.04 / NEW','라넌큘러스','5,000원 / 송이'],['10.31 / NEW','라일락 튤립','4,500원 / 송이']].forEach((x,i)=>{let el=document.createElement('div');el.className='arrival';el.innerHTML='<img loading="lazy" alt="'+x[1]+'" src="'+ARRIVAL_U[i]+'"><div><small>'+x[0]+'</small><strong>'+x[1]+'</strong><small>'+x[2]+'</small></div><em>문의 전용</em>';document.querySelector('#arrivalList').appendChild(el)});
 
