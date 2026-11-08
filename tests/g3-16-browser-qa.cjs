@@ -78,12 +78,18 @@ async function run(){
  const card=A.locator('#adminList .admin-request[data-request-id="DEMO-001"]');
  await card.focus();
  assert.equal((await focused(A)).request,'DEMO-001');
- await B.locator('#adminReset').click();
- await A.waitForTimeout(150);
- assert.equal((await focused(A)).request,'DEMO-001','focused manager card should survive remote reset/rerender');
+ // Trigger real changed data via another tab's actual *synthetic manager* controls.
+ // Writing identical values to localStorage does not emit a storage event.
+ await B.locator('#adminList .admin-request[data-request-id="DEMO-001"]').click();
+ await B.locator('#adminDetail .admin-verify input[type="checkbox"]').check();
+ const confirm=B.locator('#adminDetail .admin-action').filter({hasText:'입금 확인 · 예약 확정'});
+ assert.equal(await confirm.isEnabled(),true);
+ await confirm.click();
+ await A.waitForFunction(()=>[...document.querySelectorAll('#adminList .admin-request')].some(el=>el.dataset.requestId==='DEMO-001'&&el.textContent.includes('예약 확정')),{timeout:6000});
+ assert.equal((await focused(A)).request,'DEMO-001','focused manager card should survive remote real status change and redraw');
  assert.equal((await focused(A)).connected,true);
- pass('real Chrome: other-tab reset preserves manager card keyboard focus');
- // Calendar day summary should similarly survive a remote reset of sample bookings.
+ pass('real Chrome: other-tab manager confirmation preserves focused booking card');
+ // Calendar day summary should similarly survive a real status transition on B.
  const sampleDate=(await A.locator('#adminList .admin-request[data-request-id="DEMO-001"] .admin-request-meta').innerText()).match(/\d{4}-\d{2}-\d{2}/)?.[0];
  assert.ok(sampleDate);
  await A.evaluate(()=>location.hash='#/calendar-demo');
@@ -95,11 +101,11 @@ async function run(){
  const summary=A.locator('#calEvents .cal-timeline-item[data-request-id="DEMO-001"] summary');
  await summary.focus();
  assert.equal((await focused(A)).tag,'SUMMARY');
- await B.locator('#adminReset').click();
- await A.waitForTimeout(150);
- assert.equal((await focused(A)).tag,'SUMMARY','calendar timeline summary must keep focus after remote update');
+ await B.locator('#adminDetail .admin-action').filter({hasText:'수령 전으로 변경'}).click();
+ await A.waitForFunction(()=>[...document.querySelectorAll('#calEvents .cal-timeline-item')].some(el=>el.dataset.requestId==='DEMO-001'&&el.textContent.includes('수령 전')),{timeout:6000});
+ assert.equal((await focused(A)).tag,'SUMMARY','calendar timeline summary must keep focus after remote status update');
  assert.equal((await focused(A)).connected,true);
- pass('real Chrome: calendar timeline focus survives cross-tab status refresh');
+ pass('real Chrome: calendar summary focus survives other-tab pickup-status update');
  // Recheck keyboard order of calendar controls after opening an event day.
  await A.locator('#calBackMonth').click();
  await A.locator('#calMonth').waitFor();
