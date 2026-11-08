@@ -45,6 +45,8 @@ async function heroPhoto(page,width){
  await page.setViewportSize({width,height:900});
  await route(page,'#top','#home>.hero .heroText');
  await page.evaluate(()=>scrollTo(0,0));
+ await page.evaluate(()=>document.documentElement.classList.add('hero-peek-immediate'));
+ await page.waitForTimeout(400); // avoid collecting mismatched pixels while the hero-peek layout settles
  await page.locator('#home>.hero').evaluate(async el=>{
   const bg=getComputedStyle(el).backgroundImage;
   const u=bg.match(/url\(["']?([^"')]+)/);
@@ -77,7 +79,7 @@ async function heroPhoto(page,width){
   contrasts.sort((a,b)=>a-b);
   const min=contrasts[0]||0,lower10=contrasts[Math.floor(contrasts.length*.1)]||0;
   const threshold=box.sel.includes(' h1')||box.sel.endsWith(' .brand')&&box.font>=24?3:4.5;
-  const v={selector:box.sel,width,font:box.font,samples:contrasts.length,min:+min.toFixed(2),lower10:+lower10.toFixed(2),threshold};
+  const v={selector:box.sel,width,font:box.font,x:Math.round(box.x),y:Math.round(box.y),w:Math.round(box.w),h:Math.round(box.h),samples:contrasts.length,min:+min.toFixed(2),lower10:+lower10.toFixed(2),threshold};
   sample.push(v);
   if(contrasts.length<20)issue('photo samples insufficient',v);
   else if(lower10<threshold)issue('photo contrast '+width,v);
