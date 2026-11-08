@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium QA · G3-18
+name: Flower shop consolidated Chromium QA · G3-19
 on:
   pull_request:
     paths:
@@ -49,6 +49,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-18-browser-qa.cjs
+      - name: G3-19 real Chrome mobile readability and empty calendar
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-19-browser-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
