@@ -156,7 +156,7 @@ async function run(){
    assert.ok(response&&response.ok());
    await live.locator('#home .hero').waitFor({state:'visible',timeout:8000});
    const footer=await live.locator('footer').first().innerText({timeout:5000});
-   assert.match(footer,/G3-1[45] STATIC DEMO/);
+   assert.match(footer,/G3-1[4-7] STATIC DEMO/);
    pass('Chromium published GitHub Pages read-only smoke: home, footer version');
   }catch(error){
    process.stdout.write('UNVERIFIED published Pages browser smoke: '+String(error.message).slice(0,220)+'\n');
