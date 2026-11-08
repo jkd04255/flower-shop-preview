@@ -28,10 +28,10 @@ jobs:
         uses: browser-actions/setup-chrome@v2
       - name: Install browser test dependencies (no app runtime changes)
         run: npm install --no-save --no-package-lock --ignore-scripts playwright-core axe-core@4.10.3
-      - name: G3-20 axe-core WCAG 2.1 AA audit (discovery; not a pass gate yet)
+      - name: G3-20 axe-core WCAG 2.1 AA (strict zero-violation gate)
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
-          AXE_ENFORCE: '0'
+          AXE_ENFORCE: '1'
         run: node tests/g3-20-axe-qa.cjs
       - name: Prior synthetic regression
         run: |
