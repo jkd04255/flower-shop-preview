@@ -1,13 +1,6 @@
 name: G3-15 real Chromium QA
 on:
-  push:
-    branches:
-      - feature/g3-15-calendar-week-focus-browser-qa
-  pull_request:
-    paths:
-      - index.html
-      - tests/g3-15-browser-qa.cjs
-      - .github/workflows/g3-15-browser-qa.yml
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

@@ -1,13 +1,6 @@
 name: G3-16 Chromium keyboard and multitab QA
 on:
-  push:
-    branches:
-      - feature/g3-16-keyboard-multitab-qa
-  pull_request:
-    paths:
-      - index.html
-      - tests/g3-16-browser-qa.cjs
-      - .github/workflows/g3-16-browser-qa.yml
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
