@@ -585,6 +585,9 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
 #home .card:hover .card-detail-link,#home .card:focus-visible .card-detail-link{color:#304434}
 </style>
 <style id="g3-26-reservation-progress">
+/* Keep keyboard-focus scrolling immediate on the reservation page, especially at
+   CDP 2x/4x page scale where the global smooth scrolling could leave focus offscreen. */
+html:has(#reservation:not([hidden])){scroll-behavior:auto}
 /* Small three-stage location indicator; not links or a second checkout action. */
 #reservation .reserve-progress{margin:0 0 28px}
 #reservation .reserve-progress ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;list-style:none;padding:0;margin:0}
