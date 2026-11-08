@@ -98,7 +98,7 @@ async function run(){
    await reflow(page,'home',width,'#top','#home>.hero');
    await reflow(page,'reservation',width,'#/reserve/rosy-moment','#reserveForm');
    await page.locator('#reserveForm button[type="submit"]').click();
-   await reflow(page,'form-error',width,'#/reserve/rosy-moment','#formError');
+   await reflow(page,'form-error',width,'#/reserve/rosy-moment','#rError');
    await reflow(page,'admin',width,'#/admin-demo','#adminList .admin-request');
    await reflow(page,'calendar-month',width,'#/calendar-demo','#calMonthView');
    const day=page.locator('#calGrid .cal-day[aria-label$="예약 0건"]').first();
