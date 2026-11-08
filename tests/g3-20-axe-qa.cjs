@@ -30,7 +30,7 @@ const server=http.createServer((req,res)=>{
 });
 const records=[],violations=[];
 function record(name,data){
- const row={name,violations:data.violations.map(v=>({id:v.id,impact:v.impact,help:v.help,nodes:v.nodes.map(n=>({target:n.target,html:n.html,summary:n.failureSummary})).slice(0,8),totalNodes:v.nodes.length})),incomplete:data.incomplete.map(v=>({id:v.id,nodes:v.nodes.length}))};
+ const row={name,violations:data.violations.map(v=>({id:v.id,impact:v.impact,help:v.help,nodes:v.nodes.map(n=>({target:n.target,html:n.html,summary:n.failureSummary})),totalNodes:v.nodes.length})),incomplete:data.incomplete.map(v=>({id:v.id,nodes:v.nodes.length,targets:v.nodes.slice(0,30).map(n=>({target:n.target,summary:n.failureSummary}))}))};
  records.push(row);
  console.log('AXE '+name+': '+row.violations.length+' rule violations, '+row.violations.reduce((n,v)=>n+v.totalNodes,0)+' affected nodes; '+row.incomplete.length+' incomplete rule checks');
  for(const v of row.violations){
