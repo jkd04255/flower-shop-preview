@@ -1,13 +1,15 @@
 name: G3-17 real Chromium keyboard and filter regression
 on:
-  push:
-    branches:
-      - feature/g3-17-filter-reset-keyboard-qa
   pull_request:
     paths:
       - index.html
-      - tests/g3-17-browser-qa.cjs
-      - .github/workflows/g3-17-browser-qa.yml
+      - 'assets/**'
+      - 'tests/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
