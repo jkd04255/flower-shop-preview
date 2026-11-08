@@ -28,6 +28,11 @@ jobs:
         uses: browser-actions/setup-chrome@v2
       - name: Install browser test dependencies (no app runtime changes)
         run: npm install --no-save --no-package-lock --ignore-scripts playwright-core axe-core@4.10.3
+      - name: G3-20 axe-core WCAG 2.1 AA audit (discovery; not a pass gate yet)
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+          AXE_ENFORCE: '0'
+        run: node tests/g3-20-axe-qa.cjs
       - name: Prior synthetic regression
         run: |
           node tests/g3-12-synthetic-qa.cjs
@@ -53,11 +58,6 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-19-browser-qa.cjs
-      - name: G3-20 axe-core WCAG 2.1 AA audit (discovery; not a pass gate yet)
-        env:
-          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
-          AXE_ENFORCE: '0'
-        run: node tests/g3-20-axe-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
