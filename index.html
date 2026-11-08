@@ -481,6 +481,7 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
 </style><style id="g3-10-slot-capacity-feedback">
 /* Informational only; existing editorial and admin layout stay intact. */
 #adminDemo .admin-capacity-warning{margin:18px 0;padding:14px 16px;border:1px solid #e8d2a9;background:#fff5e2;color:#865d2f;font-size:12px;line-height:1.75}
+#adminOperationStatus:empty,#calRefreshStatus:empty{display:none}
 </style>
 <style id="g3-11-mobile-a11y">
 /* G3-11: prevent calendar day controls from overflowing narrow mobile viewports. */
@@ -617,6 +618,7 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
   <div class="admin-metric"><span>수령 완료</span><b id="adminCompleted">0</b></div>
  </div>
  <div class="admin-toolbar"><h2>요청 목록</h2><a class="admin-calendar-link" href="#/calendar-demo">예약 캘린더 열기 ↗</a><button id="adminReset" type="button" class="admin-reset">가상 데이터 초기화</button></div>
+ <p id="adminOperationStatus" class="admin-session-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <div class="admin-filters" role="group" aria-label="예약 상태별 필터">
    <button type="button" class="admin-filter" data-filter="all" aria-pressed="true">전체</button>
    <button type="button" class="admin-filter" data-filter="pending" aria-pressed="false">입금 확인 전</button>
@@ -688,9 +690,10 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
   <div class="cal-hour-list" id="calEvents" role="region" aria-labelledby="calSelectedTitle"></div>
   <p class="cal-day-footer">일정을 선택해 관리자 예약 상세를 확인할 수 있습니다. 모든 예약과 고객 이름은 가상 데이터입니다.</p>
  </div>
+ <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-17 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-18 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -986,6 +989,7 @@ document.getElementById('adminReset').addEventListener('click',function(){
  adminFilter='all';
  adminSelectedId='DEMO-001';
  renderAdminDemo();
+ document.getElementById('adminOperationStatus').textContent='가상 예약 기록을 샘플 4건으로 초기화했습니다. 전체 상태 필터가 선택됐습니다.';
 });
 /* A booking has no ID, server request, network action, or persistent storage in this demo. */
 let currentReservationIndex=-1;
@@ -1377,7 +1381,12 @@ document.getElementById('calBackMonth').addEventListener('click',function(){
 });
 document.getElementById('calDayPrev').addEventListener('click',()=>dayOffset(-1));
 document.getElementById('calDayNext').addEventListener('click',()=>dayOffset(1));
-document.getElementById('calDayRefresh').addEventListener('click',function(){restoreDemoBookings();renderCalendar();this.textContent='✓ 갱신됨'});
+document.getElementById('calDayRefresh').addEventListener('click',function(){
+ restoreDemoBookings();
+ renderCalendar();
+ this.textContent='✓ 갱신됨';
+ document.getElementById('calRefreshStatus').textContent='선택 날짜의 가상 예약 일정을 새로고침했습니다.';
+});
 document.getElementById('calPrev').addEventListener('click',()=>calendarGoMonth(-1));
 document.getElementById('calNext').addEventListener('click',()=>calendarGoMonth(1));
 for(const button of document.querySelectorAll('#calStatusFilters button')){
@@ -1395,6 +1404,7 @@ document.getElementById('calRefresh').addEventListener('click',function(){
  restoreDemoBookings();
  renderCalendar();
  this.textContent='✓ 갱신됨';
+ document.getElementById('calRefreshStatus').textContent='월간 가상 예약 달력을 새로고침했습니다.';
 });
 window.addEventListener('storage',function(event){
  if(event.key!==DEMO_BOOKINGS_KEY)return;
