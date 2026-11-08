@@ -31,7 +31,7 @@
 | G3-21 캘린더·관리자·예약 키보드 focus-visible | **6개 관찰 PASS** | Tab 직후 computed outline 2px 실선 |
 | G3-20 axe-core WCAG 2.0/2.1 A·AA 12개 시나리오 | **엄격 게이트 PASS, 위반 0건** | 실제 Chromium axe-core@4.10.3 |
 | G3-12/13/14 합성 회귀 | **31/34/38 검사 PASS** | 합성 DOM 및 JS |
-| G3-15/16/17/18/19 브라우저 회귀 | **최종 실행 전체 상태 확인 중** | 실제 Chromium 로컬 서버 |
+| G3-15/16/17/18/19 브라우저 회귀 | **14/7/10/14/20건 모두 PASS** | 실제 Chromium 로컬 서버 |
 | HTML 인라인 JavaScript 구문 | **3개 파싱 PASS** | 실제 소스 정적 파싱 |
 | iPhone/Android 실기기·VoiceOver/TalkBack | **미실행** | 실제 접근 가능한 기기·보조기술 부재 |
 | 실제 은행/결제, DB/Auth, 알림, 개인정보, 실예약 | **금지·미구현** | G2 전체 Gate HOLD |
@@ -44,7 +44,7 @@
 
 ### 증적 및 실행
 
-- 최종 단일 GitHub Actions: [G3-21 CI #42454078413](https://github.com/jkd04255/flower-shop-preview/actions/runs/42454078413).
+- 최종 단일 GitHub Actions: [G3-21 CI #42454184539](https://github.com/jkd04255/flower-shop-preview/actions/runs/42454184539) — G3-21 30개 실제 Chromium 관찰/위반 0, axe-core 12개 화면 위반 0, 합성 31/34/38건 및 Chrome 14/7/10/14/20건 **모든 단계 SUCCESS**.
 - 실행 파일: `tests/g3-21-visual-zoom-qa.cjs` (스크린샷 픽셀 비교·재배치·Tab), 기존 `tests/g3-20-axe-qa.cjs` 및 G3-12~19 회귀.
 - GitHub Actions artifact: `qa-artifacts/g3-21-visual-zoom-focus.json` 및 `qa-artifacts/g3-20-axe-results.json`.
 
