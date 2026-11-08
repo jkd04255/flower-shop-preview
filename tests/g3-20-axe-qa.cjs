@@ -53,7 +53,7 @@ async function audit(page,name,width){
 }
 async function route(page,hash,visible){
  await page.evaluate(next=>{location.hash=next;},hash);
- await page.locator(visible).waitFor({state:'visible',timeout:12000});
+ await page.locator(visible).first().waitFor({state:'visible',timeout:12000});
 }
 async function run(){
  await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
