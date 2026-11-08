@@ -23,12 +23,13 @@ async function route(page,hash,selector){
 async function checkFocus(page,label,start,expected){
  await page.locator(start).first().focus();
  await page.keyboard.press('Tab');
+ await page.waitForTimeout(750); // wait for CSS smooth-focus scrolling to settle before judging visibility
  const info=await page.evaluate(()=>{
   const e=document.activeElement,style=getComputedStyle(e),r=e.getBoundingClientRect(),v=visualViewport;
   const x=Math.max(0,Math.min(r.right,v.offsetLeft+v.width)-Math.max(r.left,v.offsetLeft));
   const y=Math.max(0,Math.min(r.bottom,v.offsetTop+v.height)-Math.max(r.top,v.offsetTop));
   return {id:e.id,tag:e.tagName,focusVisible:e.matches(':focus-visible'),outlineStyle:style.outlineStyle,outlineWidth:parseFloat(style.outlineWidth),outlineColor:style.outlineColor,
-   intersectX:+x.toFixed(1),intersectY:+y.toFixed(1),elementWidth:+r.width.toFixed(1),elementHeight:+r.height.toFixed(1),
+   intersectX:+x.toFixed(1),intersectY:+y.toFixed(1),rect:{x:+r.x.toFixed(1),y:+r.y.toFixed(1),right:+r.right.toFixed(1),bottom:+r.bottom.toFixed(1)},offset:{x:+v.offsetLeft.toFixed(1),y:+v.offsetTop.toFixed(1)},scroll:{x:window.scrollX,y:window.scrollY},elementWidth:+r.width.toFixed(1),elementHeight:+r.height.toFixed(1),
    scale:+v.scale.toFixed(2),visualWidth:+v.width.toFixed(1),visualHeight:+v.height.toFixed(1),isConnected:e.isConnected};
  });
  const success=info.id===expected&&info.focusVisible&&info.outlineStyle!=='none'&&info.outlineWidth>=2&&info.intersectX>1&&info.intersectY>1&&info.isConnected;
