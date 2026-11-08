@@ -11,7 +11,11 @@ const server=http.createServer((req,res)=>{
  fs.readFile(file,(err,buf)=>{if(err){res.writeHead(404);res.end();return}res.writeHead(200,{'content-type':mime[path.extname(file)]||'application/octet-stream'});res.end(buf)});
 });
 async function stored(page){
- return page.evaluate(()=>JSON.parse(localStorage.getItem('afternoon-garden-calendar-demo-v1')||'{"records":[]}').records);
+ return page.evaluate(()=>{
+  const raw=localStorage.getItem('afternoon-garden-calendar-demo-v1');
+  /* G3 baseline seeds four synthetic requests in memory, not storage, until a change. */
+  return raw?JSON.parse(raw).records:adminRequests.map(x=>({...x}));
+ });
 }
 async function validDate(page){
  return page.evaluate(()=>{
@@ -40,12 +44,14 @@ async function run(){
   await page.locator('#rName').fill('가상 고객');
   await page.locator('#rPhone').fill('01000000000');
   const baseline=(await stored(page)).length;
+  const storageBeforeReview=await page.evaluate(()=>localStorage.getItem('afternoon-garden-calendar-demo-v1'));
   assert.equal(baseline,4);
   await page.locator('#reserveForm button[type=submit]').click();
   await page.locator('#reserveReview').waitFor({state:'visible'});
   assert.equal(await page.locator('#reserveForm').isVisible(),false);
   assert.equal(await page.locator('#reserveResult').isVisible(),false);
   assert.equal((await stored(page)).length,baseline);
+  assert.equal(await page.evaluate(()=>localStorage.getItem('afternoon-garden-calendar-demo-v1')),storageBeforeReview);
   assert.equal(await page.evaluate(()=>document.activeElement?.id),'rReviewTitle');
   check('review is mandatory; no synthetic booking written on first submit; heading focused');
   assert.equal(await page.locator('#rReviewProduct').innerText(),'로지 모먼트');
