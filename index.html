@@ -607,6 +607,10 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
    new view. Prevent iOS/WebKit's persistent blue default focus rectangle on
    this heading; keep :focus-visible outlines on links, buttons and inputs. */
 #detail #dTitle[tabindex="-1"]:focus{outline:none}
+/* The detail-only WCAG check also exposed pre-existing pale metadata text.
+   Slightly darken only the description and specification values; leave the
+   approved photos, typography, product layout and interaction unchanged. */
+#detail .detailCopy .muted,#detail .detailCopy .spec span{color:#526154}
 </style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
