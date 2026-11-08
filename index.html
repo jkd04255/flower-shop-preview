@@ -584,6 +584,24 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
 }
 #home .card:hover .card-detail-link,#home .card:focus-visible .card-detail-link{color:#304434}
 </style>
+<style id="g3-26-reservation-progress">
+/* Keep keyboard-focus scrolling immediate on the reservation page, especially at
+   CDP 2x/4x page scale where the global smooth scrolling could leave focus offscreen. */
+html:has(#reservation:not([hidden])){scroll-behavior:auto}
+/* Small three-stage location indicator; not links or a second checkout action. */
+#reservation .reserve-progress{margin:0 0 28px}
+#reservation .reserve-progress ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;list-style:none;padding:0;margin:0}
+#reservation .reserve-progress li{min-width:0;padding:10px 4px 11px;border-top:2px solid #c9ccc0;color:#5f6b5f;
+ display:flex;align-items:center;gap:7px;font-size:12px;line-height:1.45;overflow-wrap:anywhere}
+#reservation .reserve-progress .step-number{flex:none;font-size:11px;font-weight:700;color:inherit}
+#reservation .reserve-progress li.is-current{border-top-color:#34513c;color:#273e2e;font-weight:700}
+#reservation .reserve-progress li.is-complete{border-top-color:#6c846d;color:#425a46}
+#reservation .reserve-progress small{font-size:10px;font-weight:400}
+@media(max-width:390px){
+ #reservation .reserve-progress li{font-size:11px;gap:5px;padding-left:2px;padding-right:2px}
+ #reservation .reserve-progress .step-number{font-size:10px}
+}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -616,6 +634,13 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
      </div>
    </aside>
    <div>
+     <nav id="reserveProgress" class="reserve-progress" aria-label="가상 예약 진행 단계">
+       <ol>
+         <li data-reservation-step="input" class="is-current" aria-current="step"><span class="step-number" aria-hidden="true">01</span><span>정보 입력</span></li>
+         <li data-reservation-step="review"><span class="step-number" aria-hidden="true">02</span><span>최종 확인</span></li>
+         <li data-reservation-step="result"><span class="step-number" aria-hidden="true">03</span><span>요청 완료 <small>(가상)</small></span></li>
+       </ol>
+     </nav>
      <form id="reserveForm" class="booking-form" autocomplete="off" novalidate>
        <h2 class="form-title">픽업 정보 입력</h2>
        <p class="form-hint">매장 예시 영업시간은 월–금 11:00–20:00입니다. 픽업은 11:00–19:00 사이 1시간 단위로 선택하며, 꽃다발별 최소 준비시간을 적용합니다. 오늘부터 14일 이내의 영업일만 선택할 수 있습니다.</p>
@@ -802,7 +827,7 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-25 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-26 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -1105,9 +1130,21 @@ let currentReservationIndex=-1;
 let currentDemoRequestId=null;
 let reservationReviewDraft=null;
 let reservationReviewApproved=false;
+function setReservationProgress(stage){
+ const order=['input','review','result'],index=order.indexOf(stage);
+ if(index<0)return;
+ document.querySelectorAll('#reserveProgress [data-reservation-step]').forEach(item=>{
+  const stepIndex=order.indexOf(item.dataset.reservationStep);
+  item.classList.toggle('is-current',stepIndex===index);
+  item.classList.toggle('is-complete',stepIndex<index);
+  if(stepIndex===index)item.setAttribute('aria-current','step');
+  else item.removeAttribute('aria-current');
+ });
+}
 function clearReservationReview(){
  reservationReviewDraft=null;
  reservationReviewApproved=false;
+ setReservationProgress('input');
  document.getElementById('reserveReview').hidden=true;
  for(const id of ['rReviewProduct','rReviewDate','rReviewTime','rReviewName','rReviewPhone']){
   document.getElementById(id).textContent='';
@@ -1262,6 +1299,7 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
     this.hidden=true;
     const review=document.getElementById('reserveReview');
     review.hidden=false;
+    setReservationProgress('review');
     review.scrollIntoView({block:'start',behavior:'smooth'});
     document.getElementById('rReviewTitle').focus({preventScroll:true});
     return;
@@ -1288,6 +1326,7 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   this.hidden=true;
   const result=document.getElementById('reserveResult');
   result.hidden=false;
+  setReservationProgress('result');
   result.scrollIntoView({block:'start',behavior:'smooth'});
   document.getElementById('reserveResultTitle').focus({preventScroll:true});
   /* Discard typed contact details after the in-browser simulation. */

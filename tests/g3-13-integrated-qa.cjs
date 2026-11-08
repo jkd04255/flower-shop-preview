@@ -19,7 +19,15 @@ class E {
   this.style={};this.className='';this.dataset={};this.attributes={};this.textContent='';
   this.value='';this.hidden=false;this.disabled=false;this.checked=false;this.listeners={};
   this.open=false;this.href='';this.isConnected=false;this.tabIndex=0;
-  this.classList={add:(...names)=>{this.className+=' '+names.join(' ')}};
+  this.classList={
+   add:(...names)=>{this.className=(this.className+' '+names.join(' ')).trim()},
+   toggle:(name,force)=>{
+    const names=new Set(this.className.split(/\s+/).filter(Boolean));
+    const on=force===undefined?!names.has(name):!!force;
+    if(on)names.add(name);else names.delete(name);
+    this.className=[...names].join(' ');return on;
+   }
+  };
  }
  _connection(value){this.isConnected=value;for(const c of this.children)c._connection(value)}
  appendChild(child){this.children.push(child);child.parentNode=this;child._connection(this.isConnected);return child}
@@ -50,6 +58,8 @@ const ids=new Set([...html.matchAll(/\bid=["']([^"']+)["']/g)].map(x=>x[1]));
 const els=Object.fromEntries([...ids].map(id=>{const e=new E('div',id);e.isConnected=true;return [id,e]}));
 const adminFilters=['all','pending','confirmed','ready','completed','rejected'].map(x=>{const e=new E('button');e.dataset.filter=x;e.isConnected=true;return e});
 const statusFilters=['all','pending','confirmed','ready','completed'].map(x=>{const e=new E('button');e.dataset.calStatus=x;e.isConnected=true;return e});
+const progressSteps=['input','review','result'].map(x=>{const e=new E('li');e.dataset.reservationStep=x;e.isConnected=true;return e});
+const activeProgress=()=>progressSteps.find(x=>x.attributes['aria-current']==='step')?.dataset.reservationStep;
 const containers={'#featured':new E('div'),'#regular':new E('div'),'#arrivalList':new E('div')};
 for(const node of Object.values(containers))node.isConnected=true;
 const doc={
@@ -62,6 +72,7 @@ const doc={
   throw Error('unknown document selector '+q);
  },
  querySelectorAll(q){
+  if(q==='#reserveProgress [data-reservation-step]')return progressSteps;
   if(q==='#adminDemo .admin-filter')return adminFilters;
   if(q==='#calStatusFilters button')return statusFilters;
   if(q==='#calGrid .cal-day')return els.calGrid.children.filter(x=>x.className==='cal-day');
@@ -90,17 +101,20 @@ check('catalog renders 3 featured / 2 other',containers['#featured'].children.le
 check('demo seeded with 4 bookings',app.getBookings().length===4);
 loc.hash='#/reserve/rosy-moment';
 check('reservation screen opens',els.reservation.style.display==='block');
+check('G3-26 initial progress at input',activeProgress()==='input');
 const date=app.sampleWeekday(2);els.rDate.value=date;els.rDate.dispatch('change');
 const slots=app.pickupSlots(0,date);
 check('weekday pickup slot available',slots.length>0);
 els.rTime.value=slots[0];els.rName.value='가상 고객';els.rPhone.value='01000000000';
 els.reserveForm.dispatch('submit');
 check('G3-24 review appears without booking',els.reserveForm.hidden&&!els.reserveReview.hidden&&app.getBookings().length===4&&!app.getRequestId());
+check('G3-26 review updates step 2',activeProgress()==='review');
 check('G3-24 review shows correct synthetic details',els.rReviewProduct.textContent.includes('')&&els.rReviewDate.textContent===date&&els.rReviewTime.textContent===slots[0]&&els.rReviewName.textContent==='가상 고객'&&els.rReviewPhone.textContent==='01000000000');
 els.rReviewConfirm.dispatch('click');
 const id=app.getRequestId();
 check('new synthetic booking created',!!id&&app.getBookings().length===5);
 check('booking result visible',els.reserveForm.hidden&&els.reserveResult.hidden===false);
+check('G3-26 result updates step 3',activeProgress()==='result');
 check('no customer contact persisted',!storage.get('afternoon-garden-calendar-demo-v1').includes('01000000000'));
 els.rMarkPaid.dispatch('click');
 check('fake transfer reported',app.getBookings().find(x=>x.id===id).paymentState==='reported');
