@@ -19,7 +19,15 @@ class E {
   this.style={};this.className='';this.dataset={};this.attributes={};this.textContent='';
   this.value='';this.hidden=false;this.disabled=false;this.checked=false;this.listeners={};
   this.open=false;this.href='';this.isConnected=false;this.tabIndex=0;
-  this.classList={add:(...names)=>{this.className+=' '+names.join(' ')}};
+  this.classList={
+   add:(...names)=>{this.className=(this.className+' '+names.join(' ')).trim()},
+   toggle:(name,force)=>{
+    const names=new Set(this.className.split(/\s+/).filter(Boolean));
+    const on=force===undefined?!names.has(name):!!force;
+    if(on)names.add(name);else names.delete(name);
+    this.className=[...names].join(' ');return on;
+   }
+  };
  }
  _connection(value){this.isConnected=value;for(const c of this.children)c._connection(value)}
  appendChild(child){this.children.push(child);child.parentNode=this;child._connection(this.isConnected);return child}
@@ -50,6 +58,8 @@ const ids=new Set([...html.matchAll(/\bid=["']([^"']+)["']/g)].map(x=>x[1]));
 const els=Object.fromEntries([...ids].map(id=>{const e=new E('div',id);e.isConnected=true;return [id,e]}));
 const adminFilters=['all','pending','confirmed','ready','completed','rejected'].map(x=>{const e=new E('button');e.dataset.filter=x;e.isConnected=true;return e});
 const statusFilters=['all','pending','confirmed','ready','completed'].map(x=>{const e=new E('button');e.dataset.calStatus=x;e.isConnected=true;return e});
+const progressSteps=['input','review','result'].map(x=>{const e=new E('li');e.dataset.reservationStep=x;e.isConnected=true;return e});
+const activeProgress=()=>progressSteps.find(x=>x.attributes['aria-current']==='step')?.dataset.reservationStep;
 const containers={'#featured':new E('div'),'#regular':new E('div'),'#arrivalList':new E('div')};
 for(const node of Object.values(containers))node.isConnected=true;
 const doc={
@@ -62,6 +72,7 @@ const doc={
   throw Error('unknown document selector '+q);
  },
  querySelectorAll(q){
+  if(q==='#reserveProgress [data-reservation-step]')return progressSteps;
   if(q==='#adminDemo .admin-filter')return adminFilters;
   if(q==='#calStatusFilters button')return statusFilters;
   if(q==='#calGrid .cal-day')return els.calGrid.children.filter(x=>x.className==='cal-day');
@@ -89,6 +100,7 @@ const app=new Function('window','document','location',appCode+
 check('catalog still renders five synthetic flowers',containers['#featured'].children.length===3&&containers['#regular'].children.length===2);
 loc.hash='#/reserve/rosy-moment';
 check('booking form route visible',els.reservation.style.display==='block'&&!els.reserveForm.hidden);
+check('G3-26 progress begins at input',activeProgress()==='input');
 check('date hint ARIA wired',els.rDate.attributes['aria-describedby']==='rTimeHint');
 check('time hint ARIA wired',els.rTime.attributes['aria-describedby']==='rTimeHint');
 check('alert has focus target in HTML',html.includes('id="rError" class="form-error" role="alert" tabindex="-1"'));
@@ -96,6 +108,7 @@ check('result heading has focus target in HTML',html.includes('id="reserveResult
 check('payment message has focus target in HTML',html.includes('id="rPaymentState" aria-live="polite" tabindex="-1"'));
 els.reserveForm.dispatch('submit');
 check('missing date keeps form open',!els.reserveForm.hidden&&els.reserveResult.hidden);
+check('G3-26 invalid form preserves step 1',activeProgress()==='input');
 check('missing date focuses date',doc.activeElement===els.rDate);
 check('missing date marked invalid',els.rDate.attributes['aria-invalid']==='true'&&els.rDate.attributes['aria-describedby']==='rTimeHint rError');
 const firstDate=app.sampleWeekday(2),secondDate=app.sampleWeekday(9);
