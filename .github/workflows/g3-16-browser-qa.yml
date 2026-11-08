@@ -1,0 +1,48 @@
+name: G3-16 Chromium keyboard and multitab QA
+on:
+  push:
+    branches:
+      - feature/g3-16-keyboard-multitab-qa
+  pull_request:
+    paths:
+      - index.html
+      - tests/g3-16-browser-qa.cjs
+      - .github/workflows/g3-16-browser-qa.yml
+permissions:
+  contents: read
+jobs:
+  chrome:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@v2
+      - name: Install Playwright Core driver
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright-core
+      - name: Prior synthetic regression tests
+        run: |
+          node tests/g3-12-synthetic-qa.cjs
+          node tests/g3-13-integrated-qa.cjs
+          node tests/g3-14-form-a11y-qa.cjs
+      - name: G3-15 real Chrome flow regression
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-15-browser-qa.cjs
+      - name: G3-16 real Chrome keyboard and two-tab regression
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-16-browser-qa.cjs
+      - name: Archive screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g3-16-chrome-evidence
+          path: qa-artifacts/
+          if-no-files-found: ignore
