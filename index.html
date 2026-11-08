@@ -538,6 +538,11 @@ h1,h2,h3{font-family:var(--editorial-font);font-style:normal;font-weight:510;let
 #calendarDemo .cal-day .cal-number.is-today{background:#bb3e35;color:#fff}
 /* The former 0.82 opacity reduced the "details" label below 4.5:1. */
 #calendarDemo .cal-fold-indicator{opacity:1}
+/* These original deeply scoped rules were stronger than the initial overrides. */
+#home .store .booking-info p,
+#adminDemo .admin-side .admin-summary,
+#adminDemo .admin-notification .preview-note,
+#adminDemo .admin-side .admin-disclaimer{color:#52614f}
 </style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
