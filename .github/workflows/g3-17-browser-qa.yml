@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium QA · G3-20
+name: Flower shop consolidated Chromium QA · G3-21
 on:
   pull_request:
     paths:
@@ -27,7 +27,12 @@ jobs:
         id: chrome
         uses: browser-actions/setup-chrome@v2
       - name: Install browser test dependencies (no app runtime changes)
-        run: npm install --no-save --no-package-lock --ignore-scripts playwright-core axe-core@4.10.3
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright-core axe-core@4.10.3 pngjs@7.0.0
+      - name: G3-21 Chromium reflow/photo contrast/focus discovery
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+          G321_DISCOVERY: '1'
+        run: node tests/g3-21-visual-zoom-qa.cjs
       - name: G3-20 axe-core WCAG 2.1 AA (strict zero-violation gate)
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
@@ -62,6 +67,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: g3-20-axe-browser-evidence
+          name: g3-21-visual-axe-evidence
           path: qa-artifacts/
           if-no-files-found: ignore
