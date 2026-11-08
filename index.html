@@ -1299,7 +1299,7 @@ document.getElementById('rReviewConfirm').addEventListener('click',function(){
  const form=document.getElementById('reserveForm');
  const latest={idx:currentReservationIndex,date:document.getElementById('rDate').value,
   time:document.getElementById('rTime').value,name:document.getElementById('rName').value.trim(),
-  phone:document.getElementById('rPhone').value.trim().replace(/[\\s-]/g,'')};
+  phone:document.getElementById('rPhone').value.trim().replace(/[\s-]/g,'')};
  if(Object.keys(latest).some(key=>latest[key]!==draft[key])){
   clearReservationReview();
   form.hidden=false;
