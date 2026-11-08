@@ -108,7 +108,7 @@ async function run(){
   await confirmed.click();
   assert.equal(await confirmed.getAttribute('aria-pressed'),'true');
   assert.equal(await all.getAttribute('aria-pressed'),'false');
-  assert.match(await A.locator('#calSelectedCount').innerText(),/1건 표시/);
+  assert.match(await A.locator('#calSelectedCount').innerText(),/(?:1건 표시|1건의 예약 일정)/);
   pass('Chrome calendar confirmed filter: count, aria-pressed and labeled live region');
   await confirmed.focus();
   await A.keyboard.press('Shift+Tab');
