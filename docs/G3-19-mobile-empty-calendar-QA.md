@@ -28,7 +28,7 @@
 | G3-16 실제 Chrome 두 탭/Tab | **7/7 PASS** | `tests/g3-16-browser-qa.cjs` |
 | G3-17 실제 Chrome 필터/초점/ARIA | **10/10 PASS** | `tests/g3-17-browser-qa.cjs` |
 | G3-18 실제 Chrome 새로고침/초기화 | **14/14 PASS** | `tests/g3-18-browser-qa.cjs` |
-| **G3-19 실제 Chrome 모바일/빈 캘린더** | **최종 검증 중** | `tests/g3-19-browser-qa.cjs` |
+| **G3-19 실제 Chrome 모바일/빈 캘린더** | **20/20 PASS** | `tests/g3-19-browser-qa.cjs` |
 | 인라인 JavaScript 문법 | **3/3 PASS** | 실제 HTML 스크립트 파싱 |
 | 실기기 iPhone/Android, VoiceOver/TalkBack | **미실행** | Chrome과 별도 장비 및 보조공학 환경 필요 |
 | 실제 외부 데이터, DB/Auth, 은행 API/실송금, 서버 동시성 | **미구현·미검증** | G2 전체 Gate HOLD |
@@ -45,7 +45,7 @@
 
 단일 PR 자동 검사: `.github/workflows/g3-17-browser-qa.yml`에 G3-19 실제 Chrome 검사를 추가. G3-15·16 과거 검사는 수동 실행으로 보존. 실패·새 커밋 취소 등 중복 알림 방지 정책 보존.
 
-최종 GitHub Actions: [G3-19 CI run #42451282924](https://github.com/jkd04255/flower-shop-preview/actions/runs/42451282924) — **결과 확인 중**.
+최종 GitHub Actions: [G3-19 CI run #42451483697](https://github.com/jkd04255/flower-shop-preview/actions/runs/42451483697) — **모든 단계 success**, G3-19 20/20, G3-15 14/14(공개 Pages 읽기 전용 smoke 포함), G3-16 7/7, G3-17 10/10, G3-18 14/14, 합성 31/34/38 전부 통과.
 
 ```bash
 node tests/g3-12-synthetic-qa.cjs
@@ -60,5 +60,7 @@ CHROME_BIN=/usr/bin/google-chrome node tests/g3-19-browser-qa.cjs
 ```
 
 **범위 구분:** GitHub-hosted 실제 Chromium은 GitHub 체크아웃의 정적 HTML/사진/CSS를 localhost로 제공해 버튼·레이아웃·초점을 시험했습니다. 기존 공개 GitHub Pages는 배포 후 **읽기 전용 버전 확인**만 하며, 실기기·스크린리더 사용 경험을 검증했다고 주장하지 않습니다.
+
+최종 검증 중 기존 G3-15 공개 버전 smoke 검사에 남아 있던 G3-14~17 한정 정규식도 G3 계열의 버전을 인식하도록 조정했습니다. 공개 사이트는 홈/푸터만 확인하며 예약 조작은 하지 않았습니다.
 
 G2 전체 Gate **HOLD** 유지.
