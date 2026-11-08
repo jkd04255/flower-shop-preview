@@ -1,0 +1,52 @@
+name: G3-17 real Chromium keyboard and filter regression
+on:
+  push:
+    branches:
+      - feature/g3-17-filter-reset-keyboard-qa
+  pull_request:
+    paths:
+      - index.html
+      - tests/g3-17-browser-qa.cjs
+      - .github/workflows/g3-17-browser-qa.yml
+permissions:
+  contents: read
+jobs:
+  chrome:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@v2
+      - name: Install Playwright Core
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright-core
+      - name: Prior synthetic regression
+        run: |
+          node tests/g3-12-synthetic-qa.cjs
+          node tests/g3-13-integrated-qa.cjs
+          node tests/g3-14-form-a11y-qa.cjs
+      - name: G3-15 real Chrome end-to-end
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-15-browser-qa.cjs
+      - name: G3-16 real Chrome two-tab regression
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-16-browser-qa.cjs
+      - name: G3-17 real Chrome focus/filter/reset regression
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-17-browser-qa.cjs
+      - name: Screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g3-17-browser-evidence
+          path: qa-artifacts/
+          if-no-files-found: ignore
