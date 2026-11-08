@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium QA · G3-22
+name: Flower shop consolidated Chromium QA · G3-24
 on:
   pull_request:
     paths:
@@ -68,6 +68,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-19-browser-qa.cjs
+      - name: G3-24 mandatory final review and booking privacy
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-24-reservation-review-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4

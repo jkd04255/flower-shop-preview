@@ -85,6 +85,12 @@ async function run(){
   assert.ok(options2.length>0);
   await page.locator('#rTime').selectOption(options2[0]);
   await page.locator('#reserveForm button[type="submit"]').click();
+  await page.locator('#reserveReview').waitFor({state:'visible'});
+  assert.equal(await page.locator('#reserveResult').isVisible(),false);
+  assert.equal(await page.locator('#rReviewName').innerText(),'가상 고객');
+  assert.equal(await page.locator('#rReviewPhone').innerText(),'01000000000');
+  pass('G3-24 review shows complete synthetic request without saving it yet');
+  await page.locator('#rReviewConfirm').click();
   await page.locator('#reserveResult').waitFor({state:'visible'});
   assert.equal(await page.evaluate(()=>document.activeElement?.id),'reserveResultTitle');
   assert.equal(await page.locator('#rrDate').innerText(),dates[1]);

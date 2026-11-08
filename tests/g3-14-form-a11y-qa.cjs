@@ -32,6 +32,7 @@ class E {
  dispatch(k,params={}){for(const fn of this.listeners[k]||[])fn.call(this,{target:this,preventDefault(){},...params})}
  focus(){doc.activeElement=this}
  scrollIntoView(){}
+ requestSubmit(){this.dispatch('submit')}
  reset(){for(const id of ['rDate','rTime','rName','rPhone','rMemo'])doc.getElementById(id).value=''}
  querySelectorAll(q){
   const nodes=descendants(this);
@@ -133,6 +134,13 @@ els.reserveForm.dispatch('submit');
 check('date change cannot accidentally submit old hour',els.reserveResult.hidden&&doc.activeElement===els.rTime);
 els.rTime.value=app.pickupSlots(0,secondDate)[0];els.rTime.dispatch('change');
 els.reserveForm.dispatch('submit');
+check('review phase shows details before booking',!els.reserveReview.hidden&&els.reserveForm.hidden&&!app.getRequestId()&&els.rReviewName.textContent==='가상 고객');
+check('review title focused',doc.activeElement===els.rReviewTitle);
+els.rReviewEdit.dispatch('click');
+check('edit restores form with values intact',!els.reserveForm.hidden&&els.reserveReview.hidden&&els.rName.value==='가상 고객'&&els.rDate.value===secondDate);
+els.reserveForm.dispatch('submit');
+check('review returns after correction',!els.reserveReview.hidden&&els.rReviewTime.textContent===els.rTime.value);
+els.rReviewConfirm.dispatch('click');
 const bookingId=app.getRequestId();
 check('valid booking accepted after reselection',!!bookingId&&app.getBookings().some(x=>x.id===bookingId));
 check('success focuses visible confirmation title',doc.activeElement===els.reserveResultTitle&&!els.reserveResult.hidden&&els.reserveForm.hidden);
