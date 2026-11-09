@@ -172,7 +172,9 @@ async function runEngine(engine,label,base){
   saved=await page.evaluate(()=>JSON.stringify(localStorage));
   assert.ok(!saved.includes('1234')&&!saved.includes('01000001234'));
   assert.deepEqual(errors,[]);
-  assert.match(await page.locator('footer').innerText(),/G3-38 STATIC DEMO/);
+  const footer=await page.locator('footer').innerText();
+  const version=footer.match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(version&&Number(version[1])>=38,'G3-38 or newer static-demo footer required: '+footer);
   console.log('PASS G3-38 '+label+' 320/390 responsive, axe zero, no JS errors, no persisted suffix');
   await context.close();
  }finally{await browser.close();}
