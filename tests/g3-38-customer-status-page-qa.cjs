@@ -156,6 +156,10 @@ async function runEngine(engine,label,base){
   assert.equal(stateAfterApproval.current,'confirmed','actual selected synthetic record must be confirmed before navigation');
   assert.equal(stateAfterApproval.saved,'confirmed','approved synthetic record must persist before navigation');
   await page.goto(base+'#/booking-status',{waitUntil:'domcontentloaded'});
+  /* A WebKit hash navigation may resolve before its hashchange render. Keep the
+     strict confirmed-state assertions, but read the visible result after render. */
+  await page.waitForFunction(()=>document.querySelector('#customerStatus')?.style.display==='block'&&
+    document.querySelector('#csResults')?.textContent?.includes('입금 확인 완료'));
   summary=await page.locator('#csResults').innerText();
   assert.match(summary,/예약 확정/);
   assert.match(summary,/입금 확인 완료/);
