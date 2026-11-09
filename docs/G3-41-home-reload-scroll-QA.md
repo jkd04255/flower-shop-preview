@@ -9,7 +9,7 @@ iPhone 내장 브라우저에서 홈페이지를 열고 내려가거나 `오늘�
 - 기존 `route()`는 상세/예약/관리자/캘린더/조회 페이지에는 `scrollTo(0,0)`을 실행하지만, 홈 섹션을 다시 여는 경우에는 해당 처리가 없습니다.
 
 ## 수정
-- HTML `head` 초기에 `g3-41-home-reload-top` 독립 스크립트 추가.
+- 기존 메인 `<script>` 시작 부분에 G3-41 스크롤 보정 IIFE를 통합합니다. 기존 인라인 `<script>` **3개 구조와 첫 번째 메인 스크립트 위치를 그대로 보존**해 G3-12~14의 엄격한 전체 스크립트 문법·통합 회귀 검사가 유지됩니다. 브라우저 외의 합성 DOM 테스트에서는 `performance` 등을 확인하여 보정 로직을 안전하게 건너뜁니다.
 - PerformanceNavigationTiming/구형 navigation type으로 **실제 새로고침(reload)**만 감지. 홈 페이지에서만 브라우저 `history.scrollRestoration='manual'`을 설정합니다.
 - 홈 섹션 `#curation`, `#arrivals`, `#other`, `#store`로 새로고침한 경우에는 `history.replaceState`로 `#top`을 지정하여 자동 앵커 이동을 차단합니다. 주소에는 사용자정보를 남기지 않습니다.
 - 초기 DOM 구축, load, pageshow 및 2 프레임 이후의 초기 복원을 제어합니다. Safari/WebKit의 지연 복원 대응으로 페이지 표시 후 180ms에도 한 번 더 최상단을 보정합니다. 이동 시에만 일시적으로 부드러운 스크롤을 중단하여 최상단 이동 애니메이션/흔들림을 방지하고, 기존 `html{scroll-behavior:smooth}`은 보존합니다.
