@@ -98,6 +98,32 @@ async function check(engine,label,url){
   assert.equal(await page.locator('#rMemoCount').textContent(),'0 / 120자 · 가상 시연용');
   console.log('PASS G3-37 '+label+' original 3-step review, G3-33 memo and privacy gates preserved');
 
+  /* Customer-facing synthetic status lookup, which cannot authenticate real customers. */
+  await page.goto(url+'#store',{waitUntil:'domcontentloaded'});
+  const lookup=page.locator('#rStatusLast4'),lookupResult=page.locator('#rStatusLookupResult');
+  await page.locator('#rStatusLookupForm').waitFor({state:'visible'});
+  await lookup.fill('12');
+  await page.locator('#rStatusLookupSubmit').tap();
+  assert.match(await lookupResult.innerText(),/숫자 4자리를 입력/);
+  await lookup.fill('1003');
+  await page.locator('#rStatusLookupSubmit').tap();
+  assert.match(await lookupResult.innerText(),/DEMO-003 · 예약 확정/);
+  await lookup.fill('1004');
+  await page.locator('#rStatusLookupSubmit').tap();
+  assert.match(await lookupResult.innerText(),/DEMO-004 · 거절/);
+  await lookup.fill('9999');
+  await page.locator('#rStatusLookupSubmit').tap();
+  assert.match(await lookupResult.innerText(),/연결된 가상 예약이 없습니다/);
+  await lookup.fill('0000');
+  await page.locator('#rStatusLookupSubmit').tap();
+  const newLookup=await lookupResult.innerText();
+  assert.match(newLookup,/DEMO-005 · 입금 전/);
+  assert.ok(!newLookup.includes('01000000000')&&!newLookup.includes('가상 고객')&&!newLookup.includes('가상 요청'));
+  const snapshot=await page.evaluate(()=>JSON.stringify(localStorage));
+  assert.ok(!snapshot.includes('0000')&&!snapshot.includes('01000000000'),'typed suffix and full phone must not persist');
+  await axePass(page,label+' public booking status lookup');
+  console.log('PASS G3-37 '+label+' lookup validates four digits, demo samples and same-tab new request; no private fields or axe violations');
+
   await page.goto(url+'#/admin-demo',{waitUntil:'domcontentloaded'});
   const input=page.locator('#adminRequestSearch'),clear=page.locator('#adminSearchClear');
   const list=page.locator('#adminList .admin-request');
@@ -144,6 +170,12 @@ async function check(engine,label,url){
   await list.first().waitFor({state:'visible'});
   assert.equal(await input.inputValue(),'');
   assert.equal(await clear.isHidden(),true);
+  await page.goto(url+'#store',{waitUntil:'domcontentloaded'});
+  await page.locator('#rStatusLast4').fill('0000');
+  await page.locator('#rStatusLookupSubmit').tap();
+  assert.match(await page.locator('#rStatusLookupResult').innerText(),/연결된 가상 예약이 없습니다/);
+  await page.goto(url+'#/admin-demo',{waitUntil:'domcontentloaded'});
+  await list.first().waitFor({state:'visible'});
   for(const width of [320,390]){
    await page.setViewportSize({width,height:844});
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
