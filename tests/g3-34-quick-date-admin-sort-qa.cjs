@@ -121,7 +121,9 @@ async function check(engine,label,base){
    assert.ok(overflow<=2,JSON.stringify({width,overflow}));
   }
   assert.deepEqual(errors,[]);
-  assert.match(await page.locator('footer').innerText(),/G3-34 STATIC DEMO/);
+  const footer=await page.locator('footer').innerText();
+  const version=footer.match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(version&&Number(version[1])>=34,'G3-34 or newer static demo footer required: '+footer);
   console.log('PASS G3-34 '+label+' admin reset restores original sort, 320/390px layout and no JS errors');
   await ctx.close();
  }finally{await browser.close()}
