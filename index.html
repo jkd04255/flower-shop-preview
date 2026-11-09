@@ -628,6 +628,14 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  #reservation .booking-form textarea{font-size:16px}
 }
 </style>
+<style id="g3-30-pickup-admin-wayfinding">
+/* Compact reassurance while choosing a synthetic pickup; not a reservation confirmation. */
+#reservation .pickup-preview{margin:8px 0 24px;padding:11px 14px;border-left:2px solid #637f67;background:#eef0e6;color:#394f3d;font-size:12px;line-height:1.75;overflow-wrap:anywhere}
+#reservation .pickup-preview[hidden]{display:none!important}
+/* Admin shortcut opens the existing selected-day calendar, without changing booking state. */
+#adminDemo .admin-calendar-day-jump{display:inline-block;margin:0 0 18px;padding:9px 0;border:0;border-bottom:1px solid #58715c;background:transparent;color:#354c39;text-align:left;font:600 12px/1.6 Arial,"Apple SD Gothic Neo",sans-serif;cursor:pointer}
+#adminDemo .admin-calendar-day-jump:focus-visible{outline:2px solid #4d7053;outline-offset:4px}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -681,6 +689,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
          </div>
        </div>
        <p id="rTimeHint" class="field-note" aria-live="polite">날짜를 선택하면 가능한 시간이 표시됩니다.</p>
+        <p id="rPickupPreview" class="pickup-preview" hidden>픽업 일정 미리보기 (가상)</p>
        <div class="form-row" style="margin-top:22px">
          <div class="form-field">
            <label for="rName">예약자 이름 *</label>
@@ -853,7 +862,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-28 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-30 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -1073,6 +1082,23 @@ function renderAdminDemo(){
    dl.appendChild(adminDetailPair(label,value));
  }
  detail.appendChild(dl);
+ /* A rejected request is deliberately absent from the calendar. */
+ if(selected.status!=='rejected'){
+  const jump=adminText('button','admin-calendar-day-jump','이 예약 날짜를 캘린더에서 보기 ↗');
+  jump.type='button';
+  jump.addEventListener('click',function(){
+   const day=dateFromLocalString(selected.date);
+   if(!day)return;
+   calendarSelectedDate=selected.date;
+   calendarYear=day.getFullYear();
+   calendarMonth=day.getMonth();
+   calendarMode='day';
+   calendarStatusFilter='all';
+   calendarInitialized=true;
+   location.hash='#/calendar-demo';
+  });
+  detail.appendChild(jump);
+ }
  if(selected.status==='pending'&&!demoSlotAvailable(selected.date,selected.time)){
   const capacityNote=adminText('p','admin-capacity-warning','이 시간은 확정 '+demoConfirmedSlotCount(selected.date,selected.time)+' / '+DEMO_SLOT_CAPACITY+'건으로 가상 정원이 찼습니다. 기존 요청은 보존되지만 추가 확정은 할 수 없습니다. 다른 픽업 시간은 고객과 별도로 조정해야 합니다.');
   capacityNote.setAttribute('role','status');
@@ -1231,6 +1257,17 @@ function pickupSlots(productIndex,dateStr){
   }
   return slots;
 }
+function updatePickupPreview(){
+ const preview=document.getElementById('rPickupPreview');
+ const date=document.getElementById('rDate').value;
+ const time=document.getElementById('rTime').value;
+ const slots=currentReservationIndex>=0?pickupSlots(currentReservationIndex,date):[];
+ if(!date||!slots.length){preview.textContent='';preview.hidden=true;return;}
+ preview.hidden=false;
+ preview.textContent=time&&slots.includes(time)?
+  '선택한 픽업 · '+date+' '+time+' · 예약 확정 전 (가상)':
+  '선택한 픽업 날짜 · '+date+' · 픽업 시간을 선택해 주세요 (가상)';
+}
 function updatePickupTimes(resetSelection=false){
   const field=document.getElementById('rDate');
   const select=document.getElementById('rTime');
@@ -1256,6 +1293,7 @@ function updatePickupTimes(resetSelection=false){
   else if(resetSelection&&!!selected)hint.textContent='날짜가 변경되었습니다. 이 날짜의 픽업 시간을 다시 선택해 주세요.';
   else if(previousSlotExpired)hint.textContent='선택했던 시간이 더 이상 가능하지 않습니다. 새로운 시간을 선택해 주세요.';
   else hint.textContent='픽업 가능 시간 '+options.length+'개 · 최소 준비시간 및 영업시간 반영';
+ updatePickupPreview();
 }
 function initReservation(index){
   clearReservationReview();
@@ -1310,7 +1348,10 @@ document.getElementById('rDate').addEventListener('change',()=>{
  updatePickupTimes(true);
 });
 for(const id of ['rTime','rName','rPhone']){
- document.getElementById(id).addEventListener(id==='rTime'?'change':'input',clearReservationError);
+ document.getElementById(id).addEventListener(id==='rTime'?'change':'input',function(){
+  clearReservationError();
+  if(id==='rTime')updatePickupPreview();
+ });
 }
 document.getElementById('reserveForm').addEventListener('submit',function(e){
   e.preventDefault();
