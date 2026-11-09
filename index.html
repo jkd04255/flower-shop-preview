@@ -1446,7 +1446,7 @@ function customerStatusDescriptor(item){
  if(item.status==='ready')return{badge:'수령 준비 완료',headline:'픽업 준비가 완료됐습니다.',description:'가상 입금 확인과 예약 확정 이후, 수령을 기다리는 상태입니다.',level:'complete',stage:3};
  if(item.status==='confirmed')return{badge:'예약 확정',headline:'입금 확인 후 예약이 확정됐습니다.',description:'가상 입금 확인이 완료된 예약입니다. 실제 결제나 예약 확정은 아닙니다.',level:'complete',stage:3};
  if(item.paymentState==='reported')return{badge:'입금 확인 대기',headline:'가상 송금 완료 표시 · 매장 확인 대기',description:'송금 완료로 표시했으나 아직 매장의 입금 확인 및 예약 확정 전입니다. 실제 은행 송금은 발생하지 않았습니다.',level:'reported',stage:2};
- return{badge:'입금 전',headline:'가상 계좌 안내 · 입금 전',description:'이 가상 요청은 아직 송금 완료로 표시되지 않았습니다. 아래 계좌번호는 0으로 된 시연 예시로 실제 송금할 수 없습니다.',level:'pending',stage:1};
+ return{badge:'입금 전',headline:'가상 계좌 안내 · 입금 전',description:'아직 송금 완료로 표시되지 않았습니다. 아래 계좌번호는 0으로 된 시연 예시로 실제 송금할 수 없습니다.',level:'pending',stage:1};
 }
 function statusDetailPair(label,value){
  const row=document.createElement('div');
