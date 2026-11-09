@@ -99,7 +99,10 @@ async function checkEngine(engine,label,url){
    assert.ok(extra<=2,JSON.stringify({width,extra}));
   }
   assert.deepEqual(errors,[]);
-  assert.equal(await page.locator('footer').innerText().then(s=>s.includes('G3-31 STATIC DEMO')),true);
+  // A retained G3-31 regression must also pass on later G3-32+ releases.
+  const footer=await page.locator('footer').innerText();
+  const version=footer.match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(version&&Number(version[1])>=31,'G3-31 or newer static-demo footer required: '+footer);
   console.log('PASS G3-31 '+label+' 320/390px no horizontal overflow and no JS errors');
   await ctx.close();
  }finally{await browser.close()}
