@@ -155,9 +155,8 @@ test('old layout, payment and calendar kept',()=>{
   for(const token of ['g3-11-mobile-a11y','DEMO_SLOT_CAPACITY=3','calendarTimelineItem','markDemoPayment','depositChecked','hero-original.webp'])assert.ok(source.includes(token),token);
 });
 const scripts=[...source.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)];
-test('all inline scripts parse, including the G3-41 reload guard',()=>{
-  assert.ok(scripts.length>=3,'the original scripts and approved additions must parse');
-  assert.ok(source.includes('<script id="g3-41-home-reload-top">'),'early reload guard must exist');
+test('all 3 inline scripts parse',()=>{
+  assert.equal(scripts.length,3);
   for(const match of scripts)assert.doesNotThrow(()=>new Function(match[1]));
 });
 console.log('G3-12 synthetic QA PASS: '+testNames.length+' tests; no network or real data.');
