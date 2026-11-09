@@ -156,6 +156,10 @@ async function runEngine(engine,label,base){
   assert.equal(stateAfterApproval.current,'confirmed','actual selected synthetic record must be confirmed before navigation');
   assert.equal(stateAfterApproval.saved,'confirmed','approved synthetic record must persist before navigation');
   await page.goto(base+'#/booking-status',{waitUntil:'domcontentloaded'});
+  /* A WebKit hash navigation may resolve before its hashchange render. Keep the
+     strict confirmed-state assertions, but read the visible result after render. */
+  await page.waitForFunction(()=>document.querySelector('#customerStatus')?.style.display==='block'&&
+    document.querySelector('#csResults')?.textContent?.includes('입금 확인 완료'));
   summary=await page.locator('#csResults').innerText();
   assert.match(summary,/예약 확정/);
   assert.match(summary,/입금 확인 완료/);
@@ -172,7 +176,9 @@ async function runEngine(engine,label,base){
   saved=await page.evaluate(()=>JSON.stringify(localStorage));
   assert.ok(!saved.includes('1234')&&!saved.includes('01000001234'));
   assert.deepEqual(errors,[]);
-  assert.match(await page.locator('footer').innerText(),/G3-38 STATIC DEMO/);
+  const footer=await page.locator('footer').innerText();
+  const version=footer.match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(version&&Number(version[1])>=38,'G3-38 or newer static-demo footer required: '+footer);
   console.log('PASS G3-38 '+label+' 320/390 responsive, axe zero, no JS errors, no persisted suffix');
   await context.close();
  }finally{await browser.close();}
