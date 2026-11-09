@@ -152,7 +152,9 @@ async function check(engine,label,base){
    assert.ok(overflow<=2,JSON.stringify({width,overflow}));
   }
   assert.deepEqual(errors,[]);
-  assert.match(await page.locator('footer').innerText(),/G3-36 STATIC DEMO/);
+  const footer=await page.locator('footer').innerText();
+  const version=footer.match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(version&&Number(version[1])>=36,'G3-36 or later static demo footer required: '+footer);
   console.log('PASS G3-36 '+label+' reset/reload privacy, mobile no overflow, no runtime errors');
   await ctx.close();
  }finally{await browser.close()}
