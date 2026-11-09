@@ -619,6 +619,8 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 #reservation #reservationHeading[tabindex="-1"]:focus,
 #reservation #rReviewTitle[tabindex="-1"]:focus,
 #reservation #reserveResultTitle[tabindex="-1"]:focus{outline:none}
+/* New result-page WCAG coverage found older low-contrast bank detail labels. */
+#reservation .transfer-result .transfer-details dt{color:#4f5d50}
 /* iOS WebKit auto-zooms form controls with a computed font smaller than 16px. */
 @media(max-width:700px){
  #reservation .booking-form input,
