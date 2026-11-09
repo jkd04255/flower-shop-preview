@@ -636,6 +636,14 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 #adminDemo .admin-calendar-day-jump{display:inline-block;margin:0 0 18px;padding:9px 0;border:0;border-bottom:1px solid #58715c;background:transparent;color:#354c39;text-align:left;font:600 12px/1.6 Arial,"Apple SD Gothic Neo",sans-serif;cursor:pointer}
 #adminDemo .admin-calendar-day-jump:focus-visible{outline:2px solid #4d7053;outline-offset:4px}
 </style>
+<style id="g3-31-pickup-admin-filter-feedback">
+/* Keep new guidance small, legible, and consistent with G3-30's cream/green UI. */
+#adminDemo .admin-filter-feedback{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:-4px 0 18px}
+#adminDemo .admin-filter-feedback p{margin:0;color:#4d624f;font-size:12px;line-height:1.7}
+#adminDemo #adminShowAll{border:0;border-bottom:1px solid #526e58;background:transparent;color:#354f3b;font:600 12px/1.6 Arial,"Apple SD Gothic Neo",sans-serif;padding:5px 0;cursor:pointer}
+#adminDemo #adminShowAll[hidden]{display:none!important}
+#adminDemo #adminShowAll:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -795,6 +803,10 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
    <button type="button" class="admin-filter" data-filter="completed" aria-pressed="false">수령 완료</button>
    <button type="button" class="admin-filter" data-filter="rejected" aria-pressed="false">거절</button>
  </div>
+ <div class="admin-filter-feedback">
+  <p id="adminFilterSummary" role="status" aria-live="polite" aria-atomic="true">전체 요청 · 가상 데이터</p>
+  <button type="button" id="adminShowAll" hidden>전체 보기 ↗</button>
+ </div>
  <div class="admin-panels">
   <div class="admin-list" id="adminList" role="group" aria-label="가상 예약 목록"></div>
   <aside class="admin-side" id="adminDetail" aria-live="polite"></aside>
@@ -862,7 +874,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-30 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-31 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -1029,6 +1041,11 @@ function renderAdminDemo(){
    button.setAttribute('aria-pressed',String(button.dataset.filter===adminFilter));
  }
  const entries=adminRequests.filter(item=>adminFilter==='all'||item.status===adminFilter);
+ const statusLabel=adminFilter==='all'?'전체 요청':adminStatusText[adminFilter];
+ const summary=document.getElementById('adminFilterSummary');
+ const newSummary=statusLabel+' · '+entries.length+'건 표시 / 전체 '+total+'건 · 가상 데이터';
+ if(summary.textContent!==newSummary)summary.textContent=newSummary;
+ document.getElementById('adminShowAll').hidden=adminFilter==='all';
  const list=document.getElementById('adminList');
  list.replaceChildren();
  for(const item of entries){
@@ -1161,6 +1178,12 @@ function renderAdminDemo(){
 for(const button of document.querySelectorAll('#adminDemo .admin-filter')){
  button.addEventListener('click',function(){adminFilter=this.dataset.filter;renderAdminDemo()});
 }
+document.getElementById('adminShowAll').addEventListener('click',function(){
+ adminFilter='all';
+ renderAdminDemo();
+ /* The shortcut hides after use. Restore the real All filter keyboard target. */
+ document.querySelector('#adminDemo .admin-filter[data-filter="all"]').focus({preventScroll:true});
+});
 document.getElementById('adminAccountMode').addEventListener('change',function(){
  demoAccountMode=this.value==='example'?'example':'off';
  updateBankPreview();
@@ -1263,10 +1286,12 @@ function updatePickupPreview(){
  const time=document.getElementById('rTime').value;
  const slots=currentReservationIndex>=0?pickupSlots(currentReservationIndex,date):[];
  if(!date||!slots.length){preview.textContent='';preview.hidden=true;return;}
+ const day=dateFromLocalString(date);
+ const weekday=['일','월','화','수','목','금','토'][day.getDay()]+'요일';
  preview.hidden=false;
  preview.textContent=time&&slots.includes(time)?
-  '선택한 픽업 · '+date+' '+time+' · 예약 확정 전 (가상)':
-  '선택한 픽업 날짜 · '+date+' · 픽업 시간을 선택해 주세요 (가상)';
+  '선택한 픽업 · '+date+' '+time+' ('+weekday+') · 예약 확정 전 (가상)':
+  '선택한 픽업 날짜 · '+date+' ('+weekday+') · 픽업 시간을 선택해 주세요 (가상)';
 }
 function updatePickupTimes(resetSelection=false){
   const field=document.getElementById('rDate');
