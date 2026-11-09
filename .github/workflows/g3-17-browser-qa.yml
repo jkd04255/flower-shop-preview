@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-30
+name: Flower shop consolidated Chromium + WebKit QA · G3-31
 on:
   pull_request:
     paths:
@@ -96,6 +96,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-30-pickup-admin-ux-qa.cjs
+      - name: G3-31 Chromium and WebKit weekday preview + admin filter UX + axe
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-31-weekday-filter-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
