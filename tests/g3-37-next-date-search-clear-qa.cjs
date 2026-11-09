@@ -107,17 +107,22 @@ async function check(engine,label,url){
   assert.match(await lookupResult.innerText(),/숫자 4자리를 입력/);
   await lookup.fill('1003');
   await page.locator('#rStatusLookupSubmit').tap();
-  assert.match(await lookupResult.innerText(),/DEMO-003 · 예약 확정/);
-  await lookup.fill('1004');
-  await page.locator('#rStatusLookupSubmit').tap();
-  assert.match(await lookupResult.innerText(),/DEMO-004 · 거절/);
-  await lookup.fill('9999');
-  await page.locator('#rStatusLookupSubmit').tap();
-  assert.match(await lookupResult.innerText(),/연결된 가상 예약이 없습니다/);
-  await lookup.fill('0000');
-  await page.locator('#rStatusLookupSubmit').tap();
-  const newLookup=await lookupResult.innerText();
-  assert.match(newLookup,/DEMO-005 · 입금 전/);
+  await page.locator('#customerStatus').waitFor({state:'visible'});
+  assert.equal(new URL(page.url()).hash,'#/booking-status','valid lookup must navigate to full booking screen');
+  assert.match(await page.locator('#csResults').innerText(),/DEMO-003/);
+  assert.match(await page.locator('#csResults').innerText(),/예약 확정/);
+  await page.locator('#csLast4').fill('1004');
+  await page.locator('#csSubmit').tap();
+  assert.match(await page.locator('#csResults').innerText(),/DEMO-004/);
+  assert.match(await page.locator('#csResults').innerText(),/예약 거절/);
+  await page.locator('#csLast4').fill('9999');
+  await page.locator('#csSubmit').tap();
+  assert.match(await page.locator('#csStatusMessage').innerText(),/일치하는 가상 예약이 없습니다/);
+  await page.locator('#csLast4').fill('0000');
+  await page.locator('#csSubmit').tap();
+  const newLookup=await page.locator('#csResults').innerText();
+  assert.match(newLookup,/DEMO-005/);
+  assert.match(newLookup,/입금 전/);
   assert.ok(!newLookup.includes('01000000000')&&!newLookup.includes('가상 고객')&&!newLookup.includes('가상 요청'));
   const snapshot=await page.evaluate(()=>JSON.stringify(localStorage));
   assert.ok(!snapshot.includes('0000')&&!snapshot.includes('01000000000'),'typed suffix and full phone must not persist');
@@ -173,7 +178,8 @@ async function check(engine,label,url){
   await page.goto(url+'#store',{waitUntil:'domcontentloaded'});
   await page.locator('#rStatusLast4').fill('0000');
   await page.locator('#rStatusLookupSubmit').tap();
-  assert.match(await page.locator('#rStatusLookupResult').innerText(),/연결된 가상 예약이 없습니다/);
+  await page.locator('#customerStatus').waitFor({state:'visible'});
+  assert.match(await page.locator('#csStatusMessage').innerText(),/일치하는 가상 예약이 없습니다/);
   await page.goto(url+'#/admin-demo',{waitUntil:'domcontentloaded'});
   await list.first().waitFor({state:'visible'});
   for(const width of [320,390]){
@@ -182,7 +188,9 @@ async function check(engine,label,url){
    assert.ok(overflow<=2,JSON.stringify({width,overflow}));
   }
   assert.deepEqual(errors,[]);
-  assert.match(await page.locator('footer').innerText(),/G3-37 STATIC DEMO/);
+  const footer=await page.locator('footer').innerText();
+  const version=footer.match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(version&&Number(version[1])>=37,'G3-37 or later footer required: '+footer);
   console.log('PASS G3-37 '+label+' reset/reload, 320/390px responsive and no JS runtime errors');
   await ctx.close();
  }finally{await browser.close();}
