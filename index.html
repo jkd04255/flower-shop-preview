@@ -25,6 +25,8 @@
  window.addEventListener('pageshow',function(){
   resetHomeScroll();
   requestAnimationFrame(()=>requestAnimationFrame(resetHomeScroll));
+  /* Final short guard for delayed scroll restoration in iOS WebKit. */
+  window.setTimeout(resetHomeScroll,180);
  },{once:true});
 })();
 </script><style>
