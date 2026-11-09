@@ -86,7 +86,7 @@ async function check(engine,name,base){
   await page.keyboard.press('Tab');
   await page.keyboard.press('Shift+Tab');
   const focus=await refresh.evaluate(el=>({active:document.activeElement===el,visible:el.matches(':focus-visible'),outline:getComputedStyle(el).outlineStyle}));
-  assert.ok(focus.active&&focus.visible&&focus.outline!=='none,JSON.stringify(focus));
+  assert.ok(focus.active&&focus.visible&&focus.outline!=='none',JSON.stringify(focus));
   await page.keyboard.press('Enter');
   assert.match(await page.locator('#csStatusMessage').innerText(),/다시 확인했습니다/);
   await axePass(page,name+' refreshed result');
