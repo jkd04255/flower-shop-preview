@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-38
+name: Flower shop consolidated Chromium + WebKit QA · G3-39
 on:
   pull_request:
     paths:
@@ -128,6 +128,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-38-customer-status-page-qa.cjs
+      - name: G3-39 mobile booking legibility + clear/relookup · Chromium + WebKit + axe
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-39-status-mobile-relookup-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
