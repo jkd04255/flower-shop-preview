@@ -111,7 +111,9 @@ async function check(engine,label,base){
    assert.ok(horizontalOverflow<=2,JSON.stringify({width,horizontalOverflow}));
   }
   assert.deepEqual(errors,[]);
-  assert.match(await page.locator('footer').innerText(),/G3-33 STATIC DEMO/);
+  const footer=await page.locator('footer').innerText();
+  const version=footer.match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(version&&Number(version[1])>=33,'G3-33 or later static demo footer required: '+footer);
   console.log('PASS G3-33 '+label+' axe zero, 320/390px without overflow, no page errors');
   await context.close();
  }finally{await browser.close()}
