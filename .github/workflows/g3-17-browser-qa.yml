@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-40
+name: Flower shop consolidated Chromium + WebKit QA · G3-41
 on:
   pull_request:
     paths:
@@ -136,6 +136,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-40-pickup-summary-refresh-qa.cjs
+      - name: G3-41 home hero on reload and retained anchors · Chromium + WebKit + axe
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-41-home-reload-scroll-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
