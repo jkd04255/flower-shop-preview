@@ -612,6 +612,22 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
    approved photos, typography, product layout and interaction unchanged. */
 #detail .detailCopy .muted,#detail .detailCopy .spec span{color:#526154}
 </style>
+<style id="g3-28-mobile-touch-focus">
+/* Focus remains programmatic for keyboard/AT, but non-interactive headings do
+   not show WebKit's persistent blue touch focus rectangle. Interactive focus
+   outlines (links/buttons/form controls) remain unchanged. */
+#reservation #reservationHeading[tabindex="-1"]:focus,
+#reservation #rReviewTitle[tabindex="-1"]:focus,
+#reservation #reserveResultTitle[tabindex="-1"]:focus{outline:none}
+/* New result-page WCAG coverage found older low-contrast bank detail labels. */
+#reservation .transfer-result .transfer-details dt{color:#4f5d50}
+/* iOS WebKit auto-zooms form controls with a computed font smaller than 16px. */
+@media(max-width:700px){
+ #reservation .booking-form input,
+ #reservation .booking-form select,
+ #reservation .booking-form textarea{font-size:16px}
+}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -837,7 +853,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-27 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-28 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -1139,6 +1155,28 @@ document.getElementById('adminReset').addEventListener('click',function(){
 let currentReservationIndex=-1;
 let currentDemoRequestId=null;
 let reservationReviewDraft=null;
+/* G3-28: A real touch click should not leave a focused, outlined page title
+   or a zoomed input behind. Keyboard and AT-generated activations without a
+   touch pointer retain focus-based navigation and announcements. */
+let lastTouchPointerAt=0;
+window.addEventListener('pointerdown',function(event){
+ lastTouchPointerAt=event.pointerType==='touch'?Date.now():0;
+},{passive:true});
+window.addEventListener('keydown',function(){lastTouchPointerAt=0;});
+function isRecentTouchPointer(){
+ return lastTouchPointerAt>0&&Date.now()-lastTouchPointerAt<2000;
+}
+function focusScreenTitle(target){
+ if(isRecentTouchPointer()){
+  const active=document.activeElement;
+  if(active&&typeof active.blur==='function')active.blur();
+  return;
+ }
+ if(target)target.focus({preventScroll:true});
+}
+function touchAwareScroll(element){
+ element.scrollIntoView({block:'start',behavior:isRecentTouchPointer()?'auto':'smooth'});
+}
 let reservationReviewApproved=false;
 function setReservationProgress(stage){
  const order=['input','review','result'],index=order.indexOf(stage);
@@ -1310,8 +1348,8 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
     const review=document.getElementById('reserveReview');
     review.hidden=false;
     setReservationProgress('review');
-    review.scrollIntoView({block:'start',behavior:'smooth'});
-    document.getElementById('rReviewTitle').focus({preventScroll:true});
+    touchAwareScroll(review);
+    focusScreenTitle(document.getElementById('rReviewTitle'));
     return;
   }
   if(!reservationReviewDraft||reservationReviewDraft.idx!==idx||reservationReviewDraft.date!==date||
@@ -1337,8 +1375,8 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   const result=document.getElementById('reserveResult');
   result.hidden=false;
   setReservationProgress('result');
-  result.scrollIntoView({block:'start',behavior:'smooth'});
-  document.getElementById('reserveResultTitle').focus({preventScroll:true});
+  touchAwareScroll(result);
+  focusScreenTitle(document.getElementById('reserveResultTitle'));
   /* Discard typed contact details after the in-browser simulation. */
   this.reset();
 });
@@ -1348,8 +1386,8 @@ document.getElementById('rReviewEdit').addEventListener('click',function(){
  clearReservationReview();
  const form=document.getElementById('reserveForm');
  form.hidden=false;
- form.scrollIntoView({block:'start',behavior:'smooth'});
- document.getElementById('rDate').focus({preventScroll:true});
+ touchAwareScroll(form);
+ if(!isRecentTouchPointer())document.getElementById('rDate').focus({preventScroll:true});
 });
 document.getElementById('rReviewConfirm').addEventListener('click',function(){
  const review=document.getElementById('reserveReview'),draft=reservationReviewDraft;
@@ -1744,7 +1782,7 @@ window.addEventListener('hashchange',function(){
               hash==='#/calendar-demo'?document.getElementById('calendarHeading'):
               hash.startsWith('#/reserve/')?document.getElementById('reservationHeading'):
               hash.startsWith('#/flower/')?document.getElementById('dTitle'):null;
- if(target){target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}
+ if(target){target.setAttribute('tabindex','-1');focusScreenTitle(target);}
 });
 route();
 </script><script id="editorial-product-flow-v09-script">

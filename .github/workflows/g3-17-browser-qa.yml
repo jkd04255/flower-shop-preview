@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium QA · G3-27
+name: Flower shop consolidated Chromium QA · G3-28
 on:
   pull_request:
     paths:
@@ -84,6 +84,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-27-detail-focus-qa.cjs
+      - name: G3-28 mobile touch focus and zoom stabilization
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-28-mobile-touch-zoom-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
