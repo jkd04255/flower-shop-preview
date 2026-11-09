@@ -78,8 +78,13 @@ async function checkEngine(engine,label,base){
   await card.click();
   let jump=page.locator('#adminDetail .admin-calendar-day-jump');
   assert.equal(await jump.count(),1);
-  const focus=await jump.evaluate(el=>{el.focus();const s=getComputedStyle(el);return{outline:s.outlineStyle,width:parseFloat(s.outlineWidth)}});
-  assert.ok(focus.outline!=='none'&&focus.width>=2,JSON.stringify(focus));
+  /* :focus-visible is a keyboard-only indicator; touch/programmatic focus alone
+     must not trigger the blue outline reported on iPhone. */
+  await jump.focus();
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Shift+Tab');
+  const focus=await jump.evaluate(el=>{const s=getComputedStyle(el);return{active:document.activeElement===el,visible:el.matches(':focus-visible'),outline:s.outlineStyle,width:parseFloat(s.outlineWidth)}});
+  assert.ok(focus.active&&focus.visible&&focus.outline!=='none'&&focus.width>=2,JSON.stringify(focus));
   await jump.tap();
   await page.locator('#calDetails').waitFor({state:'visible'});
   assert.equal(await page.evaluate(()=>calendarSelectedDate),slots[0].date);
