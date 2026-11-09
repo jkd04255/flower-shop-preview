@@ -1,35 +1,5 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>오후의 정원 · 꽃집 시안</title>
-<script id="g3-41-home-reload-top">
-/* G3-41: Only a *home-page reload* starts from the hero.
-   Preserve user-clicked in-page anchors, subpage deep links, and back/forward visits. */
-(function(){
- const nav=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];
- const reloaded=(nav&&nav.type==='reload')||(performance.navigation&&performance.navigation.type===1);
- if(!reloaded||location.hash.startsWith('#/'))return;
- if('scrollRestoration' in history)history.scrollRestoration='manual';
- /* A previously clicked "오늘의 꽃 만나기" leaves #curation in the URL.
-    Clear only home-section anchors on reload, before the browser jumps to them. */
- if(['#curation','#arrivals','#other','#store'].includes(location.hash)){
-  history.replaceState(history.state,'',location.pathname+location.search+'#top');
- }
- function resetHomeScroll(){
-  const root=document.documentElement,previous=root.style.scrollBehavior;
-  root.style.scrollBehavior='auto';
-  window.scrollTo(0,0);
-  root.style.scrollBehavior=previous;
- }
- resetHomeScroll();
- document.addEventListener('DOMContentLoaded',resetHomeScroll,{once:true});
- window.addEventListener('load',resetHomeScroll,{once:true});
- /* Some Safari variants finalize visual scroll restoration after document load. */
- window.addEventListener('pageshow',function(){
-  resetHomeScroll();
-  requestAnimationFrame(()=>requestAnimationFrame(resetHomeScroll));
-  /* Final short guard for delayed scroll restoration in iOS WebKit. */
-  window.setTimeout(resetHomeScroll,180);
- },{once:true});
-})();
-</script><style>
+<style>
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:#30352f;background:#f8f5ef;font-family:Arial,"Apple SD Gothic Neo",sans-serif}a{color:inherit;text-decoration:none}h1,h2{font-family:Georgia,serif;font-weight:400;letter-spacing:-.045em}p{line-height:1.8}.banner{background:#333c35;color:#fff;text-align:center;padding:9px;font-size:11px}.hero{min-height:650px;height:calc(100svh - 30px);max-height:940px;position:relative;color:#fff;background:linear-gradient(90deg,#252b27a6,#252b2730),url('./assets/hero-original.webp') center/cover}.nav{display:flex;align-items:center;justify-content:space-between;padding:30px 6%;position:relative}.brand{font-family:Georgia,serif;letter-spacing:.12em;font-size:12px}.brand strong{font-family:Arial,sans-serif;display:block;letter-spacing:-.02em;font-size:22px;margin:5px 0}.nav nav{display:flex;gap:20px;font-size:12px}.heroText{position:absolute;left:9%;bottom:17%}.micro{font-size:10px;letter-spacing:.18em}.hero h1{font-size:clamp(48px,7vw,92px);line-height:1.2;margin:26px 0}.heroText p{font-size:14px}.heroText .call{display:inline-block;padding:18px 0;border-bottom:1px solid #fff;font-size:13px}.section{padding:95px 8%}.tag{display:flex;justify-content:space-between;border-bottom:1px solid #c9cbc0;padding:0 0 12px;font-size:11px;letter-spacing:.13em}.manifesto{background:#eae5db}.manifesto h2{font-size:clamp(43px,6vw,75px);line-height:1.32;margin:50px 0 30px}.muted{color:#7e8078;font-size:13px}.head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:45px 0}.head h2{font-size:clamp(50px,7vw,90px);line-height:.94;margin:0}.head p{font-size:13px;color:#81857b}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px}.card img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;filter:saturate(.78)}.card .row{display:flex;align-items:start;justify-content:space-between;gap:10px;margin-top:15px}.card strong{font-weight:500;font-size:16px}.card span{font-family:Georgia,serif;white-space:nowrap;font-size:14px}.card small{display:block;margin:7px 0;color:#7c8176;font-size:12px}.visual{min-height:430px;background:linear-gradient(90deg,#6b6b5c55,#6b6b5c11),url('https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1400&q=85') center/cover;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff}.visual h2{font-size:clamp(38px,6vw,70px)}.arrival{display:flex;gap:22px;align-items:center;padding:20px 0;border-bottom:1px solid #ccc9c1}.arrival img{width:108px;height:115px;object-fit:cover}.arrival div{flex:1}.arrival strong{display:block;margin:9px 0;font-size:19px;font-weight:500}.arrival small{color:#888d83}.arrival em{font-style:normal;border:1px solid #b8bcaf;padding:9px;font-size:11px}.other{background:#eae5db}.other .cards{grid-template-columns:repeat(2,minmax(0,1fr));max-width:970px;margin:auto}.other .card img{aspect-ratio:4/4}.dark{background:#343d35;text-align:center;color:#f4f2ea}.dark h2{font-size:clamp(40px,6vw,68px);line-height:1.3}.dark p{color:#d6d5c9}.disabled{opacity:.55;background:none;color:inherit;border:1px solid currentColor;padding:16px 25px;margin-top:15px;cursor:not-allowed}.store table{border-collapse:collapse;width:100%;max-width:690px;margin:32px 0}.store td{border-top:1px solid #d5d5ca;padding:18px 10px;vertical-align:top;font-size:13px;line-height:1.8}.store td:first-child{width:32%;letter-spacing:.06em;font-family:Georgia,serif}.foot{background:#303830;color:#f8f6f1;padding:35px 8%;font-size:13px}.detail{display:none}.detailNav{display:flex;justify-content:space-between;align-items:center;padding:24px 7%}.detailBody{display:grid;grid-template-columns:1fr 1fr;min-height:80svh}.detailBody>img{width:100%;height:100%;min-height:600px;max-height:900px;object-fit:cover}.detailCopy{padding:13% 10%}.detailCopy h1{font-size:clamp(43px,6vw,74px)}.detailCopy .price{font:29px Georgia,serif;margin:35px 0;border-top:1px solid #ddd;border-bottom:1px solid #ddd;padding:24px 0}.spec{display:flex;justify-content:space-between;gap:15px;border-bottom:1px solid #ece9e1;padding:15px 0;font-size:13px}.spec span{color:#777}.notice{position:fixed;bottom:12px;right:12px;padding:10px 13px;border:1px solid #b6b6af;background:#f9f7f1ed;font-size:10px;line-height:1.6;z-index:5;max-width:210px}
 @media(max-width:700px){.nav{padding:22px 6%}.nav nav a:not(:last-child){display:none}.heroText{left:7%;right:5%}.hero h1{font-size:50px}.section{padding:75px 6%}.manifesto h2{font-size:45px}.head{display:block}.head h2{font-size:58px}.cards{grid-template-columns:1fr;gap:32px}.card img{aspect-ratio:4/4}.other .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.other .card img{aspect-ratio:3/4}.other .card .row{display:block}.detailBody{grid-template-columns:1fr}.detailBody>img{height:60svh;min-height:390px}.detailCopy{padding:50px 8%}.arrival img{width:83px;height:92px}.arrival{gap:12px}.arrival em{font-size:9px;padding:6px}.notice{font-size:9px;max-width:140px}}
 </style><style id="hero-peek-v11">
@@ -1135,6 +1105,36 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 </section>
 <footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-41 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
+/* G3-41: Only a *home-page reload* starts from the hero.
+   Preserve user-clicked in-page anchors, subpage deep links, and back/forward visits. */
+(function(){
+ if(typeof performance==='undefined'||typeof history==='undefined'||typeof location==='undefined'||typeof window==='undefined')return;
+ const nav=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];
+ const reloaded=(nav&&nav.type==='reload')||(performance.navigation&&performance.navigation.type===1);
+ if(!reloaded||location.hash.startsWith('#/'))return;
+ if('scrollRestoration' in history)history.scrollRestoration='manual';
+ /* A previously clicked "오늘의 꽃 만나기" leaves #curation in the URL.
+    Clear only home-section anchors on reload, before the browser jumps to them. */
+ if(['#curation','#arrivals','#other','#store'].includes(location.hash)){
+  history.replaceState(history.state,'',location.pathname+location.search+'#top');
+ }
+ function resetHomeScroll(){
+  const root=document.documentElement,previous=root.style.scrollBehavior;
+  root.style.scrollBehavior='auto';
+  window.scrollTo(0,0);
+  root.style.scrollBehavior=previous;
+ }
+ resetHomeScroll();
+ document.addEventListener('DOMContentLoaded',resetHomeScroll,{once:true});
+ window.addEventListener('load',resetHomeScroll,{once:true});
+ /* Some Safari variants finalize visual scroll restoration after document load. */
+ window.addEventListener('pageshow',function(){
+  resetHomeScroll();
+  requestAnimationFrame(()=>requestAnimationFrame(resetHomeScroll));
+  /* Final short guard for delayed scroll restoration in iOS WebKit. */
+  window.setTimeout(resetHomeScroll,180);
+ },{once:true});
+})();
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
 const P=[['rosy-moment','로지 모먼트','Rosy Moment','사랑을 가장 부드럽게 전하는 방법','39,000','로즈 · 아이보리','120분',true],['mellow-sunday','멜로우 선데이','Mellow Sunday','천천히 흘러가는 오후의 색','49,000','피치 · 크림','150분',true],['purple-letter','퍼플 레터','Purple Letter','계절의 인상을 담은 꽃다발','59,000','퍼플 · 라벤더','180분',true],['ivory-day','아이보리 데이','Ivory Day','맑고 담백한 마음을 전하는 꽃','45,000','화이트 · 그린','120분',true],['coral-diary','코랄 다이어리','Coral Diary','오늘의 빛을 모아 둔 작은 기록','55,000','코랄 · 피치','120분',false]];
