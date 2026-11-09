@@ -686,6 +686,29 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 #adminDemo #adminRequestSearch:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
 #adminDemo .admin-id-search small{font-size:11px;color:#5b6e5e;line-height:1.5}
 </style>
+<style id="g3-37-next-day-search-clear">
+/* Existing pickup rules and synthetic storage are unchanged. */
+#reservation #rNextDate{display:inline-block;margin:10px 0 0 12px;padding:7px 0;border:0;border-bottom:1px solid #55705a;background:transparent;color:#36513c;font:600 12px/1.6 var(--editorial-font),sans-serif;cursor:pointer}
+#reservation #rNextDate:disabled{border-bottom-color:#b7c0b7;color:#737c72;cursor:not-allowed}
+#reservation #rNextDate:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
+#reservation #rNextDateStatus{margin:8px 0 0;color:#4d6451;font-size:12px;line-height:1.65}
+#reservation #rNextDateStatus:empty{display:none}
+#adminDemo #adminSearchClear{align-self:flex-start;margin:2px 0 0;padding:4px 0;border:0;border-bottom:1px solid #55705a;background:transparent;color:#36513c;font:600 12px/1.6 var(--editorial-font),sans-serif;cursor:pointer}
+#adminDemo #adminSearchClear[hidden]{display:none!important}
+#adminDemo #adminSearchClear:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
+</style>
+<style id="g3-37-status-lookup-demo">
+#store .status-lookup-demo{margin:27px 0 28px;padding:22px 20px;border:1px solid #c3d0bf;background:#f6f5ed;color:#334c3b}
+#store .status-lookup-demo h3{margin:0 0 10px;font-size:18px;font-weight:650}
+#store .status-lookup-demo p{margin:6px 0 14px;font-size:12px;line-height:1.75}
+#store .status-lookup-fields{display:flex;align-items:end;gap:10px;flex-wrap:wrap}
+#store .status-lookup-fields label{display:flex;flex:1 1 140px;min-width:0;flex-direction:column;gap:7px;font-size:12px;font-weight:600}
+#store #rStatusLast4{width:100%;min-width:0;min-height:44px;padding:10px;border:1px solid #aab8a7;background:#fffdfa;color:#304a35;font-size:16px}
+#store #rStatusLookupSubmit{min-height:44px;padding:9px 16px;border:1px solid #55705a;background:#36513c;color:#fff;font-size:13px;font-weight:650;cursor:pointer}
+#store #rStatusLast4:focus-visible,#store #rStatusLookupSubmit:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
+#store #rStatusLookupResult{margin:12px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.8}
+#store #rStatusLookupResult:empty{display:none}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -696,7 +719,22 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 <div class="booking-info" role="group" aria-label="예약 안내">
   <div><div class="booking-title">꽃다발 예약 안내</div><p>꽃다발 예약 요청 후 계좌이체를 완료하면, 매장에서 입금을 확인한 뒤 예약이 확정됩니다.<br>현재는 실제 계좌번호가 없는 가상 시연입니다.</p></div>
   <a class="booking-demo-link" href="#curation">꽃다발 선택하고 예약 체험 ↗</a>
-</div><table><tr><td>ADDRESS</td><td>가상 매장 — 실제 주소 미등록</td></tr><tr><td>OPENING HOURS</td><td>월–금 11:00–20:00 (예시)</td></tr><tr><td>CONTACT</td><td>전화 문의 채널 미등록</td></tr><tr><td>PICKUP</td><td>예약 요청 → 계좌이체 → 매장 입금 확인 → 예약 확정</td></tr></table></section></main>
+</div>
+<section class="status-lookup-demo" aria-labelledby="statusLookupHeading">
+ <h3 id="statusLookupHeading">가상 예약 현황 조회</h3>
+ <p>예시 전화번호 뒷자리 4자리로 가상 예약 상태를 확인할 수 있습니다. 샘플 번호: 1001, 1002, 1003, 1004. 새로 만든 가상 요청은 같은 탭에서만 조회할 수 있습니다.</p>
+ <form id="rStatusLookupForm" autocomplete="off" novalidate>
+  <div class="status-lookup-fields">
+   <label for="rStatusLast4">전화번호 뒷자리 4자리 (시연용)
+    <input id="rStatusLast4" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" placeholder="예: 1001" aria-describedby="rStatusLookupNote">
+   </label>
+   <button id="rStatusLookupSubmit" type="submit">가상 예약 조회 ↗</button>
+  </div>
+  <p id="rStatusLookupNote">예약번호와 상태만 표시합니다. 실제 고객 예약 조회가 아니며, 뒷자리 4자리만으로 본인확인은 불가능합니다. 실제 연락처를 입력하지 마세요.</p>
+  <p id="rStatusLookupResult" role="status" aria-live="polite" aria-atomic="true"></p>
+ </form>
+</section>
+<table><tr><td>ADDRESS</td><td>가상 매장 — 실제 주소 미등록</td></tr><tr><td>OPENING HOURS</td><td>월–금 11:00–20:00 (예시)</td></tr><tr><td>CONTACT</td><td>전화 문의 채널 미등록</td></tr><tr><td>PICKUP</td><td>예약 요청 → 계좌이체 → 매장 입금 확인 → 예약 확정</td></tr></table></section></main>
 <section class="detail" id="detail"><div class="detailNav"><a href="#top" class="brand">AFTERNOON · 오후의 정원</a><a href="#curation">← 목록으로</a></div><div class="detailBody"><img id="dImage" alt=""><div class="detailCopy"><div class="micro">THE BOUQUET COLLECTION</div><h1 id="dTitle"></h1><span id="dLatin"></span><p class="muted" id="dStory"></p><div class="price" id="dPrice"></div><div class="spec"><b>구성</b><span id="dColor"></span></div><div class="spec"><b>준비시간</b><span id="dLead"></span></div><div class="spec"><b>상태</b><span id="dStatus"></span></div><p class="transfer-condition"><strong>계좌이체 안내</strong><br>송금이 완료되고 매장에서 입금을 확인하면 예약이 확정됩니다.<br>현재는 가상 시연으로 실제 송금할 수 없습니다.</p><a id="dReserve" class="reservation-cta" href="#/reserve/rosy-moment">가상 예약 요청하기 ↗</a><button id="dSoldout" type="button" class="disabled" disabled hidden>품절 · 예약 불가</button><p class="muted">가상 예약 시연만 가능합니다. 실제 접수·결제·연락은 발생하지 않습니다.</p></div></div></section>
 
 <section class="reservation" id="reservation" aria-labelledby="reservationHeading" hidden>
@@ -740,9 +778,11 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
        </div>
        <p id="rTimeHint" class="field-note" aria-live="polite">날짜를 선택하면 가능한 시간이 표시됩니다.</p>
         <button type="button" id="rEarliestDate">가장 빠른 픽업 날짜 선택 ↗</button>
+        <button type="button" id="rNextDate" disabled>다음 픽업 가능일 선택 ↗</button>
         <button type="button" id="rEarliestTime" disabled>가장 빠른 픽업 시간 선택 ↗</button>
         <button type="button" id="rLatestTime" disabled>가장 늦은 픽업 시간 선택 ↗</button>
         <p id="rEarliestStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+        <p id="rNextDateStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         <p id="rEarliestTimeStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         <p id="rLatestTimeStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         <p id="rPickupPreview" class="pickup-preview" hidden>픽업 일정 미리보기 (가상)</p>
@@ -813,6 +853,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <a id="rAgain" class="result-link" href="#curation">다른 꽃다발 둘러보기 ↗</a>
        <a id="rResultBack" class="result-link light" href="#/flower/rosy-moment">꽃다발 상세로 돌아가기</a>
        <a class="result-link light" href="#/admin-demo">관리자 데모에서 요청 상태 보기 ↗</a>
+        <a class="result-link light" href="#store">전화번호 뒷자리로 가상 예약 현황 조회 ↗</a>
      </div>
    </div>
  </div>
@@ -860,6 +901,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
    <label for="adminRequestSearch">가상 예약번호 검색</label>
    <input id="adminRequestSearch" type="search" maxlength="16" autocomplete="off" spellcheck="false" placeholder="DEMO-001" aria-describedby="adminRequestSearchHint">
    <small id="adminRequestSearchHint">예약번호만 검색 · 실고객 정보 없음</small>
+   <button type="button" id="adminSearchClear" hidden>검색 지우기 ↗</button>
   </div>
   <label class="admin-sort-label" for="adminSortOrder">목록 정렬
    <select id="adminSortOrder">
@@ -937,7 +979,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-36 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-37 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -965,6 +1007,9 @@ function initialAdminRequests(){
  ];
 }
 let adminRequests=initialAdminRequests();
+/* Tab-memory only mapping for synthetic lookups. Never persist typed phone digits. */
+const demoTabPhoneSuffixes=new Map();
+const samplePhoneSuffixes={'1001':'DEMO-001','1002':'DEMO-002','1003':'DEMO-003','1004':'DEMO-004'};
 let adminSequence=5;
 /* Synthetic booking metadata only; never persist the form's name, telephone or note. */
 const DEMO_BOOKINGS_KEY='afternoon-garden-calendar-demo-v1';
@@ -1111,6 +1156,7 @@ function renderAdminDemo(){
   entries.sort((a,b)=>direction*(a.date.localeCompare(b.date)||a.time.localeCompare(b.time)||a.id.localeCompare(b.id)));
  }
  document.getElementById('adminSortOrder').value=adminSortOrder;
+ document.getElementById('adminSearchClear').hidden=adminRequestQuery.length===0;
  const statusLabel=adminFilter==='all'?'전체 요청':adminStatusText[adminFilter];
  const summary=document.getElementById('adminFilterSummary');
  const newSummary=statusLabel+' · '+entries.length+'건 표시 / 전체 '+total+'건 · 가상 데이터'+(adminRequestQuery?' · 예약번호 검색 적용':'');
@@ -1281,6 +1327,14 @@ document.getElementById('adminRequestSearch').addEventListener('input',function(
  adminRequestQuery=this.value.trim().toUpperCase();
  renderAdminDemo();
 });
+document.getElementById('adminSearchClear').addEventListener('click',function(){
+ adminRequestQuery='';
+ const field=document.getElementById('adminRequestSearch');
+ field.value='';
+ renderAdminDemo();
+ /* The cleared button disappears, so return focus to the search input. */
+ field.focus({preventScroll:true});
+});
 document.getElementById('adminSortOrder').addEventListener('change',function(){
  adminSortOrder=['pickup','pickup-desc'].includes(this.value)?this.value:'request';
  renderAdminDemo();
@@ -1290,6 +1344,21 @@ document.getElementById('adminShowAll').addEventListener('click',function(){
  renderAdminDemo();
  /* The shortcut hides after use. Restore the real All filter keyboard target. */
  document.querySelector('#adminDemo .admin-filter[data-filter="all"]').focus({preventScroll:true});
+});
+document.getElementById('rStatusLookupForm').addEventListener('submit',function(event){
+ event.preventDefault();
+ const input=document.getElementById('rStatusLast4'),code=input.value.trim();
+ const output=document.getElementById('rStatusLookupResult');
+ if(!/^\d{4}$/.test(code)){
+  output.textContent='숫자 4자리를 입력해 주세요. 실제 고객 예약은 조회할 수 없습니다.';
+  return;
+ }
+ const ids=new Set(demoTabPhoneSuffixes.get(code)||[]);
+ if(samplePhoneSuffixes[code])ids.add(samplePhoneSuffixes[code]);
+ const matches=adminRequests.filter(item=>ids.has(item.id));
+ output.textContent=matches.length?
+  '일치하는 가상 예약 '+matches.length+'건 (실제 예약 아님)\n'+matches.map(item=>item.id+' · '+adminStatusText[item.status]).join('\n'):
+  '해당 번호와 연결된 가상 예약이 없습니다. 실제 고객 예약은 조회할 수 없습니다.';
 });
 document.getElementById('adminAccountMode').addEventListener('change',function(){
  demoAccountMode=this.value==='example'?'example':'off';
@@ -1306,6 +1375,8 @@ document.getElementById('adminReset').addEventListener('click',function(){
  adminSortOrder='request';
  adminRequestQuery='';
  document.getElementById('adminRequestSearch').value='';
+ demoTabPhoneSuffixes.clear();
+ document.getElementById('rStatusLookupResult').textContent='';
  adminSelectedId='DEMO-001';
  renderAdminDemo();
  document.getElementById('adminOperationStatus').textContent='가상 예약 기록을 샘플 4건으로 초기화했습니다. 전체 상태 필터가 선택됐습니다.';
@@ -1422,6 +1493,7 @@ function updatePickupTimes(resetSelection=false){
   document.getElementById('rLatestTime').disabled=options.length===0;
   document.getElementById('rEarliestTimeStatus').textContent='';
   document.getElementById('rLatestTimeStatus').textContent='';
+  document.getElementById('rNextDate').disabled=!field.value||!dateFromLocalString(field.value);
   /* A changed date must never silently reuse its previous pickup hour. */
   select.value=!resetSelection&&options.includes(selected)?selected:'';
   const previousSlotExpired=!resetSelection&&!!selected&&!options.includes(selected);
@@ -1458,6 +1530,7 @@ function initReservation(index){
   form.reset();
   updateMemoCount();
   document.getElementById('rEarliestStatus').textContent='';
+  document.getElementById('rNextDateStatus').textContent='';
   document.getElementById('rEarliestTimeStatus').textContent='';
   document.getElementById('rLatestTimeStatus').textContent='';
   updateBankPreview();
@@ -1520,6 +1593,24 @@ document.getElementById('rEarliestTime').addEventListener('click',function(){
  document.getElementById('rLatestTimeStatus').textContent='';
  document.getElementById('rEarliestTimeStatus').textContent='선택한 날짜의 가장 빠른 픽업 시간 '+available[0]+'을 선택했습니다. 예약 확정 전 (가상)';
 });
+document.getElementById('rNextDate').addEventListener('click',function(){
+ const field=document.getElementById('rDate'),selected=dateFromLocalString(field.value);
+ const bounds=pickupBounds();
+ if(!selected||field.value<bounds.min||field.value>bounds.max)return;
+ const day=new Date(selected);
+ day.setDate(day.getDate()+1);
+ for(;localDateString(day)<=bounds.max;day.setDate(day.getDate()+1)){
+  const candidate=localDateString(day);
+  if(!pickupSlots(currentReservationIndex,candidate).length)continue;
+  clearReservationError();
+  field.value=candidate;
+  updatePickupTimes(true);
+  document.getElementById('rEarliestStatus').textContent='';
+  document.getElementById('rNextDateStatus').textContent='다음 픽업 가능일 '+candidate+'을 선택했습니다. 픽업 시간을 다시 선택해 주세요. (가상)';
+  return;
+ }
+ document.getElementById('rNextDateStatus').textContent='선택한 날짜 이후 14일 이내에 픽업 가능한 다른 날짜가 없습니다. (가상)';
+});
 document.getElementById('rEarliestDate').addEventListener('click',function(){
  const bounds=pickupBounds();
  const date=document.getElementById('rDate');
@@ -1529,6 +1620,7 @@ document.getElementById('rEarliestDate').addEventListener('click',function(){
   clearReservationError();
   date.value=dateString;
   updatePickupTimes(true);
+  document.getElementById('rNextDateStatus').textContent='';
   document.getElementById('rEarliestStatus').textContent='가장 빠른 픽업 가능일 '+dateString+'을 선택했습니다. 픽업 시간을 골라 주세요. (가상)';
   return;
  }
@@ -1536,6 +1628,7 @@ document.getElementById('rEarliestDate').addEventListener('click',function(){
 });
 document.getElementById('rDate').addEventListener('change',()=>{
  document.getElementById('rEarliestStatus').textContent='';
+ document.getElementById('rNextDateStatus').textContent='';
  clearReservationError();
  updatePickupTimes(true);
 });
@@ -1610,6 +1703,10 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   document.getElementById('rrTime').textContent=time;
   document.getElementById('rrAmount').textContent=p[4]+' KRW';
   currentDemoRequestId=acceptedId;
+  /* Only the final four digits are kept in tab memory; never in localStorage. */
+  const suffix=phone.slice(-4);
+  if(!demoTabPhoneSuffixes.has(suffix))demoTabPhoneSuffixes.set(suffix,new Set());
+  demoTabPhoneSuffixes.get(suffix).add(acceptedId);
   clearReservationReview();
   this.hidden=true;
   const result=document.getElementById('reserveResult');
