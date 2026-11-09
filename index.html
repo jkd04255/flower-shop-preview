@@ -1066,7 +1066,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-37 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-38 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -1097,6 +1097,7 @@ let adminRequests=initialAdminRequests();
 /* Tab-memory only mapping for synthetic lookups. Never persist typed phone digits. */
 const demoTabPhoneSuffixes=new Map();
 const samplePhoneSuffixes={'1001':'DEMO-001','1002':'DEMO-002','1003':'DEMO-003','1004':'DEMO-004'};
+let activeDemoLookupCode=''; /* Never persisted or put into the route URL. */
 let adminSequence=5;
 /* Synthetic booking metadata only; never persist the form's name, telephone or note. */
 const DEMO_BOOKINGS_KEY='afternoon-garden-calendar-demo-v1';
@@ -1432,20 +1433,121 @@ document.getElementById('adminShowAll').addEventListener('click',function(){
  /* The shortcut hides after use. Restore the real All filter keyboard target. */
  document.querySelector('#adminDemo .admin-filter[data-filter="all"]').focus({preventScroll:true});
 });
-document.getElementById('rStatusLookupForm').addEventListener('submit',function(event){
- event.preventDefault();
- const input=document.getElementById('rStatusLast4'),code=input.value.trim();
- const output=document.getElementById('rStatusLookupResult');
- if(!/^\d{4}$/.test(code)){
-  output.textContent='숫자 4자리를 입력해 주세요. 실제 고객 예약은 조회할 수 없습니다.';
+/* G3-38: Dedicated status screen. Return only synthetic metadata; never use
+ * the 4-digit demo code for real authentication or expose typed contact fields. */
+function demoMatchesForSuffix(code){
+ const ids=new Set(demoTabPhoneSuffixes.get(code)||[]);
+ if(Object.prototype.hasOwnProperty.call(samplePhoneSuffixes,code))ids.add(samplePhoneSuffixes[code]);
+ return adminRequests.filter(item=>ids.has(item.id));
+}
+function customerStatusDescriptor(item){
+ if(item.status==='rejected')return{badge:'예약 거절',headline:'가상 예약 요청이 거절됐습니다.',description:'이 요청은 예약이 확정되지 않았습니다. 실제 고객에게 발송되는 알림은 없습니다.',level:'rejected',stage:1};
+ if(item.status==='completed')return{badge:'수령 완료',headline:'꽃다발 수령이 완료됐습니다.',description:'가상 수령 완료 상태입니다. 실제 픽업이나 결제가 발생한 것은 아닙니다.',level:'complete',stage:4};
+ if(item.status==='ready')return{badge:'수령 준비 완료',headline:'픽업 준비가 완료됐습니다.',description:'가상 입금 확인과 예약 확정 이후, 수령을 기다리는 상태입니다.',level:'complete',stage:3};
+ if(item.status==='confirmed')return{badge:'예약 확정',headline:'입금 확인 후 예약이 확정됐습니다.',description:'가상 입금 확인이 완료된 예약입니다. 실제 결제나 예약 확정은 아닙니다.',level:'complete',stage:3};
+ if(item.paymentState==='reported')return{badge:'입금 확인 대기',headline:'가상 송금 완료 표시 · 매장 확인 대기',description:'송금 완료로 표시했으나 아직 매장의 입금 확인 및 예약 확정 전입니다. 실제 은행 송금은 발생하지 않았습니다.',level:'reported',stage:2};
+ return{badge:'입금 전',headline:'가상 계좌 안내 · 입금 전',description:'이 가상 요청은 아직 송금 완료로 표시되지 않았습니다. 아래 계좌번호는 0으로 된 시연 예시로 실제 송금할 수 없습니다.',level:'pending',stage:1};
+}
+function statusDetailPair(label,value){
+ const row=document.createElement('div');
+ row.appendChild(adminText('dt','',label));
+ row.appendChild(adminText('dd','',value));
+ return row;
+}
+function renderCustomerStatus(){
+ const result=document.getElementById('csResults');
+ const message=document.getElementById('csStatusMessage');
+ result.replaceChildren();
+ const code=activeDemoLookupCode;
+ if(!code){
+  message.textContent='전화번호 뒷자리의 예시 숫자 4자리를 입력하면 가상 예약 상세 정보가 표시됩니다.';
   return;
  }
- const ids=new Set(demoTabPhoneSuffixes.get(code)||[]);
- if(samplePhoneSuffixes[code])ids.add(samplePhoneSuffixes[code]);
- const matches=adminRequests.filter(item=>ids.has(item.id));
- output.textContent=matches.length?
-  '일치하는 가상 예약 '+matches.length+'건 (실제 예약 아님)\n'+matches.map(item=>item.id+' · '+adminStatusText[item.status]).join('\n'):
-  '해당 번호와 연결된 가상 예약이 없습니다. 실제 고객 예약은 조회할 수 없습니다.';
+ if(!/^\d{4}$/.test(code)){
+  message.textContent='숫자 4자리를 입력해 주세요. 실제 고객 예약을 조회하는 기능이 아닙니다.';
+  return;
+ }
+ const matches=demoMatchesForSuffix(code);
+ if(!matches.length){
+  message.textContent='일치하는 가상 예약이 없습니다. 새로고침한 경우 이번 탭에서 만든 요청과의 연결은 사라집니다.';
+  return;
+ }
+ message.textContent='가상 예약 '+matches.length+'건을 찾았습니다. 개인정보나 실제 결제정보는 포함되지 않습니다.';
+ for(const item of matches){
+  const p=P[item.productIndex];
+  if(!p)continue;
+  const state=customerStatusDescriptor(item);
+  const card=adminText('article','cs-card','');
+  const head=adminText('div','cs-card-heading','');
+  const titleBlock=adminText('div','','');
+  titleBlock.appendChild(adminText('div','cs-card-id','RESERVATION · '+item.id));
+  titleBlock.appendChild(adminText('h2','',p[1]));
+  head.appendChild(titleBlock);
+  const badge=adminText('span','cs-badge is-'+state.level,state.badge);
+  head.appendChild(badge);
+  card.appendChild(head);
+  const overview=adminText('div','cs-overview','');
+  const photo=document.createElement('img');
+  photo.className='cs-photo';
+  photo.src=U[item.productIndex];
+  photo.alt=p[1]+' 가상 꽃다발 사진';
+  photo.loading='lazy';
+  overview.appendChild(photo);
+  const dl=adminText('dl','cs-detail-list','');
+  for(const [label,value] of [
+   ['상품 종류',p[1]],['픽업 날짜',item.date],['픽업 시간',item.time],
+   ['상품 금액',p[4]+' KRW'],['입금 상태',item.status==='pending'?adminPaymentText[item.paymentState]||'입금 전':'가상 입금 확인 완료'],
+   ['예약번호',item.id]
+  ])dl.appendChild(statusDetailPair(label,value));
+  overview.appendChild(dl);
+  card.appendChild(overview);
+  const stages=adminText('ol','cs-steps','');
+  for(const [index,label] of ['요청 접수','송금 표시','예약 확정','수령 완료'].entries()){
+   const step=adminText('li',index<state.stage?'is-done':'',label);
+   if(index===state.stage-1)step.setAttribute('aria-current','step');
+   stages.appendChild(step);
+  }
+  card.appendChild(stages);
+  const payment=adminText('section','cs-payment','');
+  payment.appendChild(adminText('h3','',state.headline));
+  payment.appendChild(adminText('p','',state.description));
+  if(item.status==='pending'&&item.paymentState==='waiting'){
+   const bank=adminText('div','cs-bank','');
+   bank.appendChild(adminText('p','cs-bank-title','계좌이체 안내 · 가상 예시'));
+   const details=adminText('dl','','');
+   details.appendChild(statusDetailPair('은행','미등록 · 실제 은행 계좌 아님'));
+   const account=statusDetailPair('계좌번호 (시연용)','000-0000-0000');
+   account.querySelector('dd').className='cs-account';
+   details.appendChild(account);
+   details.appendChild(statusDetailPair('입금 예정 금액',p[4]+' KRW'));
+   bank.appendChild(details);
+   bank.appendChild(adminText('p','cs-bank-warning','모든 자리가 0인 예시 번호입니다. 실제 계좌가 아니며 송금할 수 없습니다.'));
+   payment.appendChild(bank);
+  }
+  card.appendChild(payment);
+  result.appendChild(card);
+ }
+}
+function startCustomerStatusLookup(code,feedback){
+ if(!/^\d{4}$/.test(code)){
+  feedback.textContent='숫자 4자리를 입력해 주세요. 실제 고객 예약은 조회할 수 없습니다.';
+  return;
+ }
+ activeDemoLookupCode=code;
+ feedback.textContent='';
+ const formInput=document.getElementById('csLast4');
+ formInput.value='';
+ document.getElementById('rStatusLast4').value='';
+ if(location.hash==='#/booking-status')renderCustomerStatus();
+ else location.hash='#/booking-status';
+}
+document.getElementById('rStatusLookupForm').addEventListener('submit',function(event){
+ event.preventDefault();
+ startCustomerStatusLookup(document.getElementById('rStatusLast4').value.trim(),document.getElementById('rStatusLookupResult'));
+});
+document.getElementById('csLookupForm').addEventListener('submit',function(event){
+ event.preventDefault();
+ startCustomerStatusLookup(document.getElementById('csLast4').value.trim(),document.getElementById('csStatusMessage'));
 });
 document.getElementById('adminAccountMode').addEventListener('change',function(){
  demoAccountMode=this.value==='example'?'example':'off';
@@ -1463,7 +1565,10 @@ document.getElementById('adminReset').addEventListener('click',function(){
  adminRequestQuery='';
  document.getElementById('adminRequestSearch').value='';
  demoTabPhoneSuffixes.clear();
+ activeDemoLookupCode='';
  document.getElementById('rStatusLookupResult').textContent='';
+ document.getElementById('csStatusMessage').textContent='';
+ document.getElementById('csResults').replaceChildren();
  adminSelectedId='DEMO-001';
  renderAdminDemo();
  document.getElementById('adminOperationStatus').textContent='가상 예약 기록을 샘플 4건으로 초기화했습니다. 전체 상태 필터가 선택됐습니다.';
@@ -1794,6 +1899,7 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   const suffix=phone.slice(-4);
   if(!demoTabPhoneSuffixes.has(suffix))demoTabPhoneSuffixes.set(suffix,new Set());
   demoTabPhoneSuffixes.get(suffix).add(acceptedId);
+  activeDemoLookupCode=suffix;
   clearReservationReview();
   this.hidden=true;
   const result=document.getElementById('reserveResult');
@@ -2106,6 +2212,7 @@ window.addEventListener('storage',function(event){
  const calendarWeekDate=active?.closest?.('#calWeekStrip .cal-week-date')?.dataset.date;
  const calendarMonthDate=active?.closest?.('#calGrid .cal-day')?.getAttribute('aria-label')?.slice(0,10);
  restoreDemoBookings();
+ if(document.getElementById('customerStatus').style.display==='block')renderCustomerStatus();
  if(document.getElementById('calendarDemo').style.display==='block'){
   renderCalendar();
   if(calendarItemId){
@@ -2164,11 +2271,12 @@ function route(){
   const showDetail=detailSlug!==null&&index>=0;
   const showAdmin=hash==='#/admin-demo';
   const showCalendar=hash==='#/calendar-demo';
+  const showCustomerStatus=hash==='#/booking-status';
   if(showReservation&&!P[index][7]){
     location.hash='#/flower/'+P[index][0];
     return;
   }
-  document.getElementById('home').style.display=(showReservation||showDetail||showAdmin||showCalendar)?'none':'block';
+  document.getElementById('home').style.display=(showReservation||showDetail||showAdmin||showCalendar||showCustomerStatus)?'none':'block';
   document.getElementById('detail').style.display=showDetail?'block':'none';
   document.getElementById('reservation').style.display=showReservation?'block':'none';
   document.getElementById('reservation').hidden=!showReservation;
@@ -2176,6 +2284,9 @@ function route(){
   document.getElementById('adminDemo').hidden=!showAdmin;
   document.getElementById('calendarDemo').style.display=showCalendar?'block':'none';
   document.getElementById('calendarDemo').hidden=!showCalendar;
+  document.getElementById('customerStatus').style.display=showCustomerStatus?'block':'none';
+  document.getElementById('customerStatus').hidden=!showCustomerStatus;
+  if(showCustomerStatus){renderCustomerStatus();window.scrollTo(0,0);}
   if(showCalendar){if(!calendarInitialized)calendarChooseInitial();renderCalendar();window.scrollTo(0,0);}
   if(showAdmin){updateBankPreview();renderAdminDemo();window.scrollTo(0,0);}
   if(showDetail){
