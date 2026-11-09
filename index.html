@@ -1496,7 +1496,7 @@ function renderCustomerStatus(){
   const dl=adminText('dl','cs-detail-list','');
   for(const [label,value] of [
    ['상품 종류',p[1]],['픽업 날짜',item.date],['픽업 시간',item.time],
-   ['상품 금액',p[4]+' KRW'],['입금 상태',item.status==='pending'?adminPaymentText[item.paymentState]||'입금 전':'가상 입금 확인 완료'],
+   ['상품 금액',p[4]+' KRW'],['입금 상태',item.status==='rejected'?'결제 없음 · 요청 거절':item.status==='pending'?(adminPaymentText[item.paymentState]||'입금 전'):'가상 입금 확인 완료'],
    ['예약번호',item.id]
   ])dl.appendChild(statusDetailPair(label,value));
   overview.appendChild(dl);
