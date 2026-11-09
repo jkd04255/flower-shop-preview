@@ -140,10 +140,21 @@ async function runEngine(engine,label,base){
   assert.equal(await page.locator('#csResults .cs-bank').count(),0);
   await page.goto(base+'#/admin-demo',{waitUntil:'domcontentloaded'});
   await page.locator('#adminList .admin-request[data-request-id="DEMO-005"]').tap();
+  assert.match(await page.locator('#adminDetail').innerText(),/DEMO-005/,'the actual new synthetic request must be selected');
   await page.locator('#adminDetail .admin-verify input[type="checkbox"]').check();
   const approve=page.locator('#adminDetail .admin-action').filter({hasText:'입금 확인 · 예약 확정'});
   assert.equal(await approve.isDisabled(),false);
   await approve.tap();
+  const stateAfterApproval=await page.evaluate(()=>{
+   const item=adminRequests.find(x=>x.id==='DEMO-005');
+   const saved=JSON.parse(localStorage.getItem(DEMO_BOOKINGS_KEY));
+   return {current:item?.status,payment:item?.paymentState,
+    saved:saved?.records?.find(x=>x.id==='DEMO-005')?.status,
+    selected:adminSelectedId};
+  });
+  console.log('G3-38 '+label+' approval state '+JSON.stringify(stateAfterApproval));
+  assert.equal(stateAfterApproval.current,'confirmed','actual selected synthetic record must be confirmed before navigation');
+  assert.equal(stateAfterApproval.saved,'confirmed','approved synthetic record must persist before navigation');
   await page.goto(base+'#/booking-status',{waitUntil:'domcontentloaded'});
   summary=await page.locator('#csResults').innerText();
   assert.match(summary,/예약 확정/);
