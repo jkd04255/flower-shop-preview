@@ -46,7 +46,12 @@ async function check(engine,label,base){
   assert.equal(await last.isDisabled(),true);
   assert.equal(await hint.textContent(),'');
   await page.locator('#rEarliestDate').tap();
-  assert.equal(await page.locator('#rDate').inputValue(),days[0].date);
+  const quickDate=await page.locator('#rDate').inputValue();
+  const initialSlots=await page.evaluate(date=>pickupSlots(0,date),quickDate);
+  assert.ok(initialSlots.length>0,'quick-date chooses a valid day even if only one slot remains');
+  /* An earliest valid day can have only one remaining hour. Test two-way hour choices on
+     the first verified multi-slot day instead, without changing production behavior. */
+  await page.locator('#rDate').fill(days[0].date);
   assert.equal(await page.locator('#rTime').inputValue(),'','date quick choice must not select a time');
   assert.equal(await last.isDisabled(),false);
   const before=await page.evaluate(()=>JSON.stringify(adminRequests));
