@@ -791,6 +791,21 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  #customerStatus .cs-bank dd.cs-account{letter-spacing:.025em}
 }
 </style>
+<style id="g3-40-status-pickup-summary">
+/* G3-40: concise pickup essentials before the flower photo; source data is unchanged. */
+#customerStatus .cs-pickup-strip{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;border-bottom:1px solid #e1e7dc;padding:18px 27px;background:#f7f8f2}
+#customerStatus .cs-pickup-item{min-width:0}
+#customerStatus .cs-pickup-item small{display:block;margin:0 0 5px;color:#506654;font-size:12px;font-weight:650}
+#customerStatus .cs-pickup-item strong{display:block;color:#304d38;font-size:18px;font-weight:750;line-height:1.5;overflow-wrap:anywhere}
+#customerStatus #csRefreshStatus{min-height:44px;margin:2px 0 16px;padding:10px 15px;border:1px solid #6a856a;background:#fffdf8;color:#35553d;font-family:inherit;font-size:13px;font-weight:650;line-height:1.5;cursor:pointer}
+#customerStatus #csRefreshStatus[hidden]{display:none!important}
+#customerStatus #csRefreshStatus:focus-visible{outline:3px solid #5b7f5e;outline-offset:3px}
+@media(max-width:600px){
+ #customerStatus .cs-pickup-strip{gap:10px;padding:17px 20px}
+ #customerStatus .cs-pickup-item strong{font-size:17px}
+ #customerStatus #csRefreshStatus{width:100%;font-size:14px}
+}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a><a href="#/booking-status">예약 조회</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -960,6 +975,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
    <p class="cs-helper" id="csLookupHelp">샘플: 1001 · 1002 · 1003 · 1004. 실제 전화번호는 입력하지 마세요.</p>
   </form>
   <div id="csStatusMessage" role="status" aria-live="polite" aria-atomic="true"></div>
+  <button type="button" id="csRefreshStatus" hidden>현황 다시 확인 ↻</button>
   <div id="csResults" class="cs-results" role="region" aria-label="가상 예약 상세 결과"></div>
   <button type="button" id="csLookupAgain" hidden>다른 예약 조회 ↗</button>
   <p class="cs-disclaimer">안내 · 이 페이지는 정적 시연 화면입니다. 전화번호 4자리만으로 실제 고객의 예약·결제정보를 조회할 수 없으며, 운영 시에는 별도의 본인 확인과 개인정보 보호 설계가 필요합니다.</p>
@@ -1086,7 +1102,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-39 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-40 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -1478,8 +1494,10 @@ function renderCustomerStatus(){
  const result=document.getElementById('csResults');
  const message=document.getElementById('csStatusMessage');
  const again=document.getElementById('csLookupAgain');
+ const refresh=document.getElementById('csRefreshStatus');
  result.replaceChildren();
  again.hidden=true;
+ refresh.hidden=true;
  const code=activeDemoLookupCode;
  if(!code){
   message.textContent='전화번호 뒷자리의 예시 숫자 4자리를 입력하면 가상 예약 상세 정보가 표시됩니다.';
@@ -1496,6 +1514,7 @@ function renderCustomerStatus(){
  }
  message.textContent='가상 예약 '+matches.length+'건을 찾았습니다. 개인정보나 실제 결제정보는 포함되지 않습니다.';
  again.hidden=false;
+ refresh.hidden=false;
  for(const item of matches){
   const p=P[item.productIndex];
   if(!p)continue;
@@ -1509,6 +1528,19 @@ function renderCustomerStatus(){
   const badge=adminText('span','cs-badge is-'+state.level,state.badge);
   head.appendChild(badge);
   card.appendChild(head);
+  const pickup=adminText('div','cs-pickup-strip','');
+  const day=dateFromLocalString(item.date);
+  const weekday=day?['일','월','화','수','목','금','토'][day.getDay()]+'요일':'';
+  for(const [label,value] of [
+   ['픽업 날짜',item.date+(weekday?' ('+weekday+')':'')],
+   ['픽업 시간',item.time]
+  ]){
+   const info=adminText('div','cs-pickup-item','');
+   info.appendChild(adminText('small','',label));
+   info.appendChild(adminText('strong','',value));
+   pickup.appendChild(info);
+  }
+  card.appendChild(pickup);
   const overview=adminText('div','cs-overview','');
   const photo=document.createElement('img');
   photo.className='cs-photo';
@@ -1576,6 +1608,14 @@ document.getElementById('csLookupForm').addEventListener('submit',function(event
  event.preventDefault();
  startCustomerStatusLookup(document.getElementById('csLast4').value.trim(),document.getElementById('csStatusMessage'));
 });
+document.getElementById('csRefreshStatus').addEventListener('click',function(){
+ /* Local synthetic data only; no network, real payment or customer lookup. */
+ restoreDemoBookings();
+ renderCustomerStatus();
+ const button=document.getElementById('csRefreshStatus');
+ if(button.hidden)document.getElementById('csLast4').focus({preventScroll:true});
+ else document.getElementById('csStatusMessage').textContent='현재 브라우저의 가상 예약 상태를 다시 확인했습니다.';
+});
 document.getElementById('csLookupAgain').addEventListener('click',function(){
  activeDemoLookupCode='';
  document.getElementById('csLast4').value='';
@@ -1605,6 +1645,8 @@ document.getElementById('adminReset').addEventListener('click',function(){
  document.getElementById('rStatusLookupResult').textContent='';
  document.getElementById('csStatusMessage').textContent='';
  document.getElementById('csResults').replaceChildren();
+ document.getElementById('csRefreshStatus').hidden=true;
+ document.getElementById('csLookupAgain').hidden=true;
  adminSelectedId='DEMO-001';
  renderAdminDemo();
  document.getElementById('adminOperationStatus').textContent='가상 예약 기록을 샘플 4건으로 초기화했습니다. 전체 상태 필터가 선택됐습니다.';

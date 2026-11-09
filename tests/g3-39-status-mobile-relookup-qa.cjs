@@ -111,7 +111,9 @@ async function check(engine,name,url){
   });
   assert.ok(desktop.photoRight<desktop.detailLeft,'desktop original photo-side layout must remain');
   assert.deepEqual(errors,[]);
-  assert.match(await page.locator('footer').innerText(),/G3-39 STATIC DEMO/);
+  const footer=await page.locator('footer').innerText();
+  const version=footer.match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(version&&Number(version[1])>=39,'G3-39 or later static-demo footer required: '+footer);
   console.log('PASS G3-39 '+name+' desktop layout, reload privacy and no JS errors');
   await context.close();
  }finally{await browser.close();}
