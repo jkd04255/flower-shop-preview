@@ -644,6 +644,13 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 #adminDemo #adminShowAll[hidden]{display:none!important}
 #adminDemo #adminShowAll:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
 </style>
+<style id="g3-32-review-next-action">
+/* Keep optional user text confined to the review stage, rendered as plain text. */
+#reservation #rReviewMemo{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}
+#reservation #rReviewAmount{font-weight:650;color:#354b39}
+#adminDemo .admin-next-action{border-left:3px solid #647c68;background:#f4f3e9;color:#394f3e;padding:12px 15px;margin:12px 0 17px;font-size:12px;line-height:1.75}
+#adminDemo .admin-next-action strong{display:block;font-size:12px;margin-bottom:3px}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -730,6 +737,8 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
          <div><dt>예약 시간</dt><dd id="rReviewTime"></dd></div>
          <div><dt>예약자 이름</dt><dd id="rReviewName"></dd></div>
          <div><dt>전화번호</dt><dd id="rReviewPhone"></dd></div>
+         <div><dt>상품 금액</dt><dd id="rReviewAmount"></dd></div>
+         <div><dt>전달 사항</dt><dd id="rReviewMemo"></dd></div>
        </dl>
        <p class="review-warning">가상 예약 체험입니다. 확인을 눌러도 실제 꽃집으로 접수되거나 문자·송금·결제가 발생하지 않습니다.</p>
        <div class="review-actions">
@@ -874,7 +883,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-31 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-32 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -1121,6 +1130,31 @@ function renderAdminDemo(){
   capacityNote.setAttribute('role','status');
   detail.appendChild(capacityNote);
  }
+ const nextStep=adminText('div','admin-next-action','');
+ const nextTitle=adminText('strong','','다음 처리 안내 · 가상 시연');
+ let nextMessage='';
+ if(selected.status==='pending'){
+  if(!demoSlotAvailable(selected.date,selected.time)){
+   nextMessage='해당 픽업 시간이 가상 정원에 도달했습니다. 추가 확정을 진행할 수 없습니다.';
+  }else if(selected.paymentState==='waiting'){
+   nextMessage='가상 송금 완료 표시를 확인한 다음 입금 내역 확인 단계로 진행해 주세요.';
+  }else if(!selected.depositChecked){
+   nextMessage='아래 가상 입금 내역 확인 항목을 체크해야 예약 확정 버튼이 활성화됩니다.';
+  }else{
+   nextMessage='가상 입금 확인 조건을 충족했습니다. 예약 확정 버튼으로 진행할 수 있습니다.';
+  }
+ }else if(selected.status==='confirmed'){
+  nextMessage='예약 확정 상태입니다. 픽업 준비 시 수령 전 단계로 변경할 수 있습니다.';
+ }else if(selected.status==='ready'){
+  nextMessage='수령 전 상태입니다. 픽업을 마친 뒤 수령 완료로 변경할 수 있습니다.';
+ }else if(selected.status==='completed'){
+  nextMessage='수령 완료된 가상 요청입니다. 추가 처리 단계가 없습니다.';
+ }else{
+  nextMessage='거절된 가상 요청입니다. 추가 처리 단계가 없습니다.';
+ }
+ nextStep.appendChild(nextTitle);
+ nextStep.appendChild(adminText('span','',nextMessage));
+ detail.appendChild(nextStep);
  const actions=adminText('div','admin-actions','');
  const nextStatus=selected.status==='pending'?'confirmed':selected.status==='confirmed'?'ready':selected.status==='ready'?'completed':null;
  const nextLabel=selected.status==='pending'?'입금 확인 · 예약 확정':selected.status==='confirmed'?'수령 전으로 변경':selected.status==='ready'?'수령 완료 처리':'처리 완료';
@@ -1243,7 +1277,7 @@ function clearReservationReview(){
  reservationReviewApproved=false;
  setReservationProgress('input');
  document.getElementById('reserveReview').hidden=true;
- for(const id of ['rReviewProduct','rReviewDate','rReviewTime','rReviewName','rReviewPhone']){
+ for(const id of ['rReviewProduct','rReviewDate','rReviewTime','rReviewName','rReviewPhone','rReviewAmount','rReviewMemo']){
   document.getElementById(id).textContent='';
  }
 }
@@ -1386,6 +1420,7 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   const time=document.getElementById('rTime').value;
   const name=document.getElementById('rName').value.trim();
   const phone=document.getElementById('rPhone').value.trim().replace(/[\s-]/g,'');
+  const memo=document.getElementById('rMemo').value.trim();
   const bounds=pickupBounds();
   if(!p||!p[7]){showReservationError('예약 시연이 불가능한 꽃다발입니다.');return;}
   if(!dateFromLocalString(date)||date<bounds.min||date>bounds.max){
@@ -1404,12 +1439,14 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   if(!/^01[016789]\d{7,8}$/.test(phone)){showReservationError('휴대전화 형식의 예시 연락처를 입력해 주세요.','rPhone');return;}
   /* Stage 1: validate the inputs, then show a review without creating a booking. */
   if(!approved){
-    reservationReviewDraft={idx,date,time,name,phone};
+    reservationReviewDraft={idx,date,time,name,phone,memo};
     document.getElementById('rReviewProduct').textContent=p[1];
     document.getElementById('rReviewDate').textContent=date;
     document.getElementById('rReviewTime').textContent=time;
     document.getElementById('rReviewName').textContent=name;
     document.getElementById('rReviewPhone').textContent=phone;
+    document.getElementById('rReviewAmount').textContent=p[4]+' KRW';
+    document.getElementById('rReviewMemo').textContent=memo||'없음';
     this.hidden=true;
     const review=document.getElementById('reserveReview');
     review.hidden=false;
@@ -1419,7 +1456,7 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
     return;
   }
   if(!reservationReviewDraft||reservationReviewDraft.idx!==idx||reservationReviewDraft.date!==date||
-     reservationReviewDraft.time!==time||reservationReviewDraft.name!==name||reservationReviewDraft.phone!==phone){
+     reservationReviewDraft.time!==time||reservationReviewDraft.name!==name||reservationReviewDraft.phone!==phone||reservationReviewDraft.memo!==memo){
     clearReservationReview();
     showReservationError('예약 정보가 변경됐습니다. 내용을 다시 확인해 주세요.','rDate');
     return;
@@ -1461,7 +1498,8 @@ document.getElementById('rReviewConfirm').addEventListener('click',function(){
  const form=document.getElementById('reserveForm');
  const latest={idx:currentReservationIndex,date:document.getElementById('rDate').value,
   time:document.getElementById('rTime').value,name:document.getElementById('rName').value.trim(),
-  phone:document.getElementById('rPhone').value.trim().replace(/[\s-]/g,'')};
+  phone:document.getElementById('rPhone').value.trim().replace(/[\s-]/g,''),
+  memo:document.getElementById('rMemo').value.trim()};
  if(Object.keys(latest).some(key=>latest[key]!==draft[key])){
   clearReservationReview();
   form.hidden=false;
