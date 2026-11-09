@@ -697,6 +697,18 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 #adminDemo #adminSearchClear[hidden]{display:none!important}
 #adminDemo #adminSearchClear:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
 </style>
+<style id="g3-37-status-lookup-demo">
+#store .status-lookup-demo{margin:27px 0 28px;padding:22px 20px;border:1px solid #c3d0bf;background:#f6f5ed;color:#334c3b}
+#store .status-lookup-demo h3{margin:0 0 10px;font-size:18px;font-weight:650}
+#store .status-lookup-demo p{margin:6px 0 14px;font-size:12px;line-height:1.75}
+#store .status-lookup-fields{display:flex;align-items:end;gap:10px;flex-wrap:wrap}
+#store .status-lookup-fields label{display:flex;flex:1 1 140px;min-width:0;flex-direction:column;gap:7px;font-size:12px;font-weight:600}
+#store #rStatusLast4{width:100%;min-width:0;min-height:44px;padding:10px;border:1px solid #aab8a7;background:#fffdfa;color:#304a35;font-size:16px}
+#store #rStatusLookupSubmit{min-height:44px;padding:9px 16px;border:1px solid #55705a;background:#36513c;color:#fff;font-size:13px;font-weight:650;cursor:pointer}
+#store #rStatusLast4:focus-visible,#store #rStatusLookupSubmit:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
+#store #rStatusLookupResult{margin:12px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.8}
+#store #rStatusLookupResult:empty{display:none}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -707,7 +719,22 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 <div class="booking-info" role="group" aria-label="예약 안내">
   <div><div class="booking-title">꽃다발 예약 안내</div><p>꽃다발 예약 요청 후 계좌이체를 완료하면, 매장에서 입금을 확인한 뒤 예약이 확정됩니다.<br>현재는 실제 계좌번호가 없는 가상 시연입니다.</p></div>
   <a class="booking-demo-link" href="#curation">꽃다발 선택하고 예약 체험 ↗</a>
-</div><table><tr><td>ADDRESS</td><td>가상 매장 — 실제 주소 미등록</td></tr><tr><td>OPENING HOURS</td><td>월–금 11:00–20:00 (예시)</td></tr><tr><td>CONTACT</td><td>전화 문의 채널 미등록</td></tr><tr><td>PICKUP</td><td>예약 요청 → 계좌이체 → 매장 입금 확인 → 예약 확정</td></tr></table></section></main>
+</div>
+<section class="status-lookup-demo" aria-labelledby="statusLookupHeading">
+ <h3 id="statusLookupHeading">가상 예약 현황 조회</h3>
+ <p>예시 전화번호 뒷자리 4자리로 가상 예약 상태를 확인할 수 있습니다. 샘플 번호: 1001, 1002, 1003, 1004. 새로 만든 가상 요청은 같은 탭에서만 조회할 수 있습니다.</p>
+ <form id="rStatusLookupForm" autocomplete="off" novalidate>
+  <div class="status-lookup-fields">
+   <label for="rStatusLast4">전화번호 뒷자리 4자리 (시연용)
+    <input id="rStatusLast4" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" placeholder="예: 1001" aria-describedby="rStatusLookupNote">
+   </label>
+   <button id="rStatusLookupSubmit" type="submit">가상 예약 조회 ↗</button>
+  </div>
+  <p id="rStatusLookupNote">예약번호와 상태만 표시합니다. 실제 고객 예약 조회가 아니며, 뒷자리 4자리만으로 본인확인은 불가능합니다. 실제 연락처를 입력하지 마세요.</p>
+  <p id="rStatusLookupResult" role="status" aria-live="polite" aria-atomic="true"></p>
+ </form>
+</section>
+<table><tr><td>ADDRESS</td><td>가상 매장 — 실제 주소 미등록</td></tr><tr><td>OPENING HOURS</td><td>월–금 11:00–20:00 (예시)</td></tr><tr><td>CONTACT</td><td>전화 문의 채널 미등록</td></tr><tr><td>PICKUP</td><td>예약 요청 → 계좌이체 → 매장 입금 확인 → 예약 확정</td></tr></table></section></main>
 <section class="detail" id="detail"><div class="detailNav"><a href="#top" class="brand">AFTERNOON · 오후의 정원</a><a href="#curation">← 목록으로</a></div><div class="detailBody"><img id="dImage" alt=""><div class="detailCopy"><div class="micro">THE BOUQUET COLLECTION</div><h1 id="dTitle"></h1><span id="dLatin"></span><p class="muted" id="dStory"></p><div class="price" id="dPrice"></div><div class="spec"><b>구성</b><span id="dColor"></span></div><div class="spec"><b>준비시간</b><span id="dLead"></span></div><div class="spec"><b>상태</b><span id="dStatus"></span></div><p class="transfer-condition"><strong>계좌이체 안내</strong><br>송금이 완료되고 매장에서 입금을 확인하면 예약이 확정됩니다.<br>현재는 가상 시연으로 실제 송금할 수 없습니다.</p><a id="dReserve" class="reservation-cta" href="#/reserve/rosy-moment">가상 예약 요청하기 ↗</a><button id="dSoldout" type="button" class="disabled" disabled hidden>품절 · 예약 불가</button><p class="muted">가상 예약 시연만 가능합니다. 실제 접수·결제·연락은 발생하지 않습니다.</p></div></div></section>
 
 <section class="reservation" id="reservation" aria-labelledby="reservationHeading" hidden>
@@ -826,6 +853,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <a id="rAgain" class="result-link" href="#curation">다른 꽃다발 둘러보기 ↗</a>
        <a id="rResultBack" class="result-link light" href="#/flower/rosy-moment">꽃다발 상세로 돌아가기</a>
        <a class="result-link light" href="#/admin-demo">관리자 데모에서 요청 상태 보기 ↗</a>
+        <a class="result-link light" href="#store">전화번호 뒷자리로 가상 예약 현황 조회 ↗</a>
      </div>
    </div>
  </div>
@@ -979,6 +1007,9 @@ function initialAdminRequests(){
  ];
 }
 let adminRequests=initialAdminRequests();
+/* Tab-memory only mapping for synthetic lookups. Never persist typed phone digits. */
+const demoTabPhoneSuffixes=new Map();
+const samplePhoneSuffixes={'1001':'DEMO-001','1002':'DEMO-002','1003':'DEMO-003','1004':'DEMO-004'};
 let adminSequence=5;
 /* Synthetic booking metadata only; never persist the form's name, telephone or note. */
 const DEMO_BOOKINGS_KEY='afternoon-garden-calendar-demo-v1';
@@ -1314,6 +1345,21 @@ document.getElementById('adminShowAll').addEventListener('click',function(){
  /* The shortcut hides after use. Restore the real All filter keyboard target. */
  document.querySelector('#adminDemo .admin-filter[data-filter="all"]').focus({preventScroll:true});
 });
+document.getElementById('rStatusLookupForm').addEventListener('submit',function(event){
+ event.preventDefault();
+ const input=document.getElementById('rStatusLast4'),code=input.value.trim();
+ const output=document.getElementById('rStatusLookupResult');
+ if(!/^\d{4}$/.test(code)){
+  output.textContent='숫자 4자리를 입력해 주세요. 실제 고객 예약은 조회할 수 없습니다.';
+  return;
+ }
+ const ids=new Set(demoTabPhoneSuffixes.get(code)||[]);
+ if(samplePhoneSuffixes[code])ids.add(samplePhoneSuffixes[code]);
+ const matches=adminRequests.filter(item=>ids.has(item.id));
+ output.textContent=matches.length?
+  '일치하는 가상 예약 '+matches.length+'건 (실제 예약 아님)\n'+matches.map(item=>item.id+' · '+adminStatusText[item.status]).join('\n'):
+  '해당 번호와 연결된 가상 예약이 없습니다. 실제 고객 예약은 조회할 수 없습니다.';
+});
 document.getElementById('adminAccountMode').addEventListener('change',function(){
  demoAccountMode=this.value==='example'?'example':'off';
  updateBankPreview();
@@ -1329,6 +1375,8 @@ document.getElementById('adminReset').addEventListener('click',function(){
  adminSortOrder='request';
  adminRequestQuery='';
  document.getElementById('adminRequestSearch').value='';
+ demoTabPhoneSuffixes.clear();
+ document.getElementById('rStatusLookupResult').textContent='';
  adminSelectedId='DEMO-001';
  renderAdminDemo();
  document.getElementById('adminOperationStatus').textContent='가상 예약 기록을 샘플 4건으로 초기화했습니다. 전체 상태 필터가 선택됐습니다.';
@@ -1655,6 +1703,10 @@ document.getElementById('reserveForm').addEventListener('submit',function(e){
   document.getElementById('rrTime').textContent=time;
   document.getElementById('rrAmount').textContent=p[4]+' KRW';
   currentDemoRequestId=acceptedId;
+  /* Only the final four digits are kept in tab memory; never in localStorage. */
+  const suffix=phone.slice(-4);
+  if(!demoTabPhoneSuffixes.has(suffix))demoTabPhoneSuffixes.set(suffix,new Set());
+  demoTabPhoneSuffixes.get(suffix).add(acceptedId);
   clearReservationReview();
   this.hidden=true;
   const result=document.getElementById('reserveResult');
