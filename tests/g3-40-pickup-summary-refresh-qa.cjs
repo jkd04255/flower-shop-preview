@@ -131,7 +131,9 @@ async function check(engine,name,base){
   assert.ok(desktop.photoRight<desktop.detailLeft,'desktop photo + details remain side by side');
   assert.ok(desktop.stripHeight>0);
   assert.deepEqual(errors,[]);
-  assert.match(await page.locator('footer').innerText(),/G3-40 STATIC DEMO/);
+  const footer=await page.locator('footer').innerText();
+  const version=footer.match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(version&&Number(version[1])>=40,'G3-40 or later static-demo footer required: '+footer);
   console.log('PASS G3-40 '+name+' desktop unchanged, reload clears tab lookup, no runtime errors');
   await ctx.close();
  }finally{await browser.close();}
