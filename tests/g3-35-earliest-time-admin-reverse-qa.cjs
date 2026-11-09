@@ -143,7 +143,9 @@ async function check(engine,label,base){
    assert.ok(overflow<=2,JSON.stringify({width,overflow}));
   }
   assert.deepEqual(errors,[]);
-  assert.match(await page.locator('footer').innerText(),/G3-35 STATIC DEMO/);
+  const footer=await page.locator('footer').innerText();
+  const version=footer.match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(version&&Number(version[1])>=35,'G3-35 or newer static demo footer required: '+footer);
   console.log('PASS G3-35 '+label+' reset, 320/390px responsive flow, no browser errors');
   await context.close();
  }finally{await browser.close()}
