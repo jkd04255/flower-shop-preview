@@ -674,6 +674,18 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 #reservation #rEarliestTimeStatus{margin:8px 0 0;color:#4d6451;font-size:12px;line-height:1.65}
 #reservation #rEarliestTimeStatus:empty{display:none}
 </style>
+<style id="g3-36-latest-time-search">
+#reservation #rLatestTime{display:inline-block;margin:10px 0 0 12px;padding:7px 0;border:0;border-bottom:1px solid #55705a;background:transparent;color:#36513c;font:600 12px/1.6 var(--editorial-font),sans-serif;cursor:pointer}
+#reservation #rLatestTime:disabled{border-bottom-color:#b7c0b7;color:#737c72;cursor:not-allowed}
+#reservation #rLatestTime:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
+#reservation #rLatestTimeStatus{margin:8px 0 0;color:#4d6451;font-size:12px;line-height:1.65}
+#reservation #rLatestTimeStatus:empty{display:none}
+#adminDemo .admin-id-search{display:flex;flex-direction:column;gap:4px;max-width:200px;min-width:0}
+#adminDemo .admin-id-search label{font-size:12px;font-weight:600;color:#526553}
+#adminDemo #adminRequestSearch{width:100%;min-height:40px;padding:8px 10px;border:1px solid #aab8a7;border-radius:0;background:#fffdfa;color:#304a35;font:500 13px/1.5 var(--editorial-font),sans-serif}
+#adminDemo #adminRequestSearch:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
+#adminDemo .admin-id-search small{font-size:11px;color:#5b6e5e;line-height:1.5}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -729,8 +741,10 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
        <p id="rTimeHint" class="field-note" aria-live="polite">날짜를 선택하면 가능한 시간이 표시됩니다.</p>
         <button type="button" id="rEarliestDate">가장 빠른 픽업 날짜 선택 ↗</button>
         <button type="button" id="rEarliestTime" disabled>가장 빠른 픽업 시간 선택 ↗</button>
+        <button type="button" id="rLatestTime" disabled>가장 늦은 픽업 시간 선택 ↗</button>
         <p id="rEarliestStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         <p id="rEarliestTimeStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+        <p id="rLatestTimeStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         <p id="rPickupPreview" class="pickup-preview" hidden>픽업 일정 미리보기 (가상)</p>
        <div class="form-row" style="margin-top:22px">
          <div class="form-field">
@@ -842,6 +856,11 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  </div>
  <div class="admin-filter-feedback">
   <p id="adminFilterSummary" role="status" aria-live="polite" aria-atomic="true">전체 요청 · 가상 데이터</p>
+  <div class="admin-id-search">
+   <label for="adminRequestSearch">가상 예약번호 검색</label>
+   <input id="adminRequestSearch" type="search" maxlength="16" autocomplete="off" spellcheck="false" placeholder="DEMO-001" aria-describedby="adminRequestSearchHint">
+   <small id="adminRequestSearchHint">예약번호만 검색 · 실고객 정보 없음</small>
+  </div>
   <label class="admin-sort-label" for="adminSortOrder">목록 정렬
    <select id="adminSortOrder">
     <option value="request">기존 요청순</option>
@@ -918,7 +937,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-35 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-36 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -998,6 +1017,7 @@ function restoreDemoBookings(){
 restoreDemoBookings();
 let adminFilter='all';
 let adminSortOrder='request';
+let adminRequestQuery='';
 let adminSelectedId='DEMO-001';
 const adminStatusText={pending:'입금 전',confirmed:'예약 확정',ready:'수령 전',completed:'수령 완료',rejected:'거절'};
 const adminPaymentText={waiting:'입금 전',reported:'가상 송금 완료 · 입금 확인 필요',verified:'입금 확인 완료 (시연)'};
@@ -1085,7 +1105,7 @@ function renderAdminDemo(){
  for(const button of document.querySelectorAll('#adminDemo .admin-filter')){
    button.setAttribute('aria-pressed',String(button.dataset.filter===adminFilter));
  }
- const entries=adminRequests.filter(item=>adminFilter==='all'||item.status===adminFilter);
+ const entries=adminRequests.filter(item=>(adminFilter==='all'||item.status===adminFilter)&&item.id.includes(adminRequestQuery));
  if(adminSortOrder==='pickup'||adminSortOrder==='pickup-desc'){
   const direction=adminSortOrder==='pickup-desc'?-1:1;
   entries.sort((a,b)=>direction*(a.date.localeCompare(b.date)||a.time.localeCompare(b.time)||a.id.localeCompare(b.id)));
@@ -1093,7 +1113,7 @@ function renderAdminDemo(){
  document.getElementById('adminSortOrder').value=adminSortOrder;
  const statusLabel=adminFilter==='all'?'전체 요청':adminStatusText[adminFilter];
  const summary=document.getElementById('adminFilterSummary');
- const newSummary=statusLabel+' · '+entries.length+'건 표시 / 전체 '+total+'건 · 가상 데이터';
+ const newSummary=statusLabel+' · '+entries.length+'건 표시 / 전체 '+total+'건 · 가상 데이터'+(adminRequestQuery?' · 예약번호 검색 적용':'');
  if(summary.textContent!==newSummary)summary.textContent=newSummary;
  document.getElementById('adminShowAll').hidden=adminFilter==='all';
  const list=document.getElementById('adminList');
@@ -1257,6 +1277,10 @@ function renderAdminDemo(){
 for(const button of document.querySelectorAll('#adminDemo .admin-filter')){
  button.addEventListener('click',function(){adminFilter=this.dataset.filter;renderAdminDemo()});
 }
+document.getElementById('adminRequestSearch').addEventListener('input',function(){
+ adminRequestQuery=this.value.trim().toUpperCase();
+ renderAdminDemo();
+});
 document.getElementById('adminSortOrder').addEventListener('change',function(){
  adminSortOrder=['pickup','pickup-desc'].includes(this.value)?this.value:'request';
  renderAdminDemo();
@@ -1280,6 +1304,8 @@ document.getElementById('adminReset').addEventListener('click',function(){
  saveDemoBookings();
  adminFilter='all';
  adminSortOrder='request';
+ adminRequestQuery='';
+ document.getElementById('adminRequestSearch').value='';
  adminSelectedId='DEMO-001';
  renderAdminDemo();
  document.getElementById('adminOperationStatus').textContent='가상 예약 기록을 샘플 4건으로 초기화했습니다. 전체 상태 필터가 선택됐습니다.';
@@ -1393,7 +1419,9 @@ function updatePickupTimes(resetSelection=false){
   }
   select.disabled=options.length===0;
   document.getElementById('rEarliestTime').disabled=options.length===0;
+  document.getElementById('rLatestTime').disabled=options.length===0;
   document.getElementById('rEarliestTimeStatus').textContent='';
+  document.getElementById('rLatestTimeStatus').textContent='';
   /* A changed date must never silently reuse its previous pickup hour. */
   select.value=!resetSelection&&options.includes(selected)?selected:'';
   const previousSlotExpired=!resetSelection&&!!selected&&!options.includes(selected);
@@ -1431,6 +1459,7 @@ function initReservation(index){
   updateMemoCount();
   document.getElementById('rEarliestStatus').textContent='';
   document.getElementById('rEarliestTimeStatus').textContent='';
+  document.getElementById('rLatestTimeStatus').textContent='';
   updateBankPreview();
   form.hidden=false;
   document.getElementById('reserveResult').hidden=true;
@@ -1462,6 +1491,21 @@ function showReservationError(message,fieldId){
  field.focus();
 }
 document.getElementById('rMemo').addEventListener('input',updateMemoCount);
+document.getElementById('rLatestTime').addEventListener('click',function(){
+ const date=document.getElementById('rDate').value;
+ const available=pickupSlots(currentReservationIndex,date);
+ const select=document.getElementById('rTime');
+ if(!available.length||select.disabled){
+  document.getElementById('rLatestTimeStatus').textContent='먼저 픽업 가능한 날짜를 선택해 주세요. (가상)';
+  return;
+ }
+ clearReservationError();
+ const last=available[available.length-1];
+ select.value=last;
+ updatePickupPreview();
+ document.getElementById('rEarliestTimeStatus').textContent='';
+ document.getElementById('rLatestTimeStatus').textContent='선택한 날짜의 가장 늦은 픽업 시간 '+last+'을 선택했습니다. 예약 확정 전 (가상)';
+});
 document.getElementById('rEarliestTime').addEventListener('click',function(){
  const date=document.getElementById('rDate').value;
  const available=pickupSlots(currentReservationIndex,date);
@@ -1473,6 +1517,7 @@ document.getElementById('rEarliestTime').addEventListener('click',function(){
  clearReservationError();
  select.value=available[0];
  updatePickupPreview();
+ document.getElementById('rLatestTimeStatus').textContent='';
  document.getElementById('rEarliestTimeStatus').textContent='선택한 날짜의 가장 빠른 픽업 시간 '+available[0]+'을 선택했습니다. 예약 확정 전 (가상)';
 });
 document.getElementById('rEarliestDate').addEventListener('click',function(){
@@ -1499,6 +1544,7 @@ for(const id of ['rTime','rName','rPhone']){
   clearReservationError();
   if(id==='rTime'){
    document.getElementById('rEarliestTimeStatus').textContent='';
+   document.getElementById('rLatestTimeStatus').textContent='';
    updatePickupPreview();
   }
  });
