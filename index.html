@@ -709,9 +709,72 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 #store #rStatusLookupResult{margin:12px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.8}
 #store #rStatusLookupResult:empty{display:none}
 </style>
+<style id="g3-38-customer-status">
+/* Dedicated, responsive customer reservation screen — synthetic data only. */
+#customerStatus{min-height:100vh;background:#f5f5ed;color:#263b2c;padding:24px clamp(18px,5vw,65px) 90px}
+#customerStatus[hidden]{display:none!important}
+#customerStatus .cs-nav{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+#customerStatus .cs-nav a{color:#35513b;text-decoration:none;font-size:13px}
+#customerStatus .cs-wrap{max-width:960px;margin:65px auto 0}
+#customerStatus .cs-eyebrow{color:#6a786a;letter-spacing:.18em;text-transform:uppercase;font-size:11px;font-weight:700}
+#customerStatus h1{font-size:clamp(34px,6vw,54px);line-height:1.15;letter-spacing:-.05em;font-weight:650;margin:15px 0 19px}
+#customerStatus .cs-desc{max-width:690px;font-size:14px;line-height:1.9;color:#5b6e60;margin-bottom:29px}
+#customerStatus .cs-search{border:1px solid #cad4c7;background:#fbfaf5;padding:20px 23px;margin:23px 0 24px}
+#customerStatus .cs-search-row{display:flex;gap:12px;align-items:end;flex-wrap:wrap}
+#customerStatus .cs-search label{display:flex;flex:1 1 180px;min-width:0;flex-direction:column;gap:9px;font-size:13px;font-weight:650}
+#customerStatus #csLast4{min-height:48px;width:100%;min-width:0;padding:10px 12px;background:#fff;border:1px solid #a3b49e;color:#293e2f;font-size:16px;letter-spacing:.12em}
+#customerStatus #csSubmit{min-height:48px;padding:12px 24px;color:#fff;background:#385740;border:1px solid #385740;font-size:13px;font-weight:650;cursor:pointer}
+#customerStatus #csLast4:focus-visible,#customerStatus #csSubmit:focus-visible,#customerStatus .cs-nav a:focus-visible{outline:3px solid #5b7f5e;outline-offset:3px}
+#customerStatus .cs-helper{font-size:12px;line-height:1.7;color:#67766a;margin:11px 0 0}
+#customerStatus #csStatusMessage{color:#435a48;font-size:13px;line-height:1.7;margin:14px 0}
+#customerStatus #csStatusMessage:empty{display:none}
+#customerStatus .cs-results{display:grid;gap:23px}
+#customerStatus .cs-card{overflow:hidden;border:1px solid #c7d0c2;background:#fffdf8}
+#customerStatus .cs-card-heading{display:flex;justify-content:space-between;align-items:start;gap:14px;padding:25px 27px 20px;border-bottom:1px solid #e6e9e1}
+#customerStatus .cs-card-id{font-size:11px;letter-spacing:.13em;color:#798579;font-weight:650}
+#customerStatus .cs-card-heading h2{margin:6px 0;font-size:clamp(20px,3vw,28px);line-height:1.25;font-weight:650;letter-spacing:-.025em}
+#customerStatus .cs-badge{display:inline-flex;flex-shrink:0;max-width:48%;border-radius:2px;padding:8px 11px;background:#e9ede5;color:#355a3e;font-size:12px;font-weight:700;line-height:1.3}
+#customerStatus .cs-badge.is-pending{background:#f4e9d1;color:#725520}
+#customerStatus .cs-badge.is-reported{background:#f2ecda;color:#795e26}
+#customerStatus .cs-badge.is-rejected{background:#f3e5e1;color:#7d5148}
+#customerStatus .cs-overview{display:flex;gap:24px;align-items:start;padding:24px 27px 12px}
+#customerStatus .cs-photo{height:148px;width:128px;max-width:35%;object-fit:cover;flex:none;background:#e1e7dc}
+#customerStatus .cs-detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 27px;flex:1;min-width:0;margin:0}
+#customerStatus .cs-detail-list div{min-width:0}
+#customerStatus .cs-detail-list dt{color:#718073;font-size:12px;line-height:1.5;margin-bottom:5px}
+#customerStatus .cs-detail-list dd{margin:0;font-size:15px;font-weight:650;line-height:1.6;overflow-wrap:anywhere}
+#customerStatus .cs-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;list-style:none;margin:12px 27px 22px;padding:0}
+#customerStatus .cs-steps li{border-top:3px solid #d8dfd3;color:#889286;font-size:11px;line-height:1.45;padding-top:9px}
+#customerStatus .cs-steps li.is-done{border-color:#5b7b5e;color:#375740;font-weight:700}
+#customerStatus .cs-payment{border-top:1px solid #e2e7db;background:#f1f3e9;padding:24px 27px 27px}
+#customerStatus .cs-payment h3{font-size:22px;letter-spacing:-.03em;font-weight:650;margin:0 0 9px}
+#customerStatus .cs-payment p{color:#4f6252;font-size:13px;line-height:1.8;margin:0}
+#customerStatus .cs-bank{margin-top:19px;background:#fffdf8;border:1px solid #ccd7c5;padding:20px 21px}
+#customerStatus .cs-bank-title{margin:0 0 16px!important;color:#425a45!important;font-size:12px!important;letter-spacing:.08em;font-weight:700}
+#customerStatus .cs-bank dl{display:grid;gap:15px;margin:0}
+#customerStatus .cs-bank dt{color:#728175;font-size:12px;margin-bottom:6px}
+#customerStatus .cs-bank dd{font-size:17px;font-weight:750;color:#263e2c;letter-spacing:.01em;margin:0;overflow-wrap:anywhere}
+#customerStatus .cs-bank dd.cs-account{font-size:clamp(21px,4vw,29px);letter-spacing:.07em}
+#customerStatus .cs-bank-warning{margin-top:15px!important;color:#816345!important;font-weight:650}
+#customerStatus .cs-disclaimer{color:#69786c;font-size:12px;line-height:1.8;margin:27px 0 0}
+@media(max-width:600px){
+ #customerStatus{padding:18px 17px 75px}
+ #customerStatus .cs-wrap{margin-top:42px}
+ #customerStatus .cs-card-heading{padding:20px}
+ #customerStatus .cs-overview{padding:19px 20px 9px;gap:14px}
+ #customerStatus .cs-photo{width:98px;height:114px}
+ #customerStatus .cs-detail-list{grid-template-columns:1fr;gap:11px}
+ #customerStatus .cs-detail-list dd{font-size:14px}
+ #customerStatus .cs-payment{padding:22px 20px}
+ #customerStatus .cs-steps{margin:14px 20px 23px}
+ #customerStatus .cs-steps li{font-size:10px}
+ #customerStatus .cs-search{padding:17px}
+ #customerStatus .cs-search-row button{width:100%}
+}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
-<section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
+<section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a><a href="#/booking-status">예약 조회</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
 <section class="section" id="curation"><div class="head"><h2>Today's<br><span class="upright">selection.</span></h2><p>오늘의 추천 꽃다발 · 사진을 눌러 상품 보기</p></div><div class="cards" id="featured"></div><p class="muted">* 사진과 가격은 가상 자료입니다. 오늘의 추천은 최대 3개입니다.</p></section>
 <section class="section" id="arrivals"><div class="head"><h2>Just<br><span class="upright">arrived.</span></h2><p>최근 입고된 꽃 소식 · 문의 전용<br>예약 상품이 아니며, 문의만 가능합니다.</p></div><div id="arrivalList"></div></section>
 <section class="section other" id="other"><div class="head"><h2>Everyday<br><span class="upright">flowers.</span></h2><p>오늘의 추천 외에도 만나볼 수 있는 꽃다발</p></div><div class="cards" id="regular"></div></section>
@@ -730,7 +793,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
    </label>
    <button id="rStatusLookupSubmit" type="submit">가상 예약 조회 ↗</button>
   </div>
-  <p id="rStatusLookupNote">예약번호와 상태만 표시합니다. 실제 고객 예약 조회가 아니며, 뒷자리 4자리만으로 본인확인은 불가능합니다. 실제 연락처를 입력하지 마세요.</p>
+  <p id="rStatusLookupNote">조회하면 별도 예약 현황 화면에서 상품·날짜·시간·상태를 볼 수 있습니다. 예시 4자리만 입력하세요. 실제 예약이 아니며, 이 번호만으로 본인확인은 불가능합니다.</p>
   <p id="rStatusLookupResult" role="status" aria-live="polite" aria-atomic="true"></p>
  </form>
 </section>
@@ -853,9 +916,33 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <a id="rAgain" class="result-link" href="#curation">다른 꽃다발 둘러보기 ↗</a>
        <a id="rResultBack" class="result-link light" href="#/flower/rosy-moment">꽃다발 상세로 돌아가기</a>
        <a class="result-link light" href="#/admin-demo">관리자 데모에서 요청 상태 보기 ↗</a>
-        <a class="result-link light" href="#store">전화번호 뒷자리로 가상 예약 현황 조회 ↗</a>
+        <a class="result-link light" href="#/booking-status">가상 예약 상세 현황 보기 ↗</a>
      </div>
    </div>
+ </div>
+</section>
+
+<section class="customer-status-page" id="customerStatus" hidden aria-labelledby="csTitle">
+ <nav class="cs-nav" aria-label="예약 현황 탐색">
+  <a href="#top" class="brand">AFTERNOON · 오후의 정원</a>
+  <a href="#store">← 매장 안내로 돌아가기</a>
+ </nav>
+ <div class="cs-wrap">
+  <div class="cs-eyebrow">MY RESERVATION · STATIC DEMO</div>
+  <h1 id="csTitle" tabindex="-1">내 예약 현황</h1>
+  <p class="cs-desc">요청하신 꽃다발과 픽업 일정, 입금 진행 상황을 한눈에 확인하세요. 이 화면은 예시 예약으로만 작동하며 실제 예약·입금·연락은 발생하지 않습니다.</p>
+  <form class="cs-search" id="csLookupForm" novalidate autocomplete="off">
+   <div class="cs-search-row">
+    <label for="csLast4">전화번호 뒷자리 4자리 (가상 시연)
+     <input id="csLast4" type="text" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="off" placeholder="예: 1002" aria-describedby="csLookupHelp">
+    </label>
+    <button id="csSubmit" type="submit">예약 현황 확인 ↗</button>
+   </div>
+   <p class="cs-helper" id="csLookupHelp">샘플: 1001 · 1002 · 1003 · 1004. 실제 전화번호는 입력하지 마세요.</p>
+  </form>
+  <div id="csStatusMessage" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div id="csResults" class="cs-results" aria-label="가상 예약 상세 결과"></div>
+  <p class="cs-disclaimer">안내 · 이 페이지는 정적 시연 화면입니다. 전화번호 4자리만으로 실제 고객의 예약·결제정보를 조회할 수 없으며, 운영 시에는 별도의 본인 확인과 개인정보 보호 설계가 필요합니다.</p>
  </div>
 </section>
 
