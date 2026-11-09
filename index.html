@@ -772,6 +772,25 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  #customerStatus .cs-search-row button{width:100%}
 }
 </style>
+<style id="g3-39-mobile-lookup-refinement">
+/* Mobile detail hierarchy: image above readable date/time and amount, not a squeezed side column. */
+#customerStatus #csLookupAgain{display:inline-block;margin:7px 0 16px;padding:11px 0;border:0;border-bottom:1px solid #55705a;background:transparent;color:#36513c;font:650 13px/1.55 inherit;cursor:pointer}
+#customerStatus #csLookupAgain[hidden]{display:none!important}
+#customerStatus #csLookupAgain:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
+@media(max-width:600px){
+ #customerStatus .cs-card-heading{align-items:start;gap:12px;flex-wrap:wrap}
+ #customerStatus .cs-badge{max-width:100%;font-size:13px;padding:9px 12px}
+ #customerStatus .cs-overview{display:grid;grid-template-columns:94px minmax(0,1fr);gap:14px;padding:20px 20px 12px;align-items:start}
+ #customerStatus .cs-photo{max-width:100%;width:94px;height:108px;grid-column:1}
+ #customerStatus .cs-detail-list{grid-column:1 / -1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 12px}
+ #customerStatus .cs-detail-list dt{font-size:12px;margin-bottom:4px}
+ #customerStatus .cs-detail-list dd{font-size:15px;line-height:1.55}
+ #customerStatus .cs-detail-list div:nth-child(2) dd,#customerStatus .cs-detail-list div:nth-child(3) dd{font-size:17px;font-weight:750}
+ #customerStatus .cs-steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 16px;margin:15px 20px 23px}
+ #customerStatus .cs-steps li{font-size:12px;line-height:1.4;padding-top:8px}
+ #customerStatus .cs-bank dd.cs-account{letter-spacing:.025em}
+}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a><a href="#/booking-status">예약 조회</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -942,6 +961,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
   </form>
   <div id="csStatusMessage" role="status" aria-live="polite" aria-atomic="true"></div>
   <div id="csResults" class="cs-results" role="region" aria-label="가상 예약 상세 결과"></div>
+  <button type="button" id="csLookupAgain" hidden>다른 예약 조회 ↗</button>
   <p class="cs-disclaimer">안내 · 이 페이지는 정적 시연 화면입니다. 전화번호 4자리만으로 실제 고객의 예약·결제정보를 조회할 수 없으며, 운영 시에는 별도의 본인 확인과 개인정보 보호 설계가 필요합니다.</p>
  </div>
 </section>
@@ -1066,7 +1086,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-38 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-39 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 const U=["./assets/rosy-moment.webp","./assets/mellow-sunday.webp","./assets/purple-letter.webp","https://images.unsplash.com/photo-1457089328109-e5d9bd499191?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?auto=format&fit=crop&w=900"];
 const ARRIVAL_U=["https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=900","https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=900"];
@@ -1457,7 +1477,9 @@ function statusDetailPair(label,value){
 function renderCustomerStatus(){
  const result=document.getElementById('csResults');
  const message=document.getElementById('csStatusMessage');
+ const again=document.getElementById('csLookupAgain');
  result.replaceChildren();
+ again.hidden=true;
  const code=activeDemoLookupCode;
  if(!code){
   message.textContent='전화번호 뒷자리의 예시 숫자 4자리를 입력하면 가상 예약 상세 정보가 표시됩니다.';
@@ -1473,6 +1495,7 @@ function renderCustomerStatus(){
   return;
  }
  message.textContent='가상 예약 '+matches.length+'건을 찾았습니다. 개인정보나 실제 결제정보는 포함되지 않습니다.';
+ again.hidden=false;
  for(const item of matches){
   const p=P[item.productIndex];
   if(!p)continue;
@@ -1530,6 +1553,10 @@ function renderCustomerStatus(){
 }
 function startCustomerStatusLookup(code,feedback){
  if(!/^\d{4}$/.test(code)){
+  activeDemoLookupCode='';
+  if(location.hash==='#/booking-status'){
+   renderCustomerStatus();
+  }
   feedback.textContent='숫자 4자리를 입력해 주세요. 실제 고객 예약은 조회할 수 없습니다.';
   return;
  }
@@ -1548,6 +1575,15 @@ document.getElementById('rStatusLookupForm').addEventListener('submit',function(
 document.getElementById('csLookupForm').addEventListener('submit',function(event){
  event.preventDefault();
  startCustomerStatusLookup(document.getElementById('csLast4').value.trim(),document.getElementById('csStatusMessage'));
+});
+document.getElementById('csLookupAgain').addEventListener('click',function(){
+ activeDemoLookupCode='';
+ document.getElementById('csLast4').value='';
+ document.getElementById('rStatusLast4').value='';
+ renderCustomerStatus();
+ const input=document.getElementById('csLast4');
+ input.focus({preventScroll:true});
+ input.scrollIntoView({block:'center',behavior:'auto'});
 });
 document.getElementById('adminAccountMode').addEventListener('change',function(){
  demoAccountMode=this.value==='example'?'example':'off';
