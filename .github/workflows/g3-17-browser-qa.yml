@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-32
+name: Flower shop consolidated Chromium + WebKit QA · G3-33
 on:
   pull_request:
     paths:
@@ -104,6 +104,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-32-review-admin-ux-qa.cjs
+      - name: G3-33 memo length and admin synthetic capacity · Chromium + WebKit + axe
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-33-memo-slot-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
