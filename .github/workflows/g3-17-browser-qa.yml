@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-41
+name: Flower shop consolidated Chromium + WebKit QA · G3-42
 on:
   pull_request:
     paths:
@@ -92,6 +92,10 @@ jobs:
         run: npx playwright-core install --with-deps webkit
       - name: G3-29 WebKit mobile touch/zoom and keyboard booking regression
         run: node tests/g3-29-webkit-mobile-qa.cjs
+      - name: G3-42 Safari early swipe and idle hero peek · Chromium + WebKit
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-42-safari-early-scroll-qa.cjs
       - name: G3-30 Chromium and WebKit pickup preview and admin calendar shortcut
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
