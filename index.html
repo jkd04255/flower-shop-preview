@@ -1210,6 +1210,72 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  #reservation .reserve-quick-actions{grid-template-columns:minmax(0,1fr)}
 }
 </style>
+
+<style id="g3-48-simplified-pickup-selection">
+/* G3-48: date -> time remains the only default booking path.
+   Legacy convenience shortcuts are optional, progressively disclosed.
+   Extra announcement text is only visible inside the expanded helper. */
+#reservation .reserve-quick-details{
+ margin:10px 0 3px;
+ padding:0;
+ border:0;
+}
+#reservation .reserve-quick-details>summary{
+ display:inline-flex;
+ align-items:center;
+ min-height:44px;
+ padding:3px 1px;
+ color:#5c7060;
+ font-family:var(--editorial-font),sans-serif;
+ font-size:12px;
+ font-weight:540;
+ line-height:1.5;
+ cursor:pointer;
+ list-style:none;
+ text-underline-offset:4px;
+ text-decoration:underline;
+ text-decoration-color:#b3c1b2;
+}
+#reservation .reserve-quick-details>summary::-webkit-details-marker{display:none}
+#reservation .reserve-quick-details>summary::after{
+ content:"+";
+ margin-left:9px;
+ font-size:15px;
+ font-weight:400;
+ text-decoration:none;
+}
+#reservation .reserve-quick-details[open]>summary::after{content:"−"}
+#reservation .reserve-quick-details>summary:focus-visible{
+ outline:3px solid #53745a;
+ outline-offset:2px;
+}
+#reservation .reserve-quick-details .reserve-quick-actions{
+ margin:2px 0 10px;
+}
+#reservation .reserve-quick-feedback p{
+ margin:4px 0;
+ color:#516753;
+ font-size:12px;
+ line-height:1.65;
+}
+#reservation .reserve-quick-feedback p:empty{display:none}
+#reservation .reserve-quick-feedback{
+ margin-bottom:6px;
+}
+#reservation #rPickupPreview:not([hidden]){
+ margin:13px 0 0;
+ padding:12px 15px;
+ line-height:1.55;
+ font-size:13px;
+}
+#reservation .booking-form>.form-row[style]{
+ margin-top:13px!important;
+}
+@media(max-width:600px){
+ #reservation .reserve-quick-details{margin-top:7px}
+ #reservation #rPickupPreview:not([hidden]){padding:12px 13px}
+}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav aria-label="쇼윈도 주요 메뉴"><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a><a href="#/booking-status">예약 조회</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -1278,17 +1344,22 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
          </div>
        </div>
        <p id="rTimeHint" class="field-note" aria-live="polite">날짜를 선택하면 가능한 시간이 표시됩니다.</p>
+       <p id="rPickupPreview" class="pickup-preview" hidden>픽업 일정 미리보기 (가상)</p>
+       <details id="reserveQuickDetails" class="reserve-quick-details">
+        <summary>다른 날짜·시간 빠르게 찾기</summary>
         <div class="reserve-quick-actions" role="group" aria-label="픽업 일정을 빠르게 선택">
          <button type="button" id="rEarliestDate">가장 빠른 픽업 날짜 선택 ↗</button>
          <button type="button" id="rNextDate" disabled>다음 픽업 가능일 선택 ↗</button>
          <button type="button" id="rEarliestTime" disabled>가장 빠른 픽업 시간 선택 ↗</button>
          <button type="button" id="rLatestTime" disabled>가장 늦은 픽업 시간 선택 ↗</button>
         </div>
-        <p id="rEarliestStatus" role="status" aria-live="polite" aria-atomic="true"></p>
-        <p id="rNextDateStatus" role="status" aria-live="polite" aria-atomic="true"></p>
-        <p id="rEarliestTimeStatus" role="status" aria-live="polite" aria-atomic="true"></p>
-        <p id="rLatestTimeStatus" role="status" aria-live="polite" aria-atomic="true"></p>
-        <p id="rPickupPreview" class="pickup-preview" hidden>픽업 일정 미리보기 (가상)</p>
+        <div class="reserve-quick-feedback">
+         <p id="rEarliestStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+         <p id="rNextDateStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+         <p id="rEarliestTimeStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+         <p id="rLatestTimeStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+        </div>
+       </details>
        <div class="form-row" style="margin-top:22px">
          <div class="form-field">
            <label for="rName">예약자 이름 *</label>
@@ -1508,7 +1579,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-47 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-48 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 /* G3-41: Only a *home-page reload* starts from the hero.
    Preserve user-clicked in-page anchors, subpage deep links, and back/forward visits. */
@@ -2833,6 +2904,9 @@ function route(){
   }
   if(!showReservation)clearReservationReview();
   if(showReservation){
+    // G3-48: each entry into the booking screen starts with the simple form.
+    // Only users who explicitly open optional shortcuts see extra choices.
+    document.getElementById('reserveQuickDetails').open=false;
     initReservation(index);
     window.scrollTo(0,0);
   }

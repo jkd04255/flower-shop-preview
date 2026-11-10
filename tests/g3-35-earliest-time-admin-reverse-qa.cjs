@@ -38,6 +38,14 @@ async function check(engine,label,base){
   const context=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:3,isMobile:true,hasTouch:true,reducedMotion:'reduce',timezoneId:'Asia/Seoul'});
   const page=await context.newPage(),errors=[];
   page.on('pageerror',err=>errors.push(err.message));
+  // Historical shortcut regressions intentionally open the optional helper.
+  // Customer-facing G3-48 QA separately asserts that it starts collapsed.
+  await page.addInitScript(()=>{
+    document.addEventListener('DOMContentLoaded',()=>{
+      const details=document.getElementById('reserveQuickDetails');
+      if(details)details.open=true;
+    });
+  });
   await page.goto(base+'#/reserve/rosy-moment',{waitUntil:'domcontentloaded'});
   await page.locator('#reserveForm').waitFor({state:'visible'});
   const quick=page.locator('#rEarliestTime');

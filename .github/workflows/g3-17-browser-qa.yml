@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-47 optimized
+name: Flower shop consolidated Chromium + WebKit QA · G3-48
 on:
   pull_request:
     paths:
@@ -179,6 +179,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-47-reservation-status-clarity-qa.cjs
+      - name: G3-48 simple pickup date/time flow and optional advanced shortcuts · Chromium + WebKit
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-48-simplified-pickup-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
