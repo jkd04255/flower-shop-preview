@@ -807,13 +807,101 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  #customerStatus #csRefreshStatus{width:100%;font-size:14px}
 }
 </style>
+
+<style id="g3-43-typography-hierarchy">
+/* G3-43: Retain the approved Pretendard variable family; give the flower
+   editorial pages a clear Korean-first hierarchy. No navigation/behavior edits. */
+:root{
+ --type-body:15px;
+ --type-support:14px;
+ --type-meta:12px;
+ --type-ink:#303b31;
+ --type-secondary:#556359;
+}
+#home .head h2{
+ font-family:var(--editorial-font);
+ font-size:clamp(37px,4.3vw,62px);
+ line-height:1.18;
+ font-weight:620;
+ letter-spacing:-.058em;
+ word-break:keep-all;
+ overflow-wrap:break-word;
+ text-wrap:balance;
+}
+#home .head .section-heading-en{
+ display:block;
+ margin-bottom:14px;
+ color:#596b5b;
+ font-size:12px;
+ line-height:1.3;
+ letter-spacing:.1em;
+ font-weight:650;
+ text-transform:uppercase;
+}
+#home .head .section-heading-ko{display:block}
+#home .head p{font-size:var(--type-support);line-height:1.75;color:var(--type-secondary);max-width:400px}
+#home>.hero h1{letter-spacing:-.064em;font-weight:610}
+#home>.hero .heroText p{font-size:var(--type-body);line-height:1.7}
+#home>.hero .heroText .call{font-size:var(--type-support);font-weight:570}
+#home .card .row strong{font-size:17px;font-weight:620;letter-spacing:-.04em;line-height:1.38}
+#home .card .row small{font-size:13px;line-height:1.65}
+#home .card .row>span{font-size:15px;font-weight:610;letter-spacing:-.025em}
+#home .card .card-detail-link{font-size:13px;font-weight:580}
+#home .arrival strong{font-size:19px;font-weight:600}
+#home .arrival small{font-size:13px;line-height:1.6}
+#home .store .booking-info .booking-title{font-size:18px;font-weight:620}
+#home .store .booking-info p{font-size:14px;line-height:1.8}
+#home .store .booking-info .booking-demo-link{font-size:13px;font-weight:620}
+#detail .detailCopy h1{font-weight:620;letter-spacing:-.061em;line-height:1.23}
+#detail .detailCopy #dLatin{font-size:14px;color:var(--type-secondary)}
+#detail .detailCopy #dStory{font-size:15px;line-height:1.75}
+#detail .detailCopy .price{font-weight:630}
+#detail .detailCopy .spec{font-size:14px;line-height:1.6}
+#detail .reservation-cta{font-size:14px;font-weight:620}
+#reservation .reserve-head h1{font-weight:620;letter-spacing:-.06em;line-height:1.22}
+#reservation .reserve-head p{font-size:14px;line-height:1.82}
+#reservation .booking-form .form-title{font-size:23px;font-weight:630;line-height:1.35}
+#reservation .booking-form .form-hint{font-size:14px;line-height:1.75}
+#reservation .booking-form label{font-size:14px;font-weight:610}
+#reservation .booking-form .field-note{font-size:13px;line-height:1.65}
+#reservation .booking-form .form-submit{font-size:15px;font-weight:640}
+#reservation .reserve-product-copy h2{font-weight:630}
+#customerStatus h1{font-weight:620;letter-spacing:-.055em;line-height:1.2}
+#customerStatus .cs-desc{font-size:15px;line-height:1.78}
+#customerStatus .cs-search label{font-size:14px;font-weight:620}
+#customerStatus #csSubmit{font-size:14px;font-weight:630}
+#customerStatus .cs-detail-list dd{font-weight:630}
+#adminDemo .admin-title{font-size:clamp(37px,5vw,62px);font-weight:620;letter-spacing:-.061em}
+#adminDemo .admin-intro{font-size:14px;line-height:1.75}
+#adminDemo .admin-toolbar h2{font-size:24px;font-weight:620}
+#adminDemo .admin-request-name{font-size:19px;font-weight:640}
+#adminDemo .admin-filter{font-size:13px;font-weight:560}
+#adminDemo .admin-request-meta{font-size:13px;line-height:1.68}
+#calendarDemo .calendar-heading{font-size:clamp(36px,4.6vw,59px);font-weight:620;letter-spacing:-.061em}
+#calendarDemo .calendar-description{font-size:14px;line-height:1.72}
+#calendarDemo .cal-month-switcher h2{font-weight:650}
+@media(max-width:700px){
+ #home .head h2{font-size:clamp(34px,9.2vw,45px);line-height:1.19}
+ #home .head .section-heading-en{font-size:11px;margin-bottom:12px}
+ #home .head p{font-size:14px;line-height:1.68;margin-top:14px}
+ #home .card .row strong{font-size:17px}
+ #home .card .row>span{font-size:15px}
+ #home>.hero .heroText p{font-size:14px}
+ #detail .detailCopy h1{line-height:1.26}
+ #reservation .reserve-head h1{font-size:clamp(36px,9vw,48px)}
+ #reservation .booking-form .form-title{font-size:21px}
+ #customerStatus h1{font-size:clamp(34px,9vw,46px)}
+ #adminDemo .admin-title{font-size:clamp(34px,9vw,48px)}
+ #calendarDemo .calendar-heading{font-size:clamp(33px,8.8vw,46px)}
+}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a><a href="#/booking-status">예약 조회</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
-<section class="section" id="curation"><div class="head"><h2>Today's<br><span class="upright">selection.</span></h2><p>오늘의 추천 꽃다발 · 사진을 눌러 상품 보기</p></div><div class="cards" id="featured"></div><p class="muted">* 사진과 가격은 가상 자료입니다. 오늘의 추천은 최대 3개입니다.</p></section>
-<section class="section" id="arrivals"><div class="head"><h2>Just<br><span class="upright">arrived.</span></h2><p>최근 입고된 꽃 소식 · 문의 전용<br>예약 상품이 아니며, 문의만 가능합니다.</p></div><div id="arrivalList"></div></section>
-<section class="section other" id="other"><div class="head"><h2>Everyday<br><span class="upright">flowers.</span></h2><p>오늘의 추천 외에도 만나볼 수 있는 꽃다발</p></div><div class="cards" id="regular"></div></section>
-<section class="section store" id="store"><div class="head"><h2>Visit the<br><span class="upright">atelier.</span></h2></div>
+<section class="section" id="curation"><div class="head"><h2><span class="section-heading-en" lang="en">Today's selection.</span><span class="section-heading-ko">오늘의 꽃</span></h2><p>오늘의 추천 꽃다발 · 사진을 눌러 상품 보기</p></div><div class="cards" id="featured"></div><p class="muted">* 사진과 가격은 가상 자료입니다. 오늘의 추천은 최대 3개입니다.</p></section>
+<section class="section" id="arrivals"><div class="head"><h2><span class="section-heading-en" lang="en">Just arrived.</span><span class="section-heading-ko">새로 들어온 꽃</span></h2><p>최근 입고된 꽃 소식 · 문의 전용<br>예약 상품이 아니며, 문의만 가능합니다.</p></div><div id="arrivalList"></div></section>
+<section class="section other" id="other"><div class="head"><h2><span class="section-heading-en" lang="en">Everyday flowers.</span><span class="section-heading-ko">매일의 꽃다발</span></h2><p>오늘의 추천 외에도 만나볼 수 있는 꽃다발</p></div><div class="cards" id="regular"></div></section>
+<section class="section store" id="store"><div class="head"><h2><span class="section-heading-en" lang="en">Visit the atelier.</span><span class="section-heading-ko">매장 안내</span></h2></div>
 <div class="booking-info" role="group" aria-label="예약 안내">
   <div><div class="booking-title">꽃다발 예약 안내</div><p>꽃다발 예약 요청 후 계좌이체를 완료하면, 매장에서 입금을 확인한 뒤 예약이 확정됩니다.<br>현재는 실제 계좌번호가 없는 가상 시연입니다.</p></div>
   <a class="booking-demo-link" href="#curation">꽃다발 선택하고 예약 체험 ↗</a>
@@ -1103,7 +1191,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-42 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-43 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 /* G3-41: Only a *home-page reload* starts from the hero.
    Preserve user-clicked in-page anchors, subpage deep links, and back/forward visits. */
