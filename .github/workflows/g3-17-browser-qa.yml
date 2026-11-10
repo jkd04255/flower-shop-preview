@@ -89,6 +89,7 @@ jobs:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-28-mobile-touch-zoom-qa.cjs
       - name: Install Playwright WebKit engine and dependencies (non-iOS approximation)
+        timeout-minutes: 6
         run: npx playwright-core install --with-deps webkit
       - name: G3-29 WebKit mobile touch/zoom and keyboard booking regression
         run: node tests/g3-29-webkit-mobile-qa.cjs
