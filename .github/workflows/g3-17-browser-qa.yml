@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-51
+name: Flower shop consolidated Chromium + WebKit QA · G3-52
 on:
   pull_request:
     paths:
@@ -191,6 +191,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-51-mobile-review-hierarchy-qa.cjs
+      - name: G3-52 clear booking-result CTA and secondary navigation · Chromium + WebKit
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-52-mobile-result-priority-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
