@@ -134,6 +134,11 @@ async function runEngine(engine,label,base){
   // Mark the existing synthetic request in memory, as the same UI action would do.
   assert.equal(await page.evaluate(()=>markDemoPayment('DEMO-005')),true);
   await page.goto(base+'#/booking-status',{waitUntil:'domcontentloaded'});
+  /* WebKit can complete navigation before the hashchange status render.
+     Wait for the requested synthetic record's updated status, not a sleep. */
+  await page.waitForFunction(()=>document.querySelector('#customerStatus')?.style.display==='block'&&
+    document.querySelector('#csResults')?.textContent?.includes('DEMO-005')&&
+    document.querySelector('#csResults')?.textContent?.includes('입금 확인 대기'));
   summary=await page.locator('#csResults').innerText();
   assert.match(summary,/DEMO-005/);
   assert.match(summary,/입금 확인 대기/);
