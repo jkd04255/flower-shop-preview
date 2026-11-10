@@ -87,7 +87,7 @@ async function check(engine,name,base){
   await page.goto(base,{waitUntil:'domcontentloaded'});
   const scripts=await page.locator('script').count();
   assert.equal(scripts,3,'keep original three inline scripts for legacy regression gate');
-  const footerVersion=(await page.locator('footer').innerText()).match(/G3-(\\d+) STATIC DEMO/);
+  const footerVersion=(await page.locator('footer').innerText()).match(/G3-(\d+) STATIC DEMO/);
   assert.ok(footerVersion&&Number(footerVersion[1])>=43,'G3-43 or later demo footer required');
   assert.deepEqual(errors,[],name+' JS runtime errors');
   await context.close();
