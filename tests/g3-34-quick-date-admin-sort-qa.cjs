@@ -36,41 +36,24 @@ async function check(engine,label,base){
   const ctx=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:3,hasTouch:true,isMobile:true,reducedMotion:'reduce',timezoneId:'Asia/Seoul'});
   const page=await ctx.newPage(),errors=[];
   page.on('pageerror',err=>errors.push(err.message));
-  // Historical shortcut regressions intentionally open the optional helper.
-  // Customer-facing G3-48 QA separately asserts that it starts collapsed.
-  await page.addInitScript(()=>{
-    document.addEventListener('DOMContentLoaded',()=>{
-      const details=document.getElementById('reserveQuickDetails');
-      if(details)details.open=true;
-    });
-  });
   await page.goto(base+'#/reserve/rosy-moment',{waitUntil:'domcontentloaded'});
   await page.locator('#reserveForm').waitFor({state:'visible'});
-  const choices=await availableDays(page);assert.ok(choices.length>=2,'expected two available synthetic weekdays');
+  const choices=await availableDays(page);assert.ok(choices.length>=2,'expected two legal synthetic pickup dates');
   assert.equal(await page.locator('#rDate').inputValue(),'');
-  assert.equal(await page.locator('#rEarliestStatus').textContent(),'');
-  await page.locator('#rEarliestDate').tap();
-  assert.equal(await page.locator('#rDate').inputValue(),choices[0].date);
-  assert.equal(await page.locator('#rTime').inputValue(),'');
+  assert.equal(await page.locator('#rTime').isDisabled(),true);
+  await page.locator('#rDate').fill(choices[0].date);
+  assert.equal(await page.locator('#rTime').inputValue(),'','date alone must not select time');
   assert.equal(await page.locator('#rTime').isDisabled(),false);
-  assert.match(await page.locator('#rEarliestStatus').innerText(),new RegExp(choices[0].date));
   assert.ok((await page.locator('#rPickupPreview').innerText()).includes(choices[0].date));
-  console.log('PASS G3-34 '+label+' earliest available date is picked without silently choosing a time');
-
   await page.locator('#rTime').selectOption(choices[0].time);
   await page.locator('#rDate').fill(choices[1].date);
-  assert.equal(await page.locator('#rEarliestStatus').textContent(),'');
-  assert.equal(await page.locator('#rTime').inputValue(),'','manual date change resets former pickup time');
-  const manuallyChosen=await page.locator('#rPickupPreview').innerText();
-  assert.ok(manuallyChosen.includes(choices[1].date)&&!manuallyChosen.includes(choices[0].date+' '+choices[0].time));
-  await page.locator('#rEarliestDate').focus();
-  await page.keyboard.press('Enter');
-  assert.equal(await page.locator('#rDate').inputValue(),choices[0].date);
-  assert.equal(await page.locator('#rTime').inputValue(),'');
-  await axePass(page,label+' customer form');
-  console.log('PASS G3-34 '+label+' manual change clears shortcut guidance and keyboard re-activation works, axe zero');
-
+  assert.equal(await page.locator('#rTime').inputValue(),'','changing date resets previous time');
+  assert.ok((await page.locator('#rPickupPreview').innerText()).includes(choices[1].date));
+  await page.locator('#rDate').fill(choices[0].date);
   await page.locator('#rTime').selectOption(choices[0].time);
+  await axePass(page,label+' direct pickup input');
+  console.log('PASS G3-34 '+label+' direct date/hour selection and reset, axe zero');
+
   await page.locator('#rName').fill('가상 고객');
   await page.locator('#rPhone').fill('01000000000');
   await page.locator('#rMemo').fill('가상 전달사항');
