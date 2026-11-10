@@ -658,29 +658,13 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 #adminDemo .admin-slot-context{margin:0 0 14px;padding:10px 13px;background:#e5eadf;border-left:2px solid #647e66;color:#38513e;font-size:12px;line-height:1.7}
 </style>
 <style id="g3-34-quick-date-admin-sort">
-/* Small editorial controls only; both operate on existing synthetic data. */
-#reservation #rEarliestDate{display:inline-block;margin:10px 0 0;padding:7px 0;border:0;border-bottom:1px solid #55705a;background:transparent;color:#36513c;font:600 12px/1.6 var(--editorial-font),sans-serif;cursor:pointer}
-#reservation #rEarliestDate:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
-#reservation #rEarliestStatus{margin:8px 0 0;color:#4d6451;font-size:12px;line-height:1.65}
-#reservation #rEarliestStatus:empty{display:none}
+/* Preserve admin sorting UI; direct pickup selection needs no shortcuts. */
 #adminDemo .admin-sort-label{display:flex;align-items:center;gap:8px;color:#526553;font-size:12px;font-weight:600}
 #adminDemo #adminSortOrder{min-height:40px;padding:7px 10px;border:1px solid #aab8a7;border-radius:0;background:#fffdfa;color:#304a35;font:500 12px/1.5 var(--editorial-font),sans-serif}
 #adminDemo #adminSortOrder:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
 </style>
-<style id="g3-35-earliest-time-reverse-sort">
-/* Explicit quick-time selection does not confirm a synthetic booking. */
-#reservation #rEarliestTime{display:inline-block;margin:10px 0 0 12px;padding:7px 0;border:0;border-bottom:1px solid #55705a;background:transparent;color:#36513c;font:600 12px/1.6 var(--editorial-font),sans-serif;cursor:pointer}
-#reservation #rEarliestTime:disabled{border-bottom-color:#b7c0b7;color:#737c72;cursor:not-allowed}
-#reservation #rEarliestTime:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
-#reservation #rEarliestTimeStatus{margin:8px 0 0;color:#4d6451;font-size:12px;line-height:1.65}
-#reservation #rEarliestTimeStatus:empty{display:none}
-</style>
+
 <style id="g3-36-latest-time-search">
-#reservation #rLatestTime{display:inline-block;margin:10px 0 0 12px;padding:7px 0;border:0;border-bottom:1px solid #55705a;background:transparent;color:#36513c;font:600 12px/1.6 var(--editorial-font),sans-serif;cursor:pointer}
-#reservation #rLatestTime:disabled{border-bottom-color:#b7c0b7;color:#737c72;cursor:not-allowed}
-#reservation #rLatestTime:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
-#reservation #rLatestTimeStatus{margin:8px 0 0;color:#4d6451;font-size:12px;line-height:1.65}
-#reservation #rLatestTimeStatus:empty{display:none}
 #adminDemo .admin-id-search{display:flex;flex-direction:column;gap:4px;max-width:200px;min-width:0}
 #adminDemo .admin-id-search label{font-size:12px;font-weight:600;color:#526553}
 #adminDemo #adminRequestSearch{width:100%;min-height:40px;padding:8px 10px;border:1px solid #aab8a7;border-radius:0;background:#fffdfa;color:#304a35;font:500 13px/1.5 var(--editorial-font),sans-serif}
@@ -688,12 +672,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 #adminDemo .admin-id-search small{font-size:11px;color:#5b6e5e;line-height:1.5}
 </style>
 <style id="g3-37-next-day-search-clear">
-/* Existing pickup rules and synthetic storage are unchanged. */
-#reservation #rNextDate{display:inline-block;margin:10px 0 0 12px;padding:7px 0;border:0;border-bottom:1px solid #55705a;background:transparent;color:#36513c;font:600 12px/1.6 var(--editorial-font),sans-serif;cursor:pointer}
-#reservation #rNextDate:disabled{border-bottom-color:#b7c0b7;color:#737c72;cursor:not-allowed}
-#reservation #rNextDate:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
-#reservation #rNextDateStatus{margin:8px 0 0;color:#4d6451;font-size:12px;line-height:1.65}
-#reservation #rNextDateStatus:empty{display:none}
+/* Existing admin search and synthetic storage are unchanged. */
 #adminDemo #adminSearchClear{align-self:flex-start;margin:2px 0 0;padding:4px 0;border:0;border-bottom:1px solid #55705a;background:transparent;color:#36513c;font:600 12px/1.6 var(--editorial-font),sans-serif;cursor:pointer}
 #adminDemo #adminSearchClear[hidden]{display:none!important}
 #adminDemo #adminSearchClear:focus-visible{outline:2px solid #4d7053;outline-offset:3px}
@@ -1144,29 +1123,6 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 #reservation .booking-form .form-hint{
  margin:0 0 24px;color:#516453;font-size:14px;line-height:1.7;
 }
-#reservation .reserve-quick-actions{
- display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
- gap:0 16px;margin:13px 0 11px;
- border-top:1px solid #d2d9cc;
-}
-#reservation .reserve-quick-actions #rEarliestDate,
-#reservation .reserve-quick-actions #rNextDate,
-#reservation .reserve-quick-actions #rEarliestTime,
-#reservation .reserve-quick-actions #rLatestTime{
- display:flex;align-items:center;justify-content:flex-start;
- min-width:0;width:100%;min-height:46px;
- margin:0;padding:10px 2px;border:0;border-bottom:1px solid #d2d9cc;
- background:transparent;text-align:left;
- color:#36513c;font:580 12px/1.55 var(--editorial-font),sans-serif;
- white-space:normal;overflow-wrap:break-word;
-}
-#reservation .reserve-quick-actions button:disabled{
- color:#69746b!important;opacity:.74;cursor:not-allowed;
-}
-#reservation .reserve-quick-actions button:focus-visible{
- outline:3px solid #557456;outline-offset:1px;
-}
-#reservation #rEarliestStatus:empty{display:none}
 #reservation #rPickupPreview{margin-top:12px}
 #reservation .transfer-explainer{
  background:#eeefe7;border:0;border-left:2px solid #627966;
@@ -1194,85 +1150,23 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 @media(max-width:600px){
  #reservation .reserve-head{margin-bottom:23px}
  #reservation .booking-form .form-hint{font-size:14px;line-height:1.65}
- #reservation .reserve-quick-actions{gap:0 12px}
- #reservation .reserve-quick-actions #rEarliestDate,
- #reservation .reserve-quick-actions #rNextDate,
- #reservation .reserve-quick-actions #rEarliestTime,
- #reservation .reserve-quick-actions #rLatestTime{
-  font-size:12px;padding:10px 2px;
- }
  #reservation .transfer-explainer{padding:15px 17px}
  #customerStatus .cs-wrap{margin-top:30px}
  #customerStatus .cs-search{padding:17px;margin-bottom:18px}
  #customerStatus .cs-desc{font-size:15px;line-height:1.7}
 }
-@media(max-width:350px){
- #reservation .reserve-quick-actions{grid-template-columns:minmax(0,1fr)}
-}
 </style>
 
-<style id="g3-48-simplified-pickup-selection">
-/* G3-48: date -> time remains the only default booking path.
-   Legacy convenience shortcuts are optional, progressively disclosed.
-   Extra announcement text is only visible inside the expanded helper. */
-#reservation .reserve-quick-details{
- margin:10px 0 3px;
- padding:0;
- border:0;
-}
-#reservation .reserve-quick-details>summary{
- display:inline-flex;
- align-items:center;
- min-height:44px;
- padding:3px 1px;
- color:#5c7060;
- font-family:var(--editorial-font),sans-serif;
- font-size:12px;
- font-weight:540;
- line-height:1.5;
- cursor:pointer;
- list-style:none;
- text-underline-offset:4px;
- text-decoration:underline;
- text-decoration-color:#b3c1b2;
-}
-#reservation .reserve-quick-details>summary::-webkit-details-marker{display:none}
-#reservation .reserve-quick-details>summary::after{
- content:"+";
- margin-left:9px;
- font-size:15px;
- font-weight:400;
- text-decoration:none;
-}
-#reservation .reserve-quick-details[open]>summary::after{content:"−"}
-#reservation .reserve-quick-details>summary:focus-visible{
- outline:3px solid #53745a;
- outline-offset:2px;
-}
-#reservation .reserve-quick-details .reserve-quick-actions{
- margin:2px 0 10px;
-}
-#reservation .reserve-quick-feedback p{
- margin:4px 0;
- color:#516753;
- font-size:12px;
- line-height:1.65;
-}
-#reservation .reserve-quick-feedback p:empty{display:none}
-#reservation .reserve-quick-feedback{
- margin-bottom:6px;
-}
+<style id="g3-49-direct-pickup-selection">
+/* One clear path: choose a date, then a time. No shortcut controls. */
 #reservation #rPickupPreview:not([hidden]){
  margin:13px 0 0;
  padding:12px 15px;
  line-height:1.55;
  font-size:13px;
 }
-#reservation .booking-form>.form-row[style]{
- margin-top:13px!important;
-}
+#reservation .booking-form>.form-row[style]{margin-top:13px!important}
 @media(max-width:600px){
- #reservation .reserve-quick-details{margin-top:7px}
  #reservation #rPickupPreview:not([hidden]){padding:12px 13px}
 }
 </style>
@@ -1345,21 +1239,6 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
        </div>
        <p id="rTimeHint" class="field-note" aria-live="polite">날짜를 선택하면 가능한 시간이 표시됩니다.</p>
        <p id="rPickupPreview" class="pickup-preview" hidden>픽업 일정 미리보기 (가상)</p>
-       <details id="reserveQuickDetails" class="reserve-quick-details">
-        <summary>다른 날짜·시간 빠르게 찾기</summary>
-        <div class="reserve-quick-actions" role="group" aria-label="픽업 일정을 빠르게 선택">
-         <button type="button" id="rEarliestDate">가장 빠른 픽업 날짜 선택 ↗</button>
-         <button type="button" id="rNextDate" disabled>다음 픽업 가능일 선택 ↗</button>
-         <button type="button" id="rEarliestTime" disabled>가장 빠른 픽업 시간 선택 ↗</button>
-         <button type="button" id="rLatestTime" disabled>가장 늦은 픽업 시간 선택 ↗</button>
-        </div>
-        <div class="reserve-quick-feedback">
-         <p id="rEarliestStatus" role="status" aria-live="polite" aria-atomic="true"></p>
-         <p id="rNextDateStatus" role="status" aria-live="polite" aria-atomic="true"></p>
-         <p id="rEarliestTimeStatus" role="status" aria-live="polite" aria-atomic="true"></p>
-         <p id="rLatestTimeStatus" role="status" aria-live="polite" aria-atomic="true"></p>
-        </div>
-       </details>
        <div class="form-row" style="margin-top:22px">
          <div class="form-field">
            <label for="rName">예약자 이름 *</label>
@@ -1579,7 +1458,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-48 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-49 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 /* G3-41: Only a *home-page reload* starts from the hero.
    Preserve user-clicked in-page anchors, subpage deep links, and back/forward visits. */
@@ -2278,11 +2157,6 @@ function updatePickupTimes(resetSelection=false){
     const o=document.createElement('option');o.value=t;o.textContent=t;select.appendChild(o);
   }
   select.disabled=options.length===0;
-  document.getElementById('rEarliestTime').disabled=options.length===0;
-  document.getElementById('rLatestTime').disabled=options.length===0;
-  document.getElementById('rEarliestTimeStatus').textContent='';
-  document.getElementById('rLatestTimeStatus').textContent='';
-  document.getElementById('rNextDate').disabled=!field.value||!dateFromLocalString(field.value);
   /* A changed date must never silently reuse its previous pickup hour. */
   select.value=!resetSelection&&options.includes(selected)?selected:'';
   const previousSlotExpired=!resetSelection&&!!selected&&!options.includes(selected);
@@ -2318,10 +2192,6 @@ function initReservation(index){
   const form=document.getElementById('reserveForm');
   form.reset();
   updateMemoCount();
-  document.getElementById('rEarliestStatus').textContent='';
-  document.getElementById('rNextDateStatus').textContent='';
-  document.getElementById('rEarliestTimeStatus').textContent='';
-  document.getElementById('rLatestTimeStatus').textContent='';
   updateBankPreview();
   form.hidden=false;
   document.getElementById('reserveResult').hidden=true;
@@ -2353,82 +2223,14 @@ function showReservationError(message,fieldId){
  field.focus();
 }
 document.getElementById('rMemo').addEventListener('input',updateMemoCount);
-document.getElementById('rLatestTime').addEventListener('click',function(){
- const date=document.getElementById('rDate').value;
- const available=pickupSlots(currentReservationIndex,date);
- const select=document.getElementById('rTime');
- if(!available.length||select.disabled){
-  document.getElementById('rLatestTimeStatus').textContent='먼저 픽업 가능한 날짜를 선택해 주세요. (가상)';
-  return;
- }
- clearReservationError();
- const last=available[available.length-1];
- select.value=last;
- updatePickupPreview();
- document.getElementById('rEarliestTimeStatus').textContent='';
- document.getElementById('rLatestTimeStatus').textContent='선택한 날짜의 가장 늦은 픽업 시간 '+last+'을 선택했습니다. 예약 확정 전 (가상)';
-});
-document.getElementById('rEarliestTime').addEventListener('click',function(){
- const date=document.getElementById('rDate').value;
- const available=pickupSlots(currentReservationIndex,date);
- const select=document.getElementById('rTime');
- if(!available.length||select.disabled){
-  document.getElementById('rEarliestTimeStatus').textContent='먼저 픽업 가능한 날짜를 선택해 주세요. (가상)';
-  return;
- }
- clearReservationError();
- select.value=available[0];
- updatePickupPreview();
- document.getElementById('rLatestTimeStatus').textContent='';
- document.getElementById('rEarliestTimeStatus').textContent='선택한 날짜의 가장 빠른 픽업 시간 '+available[0]+'을 선택했습니다. 예약 확정 전 (가상)';
-});
-document.getElementById('rNextDate').addEventListener('click',function(){
- const field=document.getElementById('rDate'),selected=dateFromLocalString(field.value);
- const bounds=pickupBounds();
- if(!selected||field.value<bounds.min||field.value>bounds.max)return;
- const day=new Date(selected);
- day.setDate(day.getDate()+1);
- for(;localDateString(day)<=bounds.max;day.setDate(day.getDate()+1)){
-  const candidate=localDateString(day);
-  if(!pickupSlots(currentReservationIndex,candidate).length)continue;
-  clearReservationError();
-  field.value=candidate;
-  updatePickupTimes(true);
-  document.getElementById('rEarliestStatus').textContent='';
-  document.getElementById('rNextDateStatus').textContent='다음 픽업 가능일 '+candidate+'을 선택했습니다. 픽업 시간을 다시 선택해 주세요. (가상)';
-  return;
- }
- document.getElementById('rNextDateStatus').textContent='선택한 날짜 이후 14일 이내에 픽업 가능한 다른 날짜가 없습니다. (가상)';
-});
-document.getElementById('rEarliestDate').addEventListener('click',function(){
- const bounds=pickupBounds();
- const date=document.getElementById('rDate');
- for(let day=dateFromLocalString(bounds.min);localDateString(day)<=bounds.max;day.setDate(day.getDate()+1)){
-  const dateString=localDateString(day);
-  if(!pickupSlots(currentReservationIndex,dateString).length)continue;
-  clearReservationError();
-  date.value=dateString;
-  updatePickupTimes(true);
-  document.getElementById('rNextDateStatus').textContent='';
-  document.getElementById('rEarliestStatus').textContent='가장 빠른 픽업 가능일 '+dateString+'을 선택했습니다. 픽업 시간을 골라 주세요. (가상)';
-  return;
- }
- document.getElementById('rEarliestStatus').textContent='14일 이내 선택 가능한 픽업 날짜가 없습니다. (가상)';
-});
 document.getElementById('rDate').addEventListener('change',()=>{
- document.getElementById('rEarliestStatus').textContent='';
- document.getElementById('rNextDateStatus').textContent='';
  clearReservationError();
  updatePickupTimes(true);
 });
 for(const id of ['rTime','rName','rPhone']){
  document.getElementById(id).addEventListener(id==='rTime'?'change':'input',function(){
   clearReservationError();
-  if(id==='rTime'){
-   document.getElementById('rEarliestTimeStatus').textContent='';
-   document.getElementById('rLatestTimeStatus').textContent='';
-   updatePickupPreview();
-  }
+  if(id==='rTime')updatePickupPreview();
  });
 }
 document.getElementById('reserveForm').addEventListener('submit',function(e){
@@ -2904,9 +2706,6 @@ function route(){
   }
   if(!showReservation)clearReservationReview();
   if(showReservation){
-    // G3-48: each entry into the booking screen starts with the simple form.
-    // Only users who explicitly open optional shortcuts see extra choices.
-    document.getElementById('reserveQuickDetails').open=false;
     initReservation(index);
     window.scrollTo(0,0);
   }
