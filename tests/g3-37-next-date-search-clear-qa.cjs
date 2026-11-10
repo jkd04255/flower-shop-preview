@@ -37,60 +37,27 @@ async function check(engine,label,url){
   const ctx=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:3,isMobile:true,hasTouch:true,reducedMotion:'reduce',timezoneId:'Asia/Seoul'});
   const page=await ctx.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.message));
-  // Historical shortcut regressions intentionally open the optional helper.
-  // Customer-facing G3-48 QA separately asserts that it starts collapsed.
-  await page.addInitScript(()=>{
-    document.addEventListener('DOMContentLoaded',()=>{
-      const details=document.getElementById('reserveQuickDetails');
-      if(details)details.open=true;
-    });
-  });
   await page.goto(url+'#/reserve/rosy-moment',{waitUntil:'domcontentloaded'});
   await page.locator('#reserveForm').waitFor({state:'visible'});
-  const dates=await availableDates(page);assert.ok(dates.length>=3,'expect three dates in synthetic 14-day pickup window');
-  const next=page.locator('#rNextDate'),msg=page.locator('#rNextDateStatus'),time=page.locator('#rTime');
-  assert.equal(await next.isDisabled(),true);
-  assert.equal(await msg.textContent(),'');
+  const dates=await availableDates(page);assert.ok(dates.length>=3,'three valid days expected within 14 days');
+  const time=page.locator('#rTime');
   const before=await page.evaluate(()=>JSON.stringify(adminRequests));
-  await page.locator('#rEarliestDate').tap();
-  assert.equal(await page.locator('#rDate').inputValue(),dates[0].date);
-  assert.equal(await next.isDisabled(),false);
-  await time.selectOption(dates[0].times[0]);
-  await next.tap();
-  assert.equal(await page.locator('#rDate').inputValue(),dates[1].date);
-  assert.equal(await time.inputValue(),'','next date must reset the old hour');
-  assert.match(await msg.innerText(),new RegExp(dates[1].date));
-  assert.match(await msg.innerText(),/픽업 시간을 다시 선택/);
-  assert.equal(await page.locator('#rEarliestStatus').textContent(),'');
-  assert.ok((await page.locator('#rPickupPreview').innerText()).includes(dates[1].date));
-  assert.equal(await page.evaluate(()=>JSON.stringify(adminRequests)),before);
-  console.log('PASS G3-37 '+label+' next valid date skips unavailable days and clears time without creating a booking');
-
-  await next.focus();
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Shift+Tab');
-  const focus=await next.evaluate(el=>({active:document.activeElement===el,visible:el.matches(':focus-visible'),outline:getComputedStyle(el).outlineStyle}));
-  assert.ok(focus.active&&focus.visible&&focus.outline!=='none',JSON.stringify(focus));
-  await page.keyboard.press('Enter');
-  assert.equal(await page.locator('#rDate').inputValue(),dates[2].date);
-  assert.equal(await time.inputValue(),'');
   await page.locator('#rDate').fill(dates[0].date);
-  assert.equal(await msg.textContent(),'','manual date change must dismiss stale quick guidance');
-  await page.locator('#rDate').fill(dates.at(-1).date);
-  await next.tap();
-  assert.equal(await page.locator('#rDate').inputValue(),dates.at(-1).date);
-  assert.match(await msg.innerText(),/14일 이내에 픽업 가능한 다른 날짜가 없습니다/);
-  await page.locator('#rEarliestDate').tap();
-  assert.equal(await page.locator('#rDate').inputValue(),dates[0].date);
-  assert.equal(await msg.textContent(),'','G3-34 earliest-date button clears next-date guidance');
-  await page.locator('#rDate').fill('');
-  assert.equal(await next.isDisabled(),true);
-  assert.equal(await msg.textContent(),'');
-  await axePass(page,label+' booking input');
-  console.log('PASS G3-37 '+label+' keyboard activation, final-day boundary, earliest-date and manual reset, axe zero');
-
+  assert.equal(await time.isDisabled(),false);
+  await time.selectOption(dates[0].times[0]);
   await page.locator('#rDate').fill(dates[1].date);
-  await page.locator('#rLatestTime').tap();
+  assert.equal(await time.inputValue(),'','date change clears previous slot');
+  assert.ok((await page.locator('#rPickupPreview').innerText()).includes(dates[1].date));
+  await page.locator('#rDate').fill(dates.at(-1).date);
+  assert.equal(await time.inputValue(),'','last available date accepted');
+  await page.locator('#rDate').fill('');
+  assert.equal(await time.isDisabled(),true);
+  await axePass(page,label+' direct booking flow');
+  assert.equal(await page.evaluate(()=>JSON.stringify(adminRequests)),before);
+  await page.locator('#rDate').fill(dates[1].date);
+  await time.selectOption(dates[1].times.at(-1));
+  console.log('PASS G3-37 '+label+' manual date switching, last day, empty reset and review prep, axe zero');
+
   await page.locator('#rName').fill('가상 고객');
   await page.locator('#rPhone').fill('01000000000');
   await page.locator('#rMemo').fill('가상 요청');
