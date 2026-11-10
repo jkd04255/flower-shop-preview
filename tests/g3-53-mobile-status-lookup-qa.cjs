@@ -87,7 +87,8 @@ async function check(engine,name,url){
    }
    console.log('PASS G3-53 '+name+' '+width+'px: lookup hierarchy and existing data flow');
   }
-  assert.match(await page.locator('footer').innerText(),/G3-53 STATIC DEMO/);
+  const demoVersion=(await page.locator('footer').innerText()).match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(demoVersion&&Number(demoVersion[1])>=53,'G3-53 or later demo footer required');
   assert.deepEqual(errors,[],name+' javascript errors');
   await ctx.close();
  }finally{await browser.close();}
