@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-45
+name: Flower shop consolidated Chromium + WebKit QA · G3-46
 on:
   pull_request:
     paths:
@@ -156,6 +156,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-45-mobile-navigation-qa.cjs
+      - name: G3-46 understated mobile navigation design · Chromium + WebKit
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-46-editorial-mobile-nav-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
