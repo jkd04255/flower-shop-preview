@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-48
+name: Flower shop consolidated Chromium + WebKit QA · G3-49
 on:
   pull_request:
     paths:
@@ -127,19 +127,19 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-33-memo-slot-qa.cjs
-      - name: G3-34 earliest pickup quick select and admin sorting · Chromium + WebKit + axe
+      - name: G3-34 direct pickup date and admin sorting · Chromium + WebKit + axe
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-34-quick-date-admin-sort-qa.cjs
-      - name: G3-35 optional first pickup hour + reverse sort · Chromium + WebKit + axe
+      - name: G3-35 direct pickup hour + reverse sort · Chromium + WebKit + axe
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-35-earliest-time-admin-reverse-qa.cjs
-      - name: G3-36 latest pickup time and admin ID-only search · Chromium + WebKit + axe
+      - name: G3-36 direct pickup hours and admin ID-only search · Chromium + WebKit + axe
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-36-latest-time-admin-id-search-qa.cjs
-      - name: G3-37 next pickup date, admin search clear and customer status lookup · Chromium + WebKit + axe
+      - name: G3-37 date changes, admin search clear and customer status lookup · Chromium + WebKit + axe
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-37-next-date-search-clear-qa.cjs
@@ -179,7 +179,7 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-47-reservation-status-clarity-qa.cjs
-      - name: G3-48 simple pickup date/time flow and optional advanced shortcuts · Chromium + WebKit
+      - name: G3-49 removed pickup shortcuts and direct date/time flow · Chromium + WebKit
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-48-simplified-pickup-qa.cjs
