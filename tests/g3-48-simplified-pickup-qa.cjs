@@ -27,6 +27,9 @@ async function check(engine,name,url){
   for(const width of [320,390,768,1280]){
    await page.setViewportSize({width,height:900});
    await page.goto(url+'#/reserve/rosy-moment',{waitUntil:'domcontentloaded'});
+   // Same-document hash navigation retains inputs from the previous viewport.
+   // Start a fresh page load for each viewport's default-state assertions.
+   await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#reserveForm').waitFor({state:'visible'});
    const summary=page.locator('#reserveQuickDetails summary');
    assert.equal(await summary.count(),1,name+' optional tools disclosure exists');
