@@ -88,9 +88,9 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-28-mobile-touch-zoom-qa.cjs
-      - name: Install Playwright WebKit engine and dependencies (non-iOS approximation)
-        timeout-minutes: 6
-        run: npx playwright-core install --with-deps webkit
+      - name: Install Playwright WebKit browser (non-iOS approximation)
+        timeout-minutes: 5
+        run: npx playwright-core install webkit
       - name: G3-29 WebKit mobile touch/zoom and keyboard booking regression
         run: node tests/g3-29-webkit-mobile-qa.cjs
       - name: G3-42 Safari early swipe and idle hero peek · Chromium + WebKit
