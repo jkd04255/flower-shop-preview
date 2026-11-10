@@ -104,7 +104,8 @@ async function verify(engine,name,url){
   const statusOverflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
   assert.ok(statusOverflow<=2,name+' customer lookup overflow '+statusOverflow);
   assert.equal(await page.locator('script').count(),3,'legacy three-inline-script contract');
-  assert.match(await page.locator('footer').innerText(),/G3-44 STATIC DEMO/);
+  const version=(await page.locator('footer').innerText()).match(new RegExp('G3-([0-9]+) STATIC DEMO'));
+  assert.ok(version&&Number(version[1])>=44,'G3-44 or later static-demo footer required');
   assert.deepEqual(errors,[],name+' JS runtime errors');
   console.log('PASS G3-44 '+name+' lookup 390px: larger bouquet preview, no overflow or JS errors');
   await context.close();
