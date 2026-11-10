@@ -1,7 +1,5 @@
 'use strict';
-/* G3-48: user-requested date -> time-only initial booking flow.
-   The shortcuts are still accessible through optional disclosure, never
-   exposed as four competing primary choices by default. */
+/* G3-49: date -> time-only booking flow with legacy shortcut UI removed. */
 const assert=require('node:assert/strict'),fs=require('node:fs'),http=require('node:http'),path=require('node:path');
 const {chromium,webkit}=require('playwright-core');
 const root=process.cwd(),types={'.html':'text/html;charset=utf-8','.js':'application/javascript','.webp':'image/webp','.jpg':'image/jpeg','.png':'image/png'};
@@ -31,11 +29,9 @@ async function check(engine,name,url){
    // Start a fresh page load for each viewport's default-state assertions.
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('#reserveForm').waitFor({state:'visible'});
-   const summary=page.locator('#reserveQuickDetails summary');
-   assert.equal(await summary.count(),1,name+' optional tools disclosure exists');
-   assert.equal(await page.locator('#reserveQuickDetails').evaluate(el=>el.open),false,name+' starts collapsed '+width);
+   assert.equal(await page.locator('#reserveQuickDetails').count(),0,'removed advanced panel must be absent');
    for(const selector of ['#rEarliestDate','#rNextDate','#rEarliestTime','#rLatestTime','#rEarliestStatus','#rNextDateStatus','#rEarliestTimeStatus','#rLatestTimeStatus']){
-    assert.equal(await page.locator(selector).isVisible(),false,name+' optional control not in default layout: '+selector);
+    assert.equal(await page.locator(selector).count(),0,name+' removed shortcut must be absent: '+selector);
    }
    assert.equal(await page.locator('#rDate').isVisible(),true,name+' date remains visible');
    assert.equal(await page.locator('#rTime').isVisible(),true,name+' time remains visible');
@@ -59,7 +55,6 @@ async function check(engine,name,url){
    assert.equal(await preview.isVisible(),true,'one selected-pickup summary');
    const text=await preview.innerText();
    assert.ok(text.includes(choices.date+' '+choices.time),name+' date and time displayed together '+text);
-   assert.ok(!await page.locator('#reserveQuickDetails').evaluate(el=>el.open),'manual choice does not expand extra options');
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
    assert.ok(overflow<=2,name+' reservation overflow at '+width+': '+overflow);
    if(width===390){
@@ -67,17 +62,9 @@ async function check(engine,name,url){
     await page.screenshot({path:'qa-artifacts/g3-48-simplified-pickup-'+name.toLowerCase()+'-390.png'});
    }
 
-   await summary.click();
-   assert.equal(await page.locator('#reserveQuickDetails').evaluate(el=>el.open),true,'optional helper expands');
-   for(const selector of ['#rEarliestDate','#rNextDate','#rEarliestTime','#rLatestTime']){
-    assert.equal(await page.locator(selector).isVisible(),true,'old shortcut available on demand '+selector);
-   }
-   await summary.click();
-   assert.equal(await page.locator('#reserveQuickDetails').evaluate(el=>el.open),false,'optional helper closes again');
-   assert.equal(await preview.isVisible(),true,'selected pickup remains after disclosure toggle');
    assert.match(await page.locator('#reservation .booking-form .submit-note').innerText(),/실제 개인정보/);
    assert.match(await page.locator('#reservation .transfer-explainer').innerText(),/송금하지 마세요/);
-   console.log('PASS G3-48 '+name+' '+width+'px: only date/time shown, one selection summary, advanced helpers optional');
+   console.log('PASS G3-49 '+name+' '+width+'px: shortcut markup absent, direct date/time selection remains');
   }
   const foot=(await page.locator('footer').innerText()).match(/G3-([0-9]+) STATIC DEMO/);
   assert.ok(foot&&Number(foot[1])>=48,'G3-48 static demo marker');
