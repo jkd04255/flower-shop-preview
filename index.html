@@ -1285,6 +1285,105 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  }
 }
 </style>
+
+<style id="g3-52-mobile-result-priority">
+/* Present exactly one primary post-booking action on mobile.
+   Keep every previous route and the explicitly synthetic payment example. */
+@media(max-width:600px){
+ #reservation .reservation-result{
+  padding-top:19px;
+  border-top-width:1px;
+ }
+ #reservation .reservation-result h2{
+  margin:11px 0 12px;
+  font-size:27px;
+  line-height:1.35;
+ }
+ #reservation .reservation-result>p{
+  font-size:14px;
+  line-height:1.7;
+  margin:0 0 16px;
+ }
+ #reservation .reservation-result>dl{
+  margin:19px 0 17px;
+  padding:5px 0;
+ }
+ #reservation .reservation-result>dl>div{
+  grid-template-columns:minmax(82px,.38fr) minmax(0,1fr);
+  gap:10px;
+  padding:10px 0;
+ }
+ #reservation .reservation-result>dl dt{font-size:13px;line-height:1.6}
+ #reservation .reservation-result>dl dd{font-size:15px;line-height:1.6;overflow-wrap:anywhere}
+ #reservation .result-primary-action{margin:17px 0 22px}
+ #reservation .result-primary-action .result-primary{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:54px;
+  margin:0;
+  padding:14px 15px;
+  border:1px solid #354538;
+  background:#354538;
+  color:#fffdfa;
+  font-size:15px;
+  line-height:1.5;
+  font-weight:650;
+  text-align:center;
+ }
+ #reservation .reservation-result .transfer-result{
+  margin:0 0 20px;
+  padding:17px;
+  background:#f0f0e9;
+  border:1px solid #d8ddd1;
+ }
+ #reservation .reservation-result .transfer-result h3{font-size:18px;line-height:1.45}
+ #reservation .reservation-result .transfer-result p{font-size:13px;line-height:1.65}
+ #reservation .reservation-result .transfer-result .transfer-demo-button{
+  min-height:48px;
+  background:transparent;
+  border:1px solid #637968;
+  color:#39503d;
+  font-size:14px;
+ }
+ #reservation .result-secondary-nav{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  border-top:1px solid #cbd2c7;
+  margin-top:12px;
+  padding-top:7px;
+ }
+ #reservation .result-secondary-nav a.result-link,
+ #reservation .result-secondary-nav a.result-link.light{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  width:100%;
+  min-height:45px;
+  margin:0;
+  padding:12px 1px;
+  border:0;
+  border-bottom:1px solid #d6ddd3;
+  background:transparent;
+  color:#49624e;
+  font-size:13px;
+  line-height:1.5;
+  font-weight:530;
+  text-align:left;
+ }
+ #reservation .result-secondary-nav a[href="#/admin-demo"]{
+  color:#5f7063;
+  font-size:12px;
+ }
+ #reservation .result-secondary-nav a:focus-visible,
+ #reservation .result-primary-action a:focus-visible{
+  outline:3px solid #64826a;
+  outline-offset:2px;
+ }
+}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav aria-label="쇼윈도 주요 메뉴"><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a><a href="#/booking-status">예약 조회</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -1406,6 +1505,9 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
          <div><dt>픽업 시간</dt><dd id="rrTime"></dd></div>
          <div><dt>예약 상태</dt><dd>가상 예약 · 입금 확인 전 (실제 접수 없음)</dd></div>
        </dl>
+       <div class="result-primary-action">
+        <a id="rResultStatus" class="result-link result-primary" href="#/booking-status">가상 예약 현황 보기 ↗</a>
+       </div>
        <div class="transfer-result" role="note">
   <div class="micro">ACCOUNT TRANSFER · DEMO ONLY</div>
   <h3>입금 확인 후 예약이 확정됩니다.</h3>
@@ -1418,10 +1520,11 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
   <button type="button" id="rMarkPaid" class="transfer-demo-button" aria-describedby="rPaymentState">가상 송금 완료 표시하기</button>
   <p id="rPaymentState" aria-live="polite" tabindex="-1">현재 가상 입금 전 상태입니다. 실제 예약은 확정되지 않았습니다.</p>
  </div>
- <a id="rAgain" class="result-link" href="#curation">다른 꽃다발 둘러보기 ↗</a>
-       <a id="rResultBack" class="result-link light" href="#/flower/rosy-moment">꽃다발 상세로 돌아가기</a>
-       <a class="result-link light" href="#/admin-demo">관리자 데모에서 요청 상태 보기 ↗</a>
-        <a class="result-link light" href="#/booking-status">가상 예약 상세 현황 보기 ↗</a>
+ <nav class="result-secondary-nav" aria-label="예약 체험 후 다른 메뉴">
+  <a id="rAgain" class="result-link light" href="#curation">다른 꽃다발 둘러보기 ↗</a>
+  <a id="rResultBack" class="result-link light" href="#/flower/rosy-moment">꽃다발 상세로 돌아가기</a>
+  <a class="result-link light" href="#/admin-demo">관리자 데모에서 요청 상태 보기 ↗</a>
+ </nav>
      </div>
    </div>
  </div>
@@ -1573,7 +1676,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-51 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-52 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 /* G3-41: Only a *home-page reload* starts from the hero.
    Preserve user-clicked in-page anchors, subpage deep links, and back/forward visits. */
