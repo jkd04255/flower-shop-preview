@@ -88,6 +88,16 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-28-mobile-touch-zoom-qa.cjs
+      - name: Install WebKit runtime libraries only (non-iOS approximation)
+        timeout-minutes: 7
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
+            libgtk-4-1 libgraphene-1.0-0 libevent-2.1-7t64 libopus0 \
+            libgstreamer-plugins-base1.0-0 libgstreamer-gl1.0-0 \
+            libgstreamer-plugins-bad1.0-0 libavif16 libharfbuzz-icu0 \
+            libwayland-server0 libmanette-0.2-0 libsecret-1-0 \
+            libhyphen0 libgles2 gstreamer1.0-libav
       - name: Install Playwright WebKit browser (non-iOS approximation)
         timeout-minutes: 5
         run: npx playwright-core install webkit
