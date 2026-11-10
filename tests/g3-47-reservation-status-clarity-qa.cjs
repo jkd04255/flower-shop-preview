@@ -27,34 +27,20 @@ async function check(engine,name,url){
    await page.setViewportSize({width,height:900});
    await page.goto(url+'#/reserve/rosy-moment',{waitUntil:'domcontentloaded'});
    await page.locator('#reservation').waitFor({state:'visible'});
-   assert.equal(await page.locator('#reservation .booking-form .reserve-quick-actions button').count(),4,'four optional quick actions preserved');
-   assert.equal(await page.locator('#reserveQuickDetails').evaluate(el=>el.open),false,'G3-48 defaults to a simple date/time workflow');
-   assert.equal(await page.locator('#rEarliestDate').isVisible(),false,'shortcuts are not default choices');
-   await page.locator('#reserveQuickDetails summary').click();
-   assert.equal(await page.locator('#reserveQuickDetails').evaluate(el=>el.open),true,'advanced helper can expand');
    assert.equal(await page.locator('#reserveForm').isVisible(),true);
+   assert.equal(await page.locator('#rDate').isVisible(),true);
+   assert.equal(await page.locator('#rTime').isVisible(),true);
+   assert.equal(await page.locator('#reserveQuickDetails').count(),0,'unwanted additional pickup choices removed');
    const note=await page.locator('#reservation .booking-form .submit-note').innerText();
    assert.match(note,/실제 개인정보/,'safety guidance kept');
    assert.match(note,/서버에 전송·저장되지 않습니다/,'demo-only safety guidance kept');
    const disclaimer=await page.locator('#reservation .transfer-explainer').innerText();
    assert.match(disclaimer,/송금하지 마세요/,'no real payments');
-   const nav=await page.locator('#reservation .reserve-quick-actions').evaluate(el=>{
-    const r=el.getBoundingClientRect();
-    return {cols:getComputedStyle(el).gridTemplateColumns,box:{width:r.width,top:r.top,bottom:r.bottom},
-      children:[...el.querySelectorAll('button')].map(b=>{
-       const x=b.getBoundingClientRect(),style=getComputedStyle(b);
-       return {width:x.width,height:x.height,left:x.left,right:x.right,color:style.color,text:b.textContent.trim()};
-      })};
-   });
-   for(const b of nav.children){
-    assert.ok(b.height>=44&&b.width>80&&b.left>=0&&b.right<=width+1,
-      name+' tappable compact quick action '+width+': '+JSON.stringify(b));
-   }
    const reserveOverflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
    assert.ok(reserveOverflow<=2,name+' reservation overflow '+width+'px '+reserveOverflow);
    assert.equal(await page.locator('#rReviewConfirm').count(),1,'review request action retained');
    assert.equal(await page.locator('#reserveProgress li').count(),3,'progress retained');
-   console.log('PASS G3-47 '+name+' reservation '+width+'px: concise copy, 4 controls, safety notes, no overflow');
+   console.log('PASS G3-47 '+name+' reservation '+width+'px: direct pickup choices, safety notes, no overflow');
 
    await page.goto(url+'#/booking-status',{waitUntil:'domcontentloaded'});
    await page.locator('#customerStatus').waitFor({state:'visible'});
