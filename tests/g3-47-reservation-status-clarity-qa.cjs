@@ -27,7 +27,11 @@ async function check(engine,name,url){
    await page.setViewportSize({width,height:900});
    await page.goto(url+'#/reserve/rosy-moment',{waitUntil:'domcontentloaded'});
    await page.locator('#reservation').waitFor({state:'visible'});
-   assert.equal(await page.locator('#reservation .booking-form .reserve-quick-actions button').count(),4,'four quick actions preserved');
+   assert.equal(await page.locator('#reservation .booking-form .reserve-quick-actions button').count(),4,'four optional quick actions preserved');
+   assert.equal(await page.locator('#reserveQuickDetails').evaluate(el=>el.open),false,'G3-48 defaults to a simple date/time workflow');
+   assert.equal(await page.locator('#rEarliestDate').isVisible(),false,'shortcuts are not default choices');
+   await page.locator('#reserveQuickDetails summary').click();
+   assert.equal(await page.locator('#reserveQuickDetails').evaluate(el=>el.open),true,'advanced helper can expand');
    assert.equal(await page.locator('#reserveForm').isVisible(),true);
    const note=await page.locator('#reservation .booking-form .submit-note').innerText();
    assert.match(note,/실제 개인정보/,'safety guidance kept');
