@@ -2904,6 +2904,9 @@ function route(){
   }
   if(!showReservation)clearReservationReview();
   if(showReservation){
+    // G3-48: each entry into the booking screen starts with the simple form.
+    // Only users who explicitly open optional shortcuts see extra choices.
+    document.getElementById('reserveQuickDetails').open=false;
     initReservation(index);
     window.scrollTo(0,0);
   }
