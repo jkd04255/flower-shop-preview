@@ -1392,6 +1392,70 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  }
 }
 </style>
+<style id="g3-53-mobile-status-lookup">
+/* G3-53: one clear lookup action; mobile form reads like a simple editorial
+   entry, not a second heavy card. All IDs, copy, validation and links stay. */
+@media (max-width:600px) {
+ #customerStatus .cs-wrap {margin-top:34px}
+ #customerStatus .cs-desc {
+  margin:0 0 18px;
+  font-size:14px;
+  line-height:1.7;
+ }
+ #customerStatus .cs-search {
+  margin:0 0 21px;
+  padding:20px 0 22px;
+  border:0;
+  border-top:1px solid #cad4c7;
+  border-bottom:1px solid #cad4c7;
+  background:transparent;
+ }
+ #customerStatus .cs-search-row {
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:15px;
+  align-items:stretch;
+ }
+ #customerStatus .cs-search label {
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-width:0;
+  font-size:14px;
+  line-height:1.5;
+  font-weight:650;
+ }
+ #customerStatus #csLast4 {
+  box-sizing:border-box;
+  width:100%;
+  min-height:54px;
+  padding:13px 15px;
+  font-size:16px;
+  letter-spacing:.09em;
+  border:1px solid #9daf9b;
+  background:#fffdf8;
+ }
+ #customerStatus #csSubmit {
+  box-sizing:border-box;
+  width:100%;
+  min-height:54px;
+  margin:0;
+  padding:14px 16px;
+  background:#354538;
+  border:1px solid #354538;
+  color:#fffdfa;
+  font-size:15px;
+  line-height:1.5;
+  font-weight:650;
+ }
+ #customerStatus .cs-helper {
+  margin:12px 0 0;
+  font-size:12.5px;
+  line-height:1.65;
+ }
+ #customerStatus #csStatusMessage:not(:empty) {margin:12px 0 15px;line-height:1.65}
+}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav aria-label="쇼윈도 주요 메뉴"><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a><a href="#/booking-status">예약 조회</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -1684,7 +1748,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-52 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-53 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 /* G3-41: Only a *home-page reload* starts from the hero.
    Preserve user-clicked in-page anchors, subpage deep links, and back/forward visits. */
