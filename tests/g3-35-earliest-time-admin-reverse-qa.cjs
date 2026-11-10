@@ -38,59 +38,30 @@ async function check(engine,label,base){
   const context=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:3,isMobile:true,hasTouch:true,reducedMotion:'reduce',timezoneId:'Asia/Seoul'});
   const page=await context.newPage(),errors=[];
   page.on('pageerror',err=>errors.push(err.message));
-  // Historical shortcut regressions intentionally open the optional helper.
-  // Customer-facing G3-48 QA separately asserts that it starts collapsed.
-  await page.addInitScript(()=>{
-    document.addEventListener('DOMContentLoaded',()=>{
-      const details=document.getElementById('reserveQuickDetails');
-      if(details)details.open=true;
-    });
-  });
   await page.goto(base+'#/reserve/rosy-moment',{waitUntil:'domcontentloaded'});
   await page.locator('#reserveForm').waitFor({state:'visible'});
-  const quick=page.locator('#rEarliestTime');
-  const status=page.locator('#rEarliestTimeStatus');
   const slots=await sampleSlots(page);
-  assert.equal(slots.length,2);
-  assert.equal(await quick.isDisabled(),true);
-  assert.equal(await status.textContent(),'');
+  assert.equal(slots.length,2,'two distinct valid dates');
   const initialCount=await page.evaluate(()=>adminRequests.length);
-  await page.locator('#rEarliestDate').tap();
-  assert.equal(await page.locator('#rDate').inputValue(),slots[0].date);
-  assert.equal(await page.locator('#rTime').inputValue(),'','date quick selection must still require a separate time choice');
-  assert.equal(await quick.isDisabled(),false);
-  await quick.tap();
-  assert.equal(await page.locator('#rTime').inputValue(),slots[0].times[0]);
-  assert.match(await status.innerText(),new RegExp(slots[0].times[0]));
-  assert.match(await status.innerText(),/예약 확정 전/);
-  assert.ok((await page.locator('#rPickupPreview').innerText()).includes(slots[0].date+' '+slots[0].times[0]));
-  assert.equal(await page.evaluate(()=>adminRequests.length),initialCount,'quick controls must not create a request');
-  console.log('PASS G3-35 '+label+' earliest date alone never selects hour; explicit time press selects only a valid slot');
-
-  await page.locator('#rDate').fill(slots[1].date);
-  assert.equal(await status.textContent(),'');
-  assert.equal(await page.locator('#rTime').inputValue(),'');
-  assert.equal(await quick.isDisabled(),false);
-  await quick.focus();
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Shift+Tab');
-  const focus=await quick.evaluate(el=>({active:document.activeElement===el,visible:el.matches(':focus-visible'),outline:getComputedStyle(el).outlineStyle}));
-  assert.ok(focus.active&&focus.visible&&focus.outline!=='none',JSON.stringify(focus));
-  await page.keyboard.press('Enter');
-  assert.equal(await page.locator('#rTime').inputValue(),slots[1].times[0]);
-  assert.ok((await page.locator('#rPickupPreview').innerText()).includes(slots[1].date+' '+slots[1].times[0]));
-  assert.ok(!(await page.locator('#rPickupPreview').innerText()).includes(slots[0].date));
-  await page.locator('#rTime').selectOption('');
-  assert.equal(await status.textContent(),'','manual hour changes clear the obsolete shortcut message');
-  await page.locator('#rDate').fill('');
-  assert.equal(await quick.isDisabled(),true);
-  assert.equal(await status.textContent(),'');
   assert.equal(await page.locator('#rTime').isDisabled(),true);
-  await axePass(page,label+' customer input');
-  console.log('PASS G3-35 '+label+' date changes, keyboard activation, manual hour and empty-date reset; axe zero');
-
   await page.locator('#rDate').fill(slots[0].date);
-  await quick.tap();
+  assert.equal(await page.locator('#rTime').inputValue(),'');
+  await page.locator('#rTime').selectOption(slots[0].times[0]);
+  assert.ok((await page.locator('#rPickupPreview').innerText()).includes(slots[0].date+' '+slots[0].times[0]));
+  await page.locator('#rDate').fill(slots[1].date);
+  assert.equal(await page.locator('#rTime').inputValue(),'','changing date resets time');
+  await page.locator('#rTime').selectOption(slots[1].times[0]);
+  assert.ok((await page.locator('#rPickupPreview').innerText()).includes(slots[1].date+' '+slots[1].times[0]));
+  await page.locator('#rTime').selectOption('');
+  assert.equal(await page.locator('#rTime').inputValue(),'','manually clearing hour is possible');
+  await page.locator('#rDate').fill('');
+  assert.equal(await page.locator('#rTime').isDisabled(),true);
+  assert.equal(await page.evaluate(()=>adminRequests.length),initialCount);
+  await axePass(page,label+' direct booking form');
+  await page.locator('#rDate').fill(slots[0].date);
+  await page.locator('#rTime').selectOption(slots[0].times[0]);
+  console.log('PASS G3-35 '+label+' direct hour choice, date reset, preview, axe zero');
+
   await page.locator('#rName').fill('가상 고객');
   await page.locator('#rPhone').fill('01000000000');
   await page.locator('#rMemo').fill('가상 리본');
