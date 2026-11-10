@@ -48,7 +48,10 @@ async function verify(engine,name,url){
   for(const width of [320,390,768,1280]){
    await page.setViewportSize({width,height:900});
    await page.goto(url,{waitUntil:'domcontentloaded'});
-   await page.waitForFunction(()=>[...document.querySelectorAll('#featured .card img')].every(x=>x.complete&&x.naturalWidth>0));
+   /* Cards are intentionally loading="lazy" on the real site. Only the test
+      requests eager fetching for offscreen product images under every viewport. */
+   await page.locator('#featured .card img').evaluateAll(imgs=>imgs.forEach(img=>{img.loading='eager';}));
+   await page.waitForFunction(()=>[...document.querySelectorAll('#featured .card img')].every(x=>x.complete&&x.naturalWidth>0),null,{timeout:15000});
    const featured=await geometry(page,'#featured .card img');
    const regular=await geometry(page,'#regular .card img');
    const arrivals=await geometry(page,'#arrivalList .arrival img');
