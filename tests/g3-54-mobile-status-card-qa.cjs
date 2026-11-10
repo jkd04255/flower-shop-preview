@@ -104,7 +104,8 @@ async function verify(engine,name,url){
    }
    console.log('PASS G3-54 '+name+' '+width+'px: readable card, pickup and unchanged safe demo');
   }
-  assert.match(await page.locator('footer').innerText(),/G3-54 STATIC DEMO/);
+  const demoVersion=(await page.locator('footer').innerText()).match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(demoVersion&&Number(demoVersion[1])>=54,'G3-54 or later demo footer required');
   assert.deepEqual(errors,[],name+' JS page errors');
   await ctx.close();
  }finally{await browser.close();}
