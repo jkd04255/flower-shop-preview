@@ -61,7 +61,7 @@ async function verify(engine,name,url){
    for(const p of [...featured,...regular]){
     assert.ok(p.w>0&&p.h>0&&near(p.ratio,4/5),name+' bouquet 4:5 ratio '+width+': '+JSON.stringify(p));
     assert.equal(p.fit,'cover','photo must be cropped rather than distorted');
-    assert.ok(/saturate\\(0\\.96\\)/.test(p.filter),'photo saturation should be gently restored: '+p.filter);
+    assert.ok(/saturate\(0\.96\)/.test(p.filter),'photo saturation should be gently restored: '+p.filter);
    }
    for(const p of arrivals){
     assert.ok(p.w>0&&p.h>0&&near(p.ratio,1),name+' arrival square thumbnail '+width+': '+JSON.stringify(p));
@@ -78,7 +78,7 @@ async function verify(engine,name,url){
    const detail=(await geometry(page,'#detail .detailBody>img'))[0];
    assert.ok(detail.naturalWidth>0&&detail.naturalHeight>0,name+' original detail photo loads');
    assert.equal(detail.fit,'cover');
-   assert.match(detail.src,/assets\\/rosy-moment\\.webp$/);
+   assert.match(detail.src,/assets\/rosy-moment\.webp$/);
    if(width<=700)assert.ok(detail.h>=385&&detail.h<=555,name+' mobile detail photo not oversized: '+JSON.stringify(detail));
 
    await page.goto(url+'#/reserve/rosy-moment',{waitUntil:'domcontentloaded'});
@@ -86,7 +86,7 @@ async function verify(engine,name,url){
    const reserve=(await geometry(page,'#reservation .reserve-product img'))[0];
    assert.ok(reserve.naturalWidth>0&&reserve.naturalHeight>0,name+' original reservation photo loads');
    assert.equal(reserve.fit,'cover');
-   assert.match(reserve.src,/assets\\/rosy-moment\\.webp$/);
+   assert.match(reserve.src,/assets\/rosy-moment\.webp$/);
    console.log('PASS G3-44 '+name+' '+width+'px: detail and reservation same photo, cover cropping');
   }
   await page.setViewportSize({width:390,height:844});
