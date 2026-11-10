@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-50
+name: Flower shop consolidated Chromium + WebKit QA · G3-51
 on:
   pull_request:
     paths:
@@ -187,6 +187,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-50-mobile-form-readability-qa.cjs
+      - name: G3-51 mobile review layout, editable details and final confirm · Chromium + WebKit
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-51-mobile-review-hierarchy-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
