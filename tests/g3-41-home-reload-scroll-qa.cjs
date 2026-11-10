@@ -102,7 +102,8 @@ async function check(engine,name,base){
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
    assert.ok(overflow<=2,'no overflow at '+width+': '+overflow);
   }
-  assert.match(await page.locator('footer').innerText(),/G3-41 STATIC DEMO/);
+  const footerVersion=(await page.locator('footer').innerText()).match(/G3-(\d+) STATIC DEMO/);
+  assert.ok(footerVersion&&Number(footerVersion[1])>=41,'G3-41 or newer demo footer expected');
   assert.match(await call.innerText(),/오늘의 꽃 만나기/);
   assert.deepEqual(errors,[]);
   await ctx.close();
