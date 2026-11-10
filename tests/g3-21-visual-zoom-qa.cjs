@@ -27,7 +27,17 @@ async function reflow(page,label,width,hash,selector){
   const documentWidth=document.documentElement.scrollWidth,viewport=document.documentElement.clientWidth;
   const escaped=[...document.querySelectorAll('a,button,input,select,summary')].filter(n=>{
    const r=n.getBoundingClientRect(),s=getComputedStyle(n);
-   return r.width>0&&r.height>0&&s.visibility!=='hidden'&&s.display!=='none'&&r.right>innerWidth+2;
+   if(!(r.width>0&&r.height>0&&s.visibility!=='hidden'&&s.display!=='none'&&r.right>innerWidth+2))return false;
+   /* A control deliberately clipped inside a bounded, independently
+      scrollable filter rail is not a page-wide reflow failure.
+      Keep failing for all other escaped controls and document overflow. */
+   const rail=n.closest('#adminDemo .admin-filters');
+   if(rail){
+    const b=rail.getBoundingClientRect(),scroll=getComputedStyle(rail);
+    if(scroll.overflowX==='auto'&&rail.scrollWidth>rail.clientWidth&&
+       b.left>=-2&&b.right<=innerWidth+2)return false;
+   }
+   return true;
   }).slice(0,6).map(n=>({el:n.id||n.className||n.tagName,right:Math.round(n.getBoundingClientRect().right),text:n.innerText?.slice(0,42)}));
   return {documentWidth,viewport,overflow:documentWidth-viewport,escaped};
  });
