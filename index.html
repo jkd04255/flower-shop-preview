@@ -1289,6 +1289,14 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
 <style id="g3-52-mobile-result-priority">
 /* Present exactly one primary post-booking action on mobile.
    Keep every previous route and the explicitly synthetic payment example. */
+/* WebKit desktop touch-target safeguard: 13px text plus padding can be
+   under 44px in some engines, even when Chromium appears sufficient. */
+#reservation .result-primary-action .result-primary{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ min-height:48px;
+}
 @media(max-width:600px){
  #reservation .reservation-result{
   padding-top:19px;
