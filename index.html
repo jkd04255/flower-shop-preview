@@ -1134,6 +1134,82 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  #home>.hero .nav>nav a{transition:none}
 }
 </style>
+
+<style id="g3-47-reservation-status-clarity">
+/* G3-47: reserve legibility, clear primary actions and quiet secondary links.
+   Do not hide controls, legal demo warnings or change any programmatic IDs. */
+#reservation .reserve-head{margin-bottom:29px}
+#reservation .reserve-head p{max-width:590px;line-height:1.75;color:#526254}
+#reservation .booking-form .form-title{margin-bottom:11px}
+#reservation .booking-form .form-hint{
+ margin:0 0 24px;color:#516453;font-size:13px;line-height:1.7;
+}
+#reservation .reserve-quick-actions{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:0 16px;margin:13px 0 11px;
+ border-top:1px solid #d2d9cc;
+}
+#reservation .reserve-quick-actions #rEarliestDate,
+#reservation .reserve-quick-actions #rNextDate,
+#reservation .reserve-quick-actions #rEarliestTime,
+#reservation .reserve-quick-actions #rLatestTime{
+ display:flex;align-items:center;justify-content:flex-start;
+ min-width:0;width:100%;min-height:46px;
+ margin:0;padding:10px 2px;border:0;border-bottom:1px solid #d2d9cc;
+ background:transparent;text-align:left;
+ color:#36513c;font:580 12px/1.55 var(--editorial-font),sans-serif;
+ white-space:normal;overflow-wrap:break-word;
+}
+#reservation .reserve-quick-actions button:disabled{
+ color:#69746b!important;opacity:.74;cursor:not-allowed;
+}
+#reservation .reserve-quick-actions button:focus-visible{
+ outline:3px solid #557456;outline-offset:1px;
+}
+#reservation #rEarliestStatus:empty{display:none}
+#reservation #rPickupPreview{margin-top:12px}
+#reservation .transfer-explainer{
+ background:#eeefe7;border:0;border-left:2px solid #627966;
+ padding:18px 20px;margin:17px 0 22px;
+}
+#reservation .transfer-explainer h3{font-size:17px;line-height:1.45}
+#reservation .transfer-explainer p{font-size:13px;line-height:1.7;color:#506453}
+#reservation .booking-form .submit-note{font-size:12px;line-height:1.7;max-width:600px}
+#reservation .reservation-review .review-description{max-width:590px}
+#reservation .reservation-result a.result-link.light{
+ display:inline-flex;align-items:center;justify-content:center;
+ min-height:44px;padding:10px 3px;margin:5px 13px 5px 0;
+ border:0;border-bottom:1px solid #78917a;
+ color:#35513b;background:transparent;
+}
+#customerStatus .cs-wrap{margin-top:44px}
+#customerStatus h1{margin-bottom:14px}
+#customerStatus .cs-desc{max-width:560px;margin:0 0 22px;line-height:1.73;color:#506553}
+#customerStatus .cs-search{
+ border:1px solid #d0d8ca;background:#faf9f4;
+ padding:19px 22px;margin:0 0 20px;
+}
+#customerStatus .cs-helper{color:#4f6554;font-size:12px}
+#customerStatus .cs-disclaimer{max-width:700px;line-height:1.75}
+@media(max-width:600px){
+ #reservation .reserve-head{margin-bottom:23px}
+ #reservation .booking-form .form-hint{font-size:13px;line-height:1.65}
+ #reservation .reserve-quick-actions{gap:0 12px}
+ #reservation .reserve-quick-actions #rEarliestDate,
+ #reservation .reserve-quick-actions #rNextDate,
+ #reservation .reserve-quick-actions #rEarliestTime,
+ #reservation .reserve-quick-actions #rLatestTime{
+  font-size:12px;padding:10px 2px;
+ }
+ #reservation .transfer-explainer{padding:15px 17px}
+ #customerStatus .cs-wrap{margin-top:30px}
+ #customerStatus .cs-search{padding:17px;margin-bottom:18px}
+ #customerStatus .cs-desc{font-size:14px;line-height:1.7}
+}
+@media(max-width:350px){
+ #reservation .reserve-quick-actions{grid-template-columns:minmax(0,1fr)}
+}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav aria-label="쇼윈도 주요 메뉴"><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a><a href="#/booking-status">예약 조회</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -1170,7 +1246,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <div class="reserve-head">
    <div class="micro">YOUR FLOWERS, YOUR DAY.</div>
    <h1 id="reservationHeading">꽃다발 예약 요청</h1>
-   <p>원하는 픽업 날짜와 시간을 골라 보세요. <b>계좌이체 후 매장에서 입금이 확인되면 예약이 확정됩니다.</b> 현재 페이지는 가상 시연용으로 실제 접수·송금·예약 확정은 불가능합니다.</p>
+   <p>픽업 날짜와 시간을 고르고 요청 정보를 확인해 주세요. <b>가상 시연으로 실제 예약·송금은 진행되지 않습니다.</b></p>
  </div>
  <div class="reserve-layout">
    <aside class="reserve-product" aria-label="선택한 꽃다발">
@@ -1190,7 +1266,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
      </nav>
      <form id="reserveForm" class="booking-form" autocomplete="off" novalidate>
        <h2 class="form-title">픽업 정보 입력</h2>
-       <p class="form-hint">매장 예시 영업시간은 월–금 11:00–20:00입니다. 픽업은 11:00–19:00 사이 1시간 단위로 선택하며, 꽃다발별 최소 준비시간을 적용합니다. 오늘부터 14일 이내의 영업일만 선택할 수 있습니다.</p>
+       <p class="form-hint">월–금 운영 11:00–20:00 · 픽업 11:00–19:00(1시간 간격) · 14일 이내 영업일 · 상품별 준비시간 적용</p>
        <div class="form-row">
          <div class="form-field">
            <label for="rDate">픽업 날짜 *</label>
@@ -1202,10 +1278,12 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
          </div>
        </div>
        <p id="rTimeHint" class="field-note" aria-live="polite">날짜를 선택하면 가능한 시간이 표시됩니다.</p>
-        <button type="button" id="rEarliestDate">가장 빠른 픽업 날짜 선택 ↗</button>
-        <button type="button" id="rNextDate" disabled>다음 픽업 가능일 선택 ↗</button>
-        <button type="button" id="rEarliestTime" disabled>가장 빠른 픽업 시간 선택 ↗</button>
-        <button type="button" id="rLatestTime" disabled>가장 늦은 픽업 시간 선택 ↗</button>
+        <div class="reserve-quick-actions" role="group" aria-label="픽업 일정을 빠르게 선택">
+         <button type="button" id="rEarliestDate">가장 빠른 픽업 날짜 선택 ↗</button>
+         <button type="button" id="rNextDate" disabled>다음 픽업 가능일 선택 ↗</button>
+         <button type="button" id="rEarliestTime" disabled>가장 빠른 픽업 시간 선택 ↗</button>
+         <button type="button" id="rLatestTime" disabled>가장 늦은 픽업 시간 선택 ↗</button>
+        </div>
         <p id="rEarliestStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         <p id="rNextDateStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         <p id="rEarliestTimeStatus" role="status" aria-live="polite" aria-atomic="true"></p>
@@ -1228,16 +1306,16 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
        </div>
        <div class="transfer-explainer" role="note">
  <div class="transfer-tag">BANK TRANSFER · DEPOSIT REQUIRED</div>
- <h3>송금 완료 후 입금이 확인되면 예약 확정</h3>
- <p>예약 요청 후 지정 계좌로 송금하고, 매장에서 실제 입금 내역을 확인해야 예약이 최종 확정됩니다. 현재 계좌번호는 미등록 상태이므로 실제 송금하지 마세요.</p>
+ <h3>입금 확인 후 예약이 확정됩니다.</h3>
+ <p>정식 운영 시에는 입금 확인 후 예약을 확정합니다. 현재는 계좌번호가 없는 가상 시연이므로 송금하지 마세요.</p>
 </div><p id="rError" class="form-error" role="alert" tabindex="-1"></p>
        <button class="form-submit" type="submit">가상 예약 요청서 확인 ↗</button>
-       <p class="submit-note">안내: 실제 개인정보 대신 예시 정보를 입력해 주세요. 입력 내용은 브라우저 내 시연에만 사용되며, 서버에 전송하거나 저장하지 않습니다. 실제 주문·결제·예약 확정은 불가능합니다.</p>
+       <p class="submit-note">실제 개인정보를 입력하지 마세요. 예시 입력은 브라우저 내 시연에만 사용되며 서버에 전송·저장되지 않습니다. 실제 주문·결제는 발생하지 않습니다.</p>
      </form>
      <section id="reserveReview" class="reservation-review" hidden role="region" aria-labelledby="rReviewTitle">
        <div class="review-eyebrow">FINAL CHECK · DEMO ONLY</div>
        <h2 id="rReviewTitle" tabindex="-1">예약 정보를 한 번 더 확인해 주세요.</h2>
-       <p class="review-description">꽃다발·픽업 일정·이름·전화번호가 정확한지 확인해 주세요. 아래 <b>확인하고 가상 예약 요청하기</b>를 누르기 전에는 가상 예약 기록도 생성되지 않습니다.</p>
+       <p class="review-description">꽃다발, 픽업 일정과 연락처를 확인해 주세요. 최종 확인 전에는 가상 요청이 생성되지 않습니다.</p>
        <dl class="review-list">
          <div><dt>꽃다발 종류</dt><dd id="rReviewProduct"></dd></div>
          <div><dt>픽업 날짜</dt><dd id="rReviewDate"></dd></div>
@@ -1292,7 +1370,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <div class="cs-wrap">
   <div class="cs-eyebrow">MY RESERVATION · STATIC DEMO</div>
   <h1 id="csTitle" tabindex="-1">내 예약 현황</h1>
-  <p class="cs-desc">요청하신 꽃다발과 픽업 일정, 입금 진행 상황을 한눈에 확인하세요. 이 화면은 예시 예약으로만 작동하며 실제 예약·입금·연락은 발생하지 않습니다.</p>
+  <p class="cs-desc">예시 예약의 꽃다발, 픽업 일정과 입금 상태를 확인하세요. 실제 고객 예약을 조회하는 화면은 아닙니다.</p>
   <form class="cs-search" id="csLookupForm" novalidate autocomplete="off">
    <div class="cs-search-row">
     <label for="csLast4">전화번호 뒷자리 4자리 (가상 시연)
@@ -1430,7 +1508,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-46 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-47 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 /* G3-41: Only a *home-page reload* starts from the hero.
    Preserve user-clicked in-page anchors, subpage deep links, and back/forward visits. */
