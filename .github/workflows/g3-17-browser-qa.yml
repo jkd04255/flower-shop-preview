@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-47
+name: Flower shop consolidated Chromium + WebKit QA · G3-47 optimized
 on:
   pull_request:
     paths:
