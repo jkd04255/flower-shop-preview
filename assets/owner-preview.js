@@ -49,7 +49,6 @@
     if(!payload||!Array.isArray(payload.products)||payload.products.length>30)return;
     const name=value(payload.name,50)||base.name;
     document.querySelector('#home .hero .nav .brand strong').textContent=name;
-    document.querySelector('#home .foot')?.setAttribute('data-ignored',''); // no-op; footer is outside home
     const footer=document.querySelector('.foot b');if(footer)footer.textContent=name;
     document.querySelectorAll('#detail .brand,#reservation .brand,#customerStatus .brand').forEach(el=>{el.textContent='AFTERNOON · '+name;});
     document.title=name+' · 미리보기';
