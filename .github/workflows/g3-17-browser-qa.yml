@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-56
+name: Flower shop consolidated Chromium + WebKit QA · G3-57
 on:
   pull_request:
     paths:
@@ -211,6 +211,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-56-mobile-admin-search-sort-qa.cjs
+      - name: G3-57 mobile admin booking cards, selection and metadata · Chromium + WebKit + axe
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-57-mobile-admin-request-cards-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
