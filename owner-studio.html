@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>오후의 정원 · 사장용 콘텐츠 편집 시연</title>
+<link rel="stylesheet" href="./assets/owner-studio.css">
+</head>
+<body style="margin:0;background:#eae9e2;color:#27352b;font-family:Arial,'Apple SD Gothic Neo',sans-serif">
+<main id="ownerStudio" aria-labelledby="ownerHeading">
+<header class="os-top">
+ <div class="os-brand">AFTERNOON · 오후의 정원</div>
+ <a href="./index.html#/admin-demo">← 예약 관리자 데모</a>
+</header>
+<div class="os-workspace">
+ <section class="os-controls" aria-label="사장용 편집 영역">
+  <p class="os-kicker">CONTENT STUDIO · LOCAL PREVIEW</p>
+  <h1 id="ownerHeading">매장 콘텐츠 관리</h1>
+  <p class="os-note">가게 정보와 꽃다발 구성을 직접 수정하면 오른쪽 고객 화면에 바로 반영됩니다.</p>
+  <p class="os-important">가상 편집 시연입니다. 입력한 내용과 사진은 현재 브라우저 탭의 미리보기에만 반영되며, 고객 사이트나 서버에는 게시·저장되지 않습니다. 관리자 로그인·업로드·실제 주문은 연결되지 않았습니다.</p>
+  <fieldset>
+   <legend>매장 기본 정보</legend>
+   <div class="os-field"><label for="ownerBusinessName">가게 이름</label><input id="ownerBusinessName" type="text" maxlength="50" placeholder="가게 이름"></div>
+   <div class="os-field"><label for="ownerAddress">주소</label><input id="ownerAddress" type="text" maxlength="150" placeholder="매장 주소"></div>
+   <div class="os-row">
+    <div class="os-field"><label for="ownerPhone">매장 전화번호</label><input id="ownerPhone" type="tel" maxlength="50" placeholder="미등록"></div>
+    <div class="os-field"><label for="ownerHours">운영 시간</label><input id="ownerHours" type="text" maxlength="100" placeholder="월–금 11:00–20:00"></div>
+   </div>
+   <div class="os-field"><label for="ownerPickup">픽업·예약 안내</label><textarea id="ownerPickup" maxlength="200" rows="2"></textarea></div>
+  </fieldset>
+  <fieldset>
+   <legend>메인 사진</legend>
+   <div class="os-image-row">
+    <img id="ownerHeroThumb" class="os-thumbnail" alt="현재 선택한 메인 사진">
+    <div class="os-image-actions">
+     <label for="ownerHeroUpload">메인 배경 사진 바꾸기</label>
+     <input id="ownerHeroUpload" data-photo="hero" type="file" accept="image/png,image/jpeg,image/webp" aria-describedby="ownerImageHelp">
+     <small id="ownerImageHelp">JPG·PNG·WebP, 3MB 이하 · 현재 탭에서만 사용</small>
+     <button type="button" class="os-action" id="ownerHeroRestore">원래 사진으로</button>
+    </div>
+   </div>
+  </fieldset>
+  <fieldset>
+   <legend>판매 상품 구성</legend>
+   <div class="os-subheading"><h3>오늘의 꽃</h3><span id="ownerFeaturedCount" class="os-count"></span></div>
+   <div id="ownerFeatured" aria-label="오늘의 꽃 편집 목록"></div>
+   <button type="button" class="os-action os-add" id="ownerAddFeatured" disabled>오늘의 꽃 추가 +</button>
+   <div class="os-subheading" style="margin-top:29px"><h3>매일의 꽃다발</h3><span id="ownerRegularCount" class="os-count"></span></div>
+   <div id="ownerRegular" aria-label="일반 판매 꽃다발 편집 목록"></div>
+   <button type="button" class="os-action os-add" id="ownerAddRegular" disabled>일반 상품 추가 +</button>
+  </fieldset>
+  <div class="os-bottom">
+   <button type="button" class="os-action" id="ownerReset" disabled>편집 내용 초기화</button>
+   <span id="ownerStatus" class="os-live-status" role="status" aria-live="polite">고객 미리보기를 불러오는 중입니다.</span>
+  </div>
+ </section>
+ <section class="os-preview-panel" aria-label="실시간 고객 화면 미리보기">
+  <div class="os-preview-head"><strong>실시간 고객 화면</strong><span>원본 고객 페이지 · 가상 미리보기</span></div>
+  <div class="os-preview-surround">
+   <iframe id="ownerPreview" class="os-preview-frame" title="편집 결과가 즉시 반영되는 실제 고객 페이지 미리보기" src="./index.html?owner-preview=1#top" loading="eager"></iframe>
+  </div>
+ </section>
+</div>
+</main>
+<script src="./assets/owner-studio.js"></script>
+</body>
+</html>
