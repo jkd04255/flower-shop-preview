@@ -78,10 +78,10 @@ async function verify(engine,label,url){
   assert.equal(await page.locator('#ownerRegular .os-product').count(),3,label+' switch section persists');
   await page.waitForFunction(()=>document.querySelector('#ownerPreview')?.contentDocument?.querySelectorAll('#regular .card').length===3);
   assert.equal(await preview.locator('#regular .card').count(),3,label+' section switch real customer');
-  await page.locator('#ownerRegular [data-product-id="owner-draft-1"] [data-move="up"]').click();
-  await waitNames('regular',['추가한 꽃','아이보리 데이','코랄 다이어리']);
+  await page.locator('#ownerRegular [data-product-id="owner-draft-1"] [data-move="down"]').click();
+  await waitNames('regular',['아이보리 데이','추가한 꽃','코랄 다이어리']);
   const regularNames=await preview.locator('#regular .card strong').allInnerTexts();
-  assert.deepEqual(regularNames,['추가한 꽃','아이보리 데이','코랄 다이어리'],label+' regular ordering stays inside its section');
+  assert.deepEqual(regularNames,['아이보리 데이','추가한 꽃','코랄 다이어리'],label+' regular ordering stays inside its section');
   // Reset removes the local draft; independently opened customer site never changes.
   await page.locator('#ownerReset').click();
   await waitNames('featured',['로지 모먼트','멜로우 선데이','퍼플 레터']);
