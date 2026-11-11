@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-68
+name: Flower shop consolidated Chromium + WebKit QA · G3-69
 on:
   pull_request:
     paths:
@@ -107,6 +107,10 @@ jobs:
         run: npx playwright-core install webkit
       - name: G3-29 WebKit mobile touch/zoom and keyboard booking regression
         run: node tests/g3-29-webkit-mobile-qa.cjs
+      - name: G3-69 owner studio real customer preview, uploads and draft isolation · Chromium + WebKit + axe
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-69-owner-studio-qa.cjs
       - name: G3-42 Safari early swipe and idle hero peek · Chromium + WebKit
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}

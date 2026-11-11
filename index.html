@@ -2159,6 +2159,12 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  }
 }
 </style>
+<style id="g3-69-owner-entry">
+/* Entry to the independent demo-only owner content editor; no admin privilege claim. */
+#adminDemo .owner-studio-entry{font-size:13px;line-height:1.7;margin:-11px 0 23px;color:#536755}
+#adminDemo .owner-studio-entry a{display:inline-flex;align-items:center;min-height:44px;color:#35583d;text-decoration:underline;text-underline-offset:4px;font-weight:650}
+#adminDemo .owner-studio-entry small{display:block;font-size:12px;color:#607063}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav aria-label="쇼윈도 주요 메뉴"><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a><a href="#/booking-status">예약 조회</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -2336,6 +2342,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <div class="admin-kicker">MANAGER WORKSPACE · DEMO</div>
  <h1 class="admin-title" id="adminHeading">예약 요청 관리</h1>
  <p class="admin-intro">예약 고객의 <b>계좌이체가 완료되고 실제 입금이 확인된 후에만 예약을 확정</b>하는 운영 방식을 시연합니다. 이 데모에서는 가상 송금 표시 후 관리자가 수동 확정합니다. 실제 은행 거래 내역 확인·고객 정보·로그인·알림·서버 저장 기능은 없으며, 공개된 시연 화면이지 실제 관리자 시스템이 아닙니다.</p>
+ <p class="owner-studio-entry"><a href="./owner-studio.html">상품·매장 정보 편집 데모 ↗</a><small>왼쪽 편집 · 오른쪽 실제 고객 화면 미리보기 · 변경 사항 게시 안 됨</small></p>
  <section class="account-preview" aria-label="가상 계좌 안내 설정">
    <div>
      <div class="admin-kicker">PAYMENT INSTRUCTIONS · PREVIEW</div>
@@ -2451,7 +2458,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-68 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-69 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 /* G3-41: Only a *home-page reload* starts from the hero.
    Preserve user-clicked in-page anchors, subpage deep links, and back/forward visits. */
@@ -2528,6 +2535,8 @@ let activeDemoLookupCode=''; /* Never persisted or put into the route URL. */
 let adminSequence=5;
 /* Synthetic booking metadata only; never persist the form's name, telephone or note. */
 const DEMO_BOOKINGS_KEY='afternoon-garden-calendar-demo-v1';
+/* Owner preview uses only in-memory synthetic data; never share/write normal demo storage. */
+const OWNER_PREVIEW_ONLY=!!(typeof window!=='undefined'&&window.location&&typeof window.location.search==='string'&&new URLSearchParams(window.location.search).get('owner-preview')==='1'&&window.parent!==window);
 /* G3-12: bounded, client-only synthetic history; reject new demo requests before saved data becomes unreadable. */
 const DEMO_BOOKINGS_LIMIT=500;
 const DEMO_ID_LIMIT=999999;
@@ -2537,6 +2546,7 @@ function bookingAlias(request){
  return number>=1&&number<=4?samples[number-1]:'체험 고객 '+String(number).padStart(3,'0')+' (가상)';
 }
 function saveDemoBookings(){
+ if(typeof OWNER_PREVIEW_ONLY!=='undefined'&&OWNER_PREVIEW_ONLY)return;
  try{
   const records=adminRequests.map(item=>({
    id:item.id,productIndex:item.productIndex,date:item.date,time:item.time,
@@ -2546,6 +2556,7 @@ function saveDemoBookings(){
  }catch(err){/* Private browsing or storage denial: in-memory demo still works. */}
 }
 function restoreDemoBookings(){
+ if(typeof OWNER_PREVIEW_ONLY!=='undefined'&&OWNER_PREVIEW_ONLY){adminRequests=initialAdminRequests();adminSequence=5;return false;}
  try{
   const raw=window.localStorage.getItem(DEMO_BOOKINGS_KEY);
   if(!raw){adminRequests=initialAdminRequests();adminSequence=5;return false;}
@@ -3781,4 +3792,11 @@ route();
   document.addEventListener('click',userTappedLink,{passive:true});
   window.addEventListener('pageshow',userScrolled,{passive:true});
 })();
+/* Load the owner preview bridge only for the explicit in-frame demo;
+   preserve the original three inline script blocks and all public behaviors. */
+if(new URLSearchParams(location.search).get('owner-preview')==='1'&&window.parent!==window){
+ var ownerPreviewBridge=document.createElement('script');
+ ownerPreviewBridge.src='./assets/owner-preview.js';
+ document.head.appendChild(ownerPreviewBridge);
+}
 </script></body></html>
