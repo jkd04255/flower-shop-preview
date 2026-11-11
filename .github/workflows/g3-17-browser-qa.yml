@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-60
+name: Flower shop consolidated Chromium + WebKit QA · G3-61
 on:
   pull_request:
     paths:
@@ -227,6 +227,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-60-mobile-calendar-metrics-qa.cjs
+      - name: G3-61 mobile calendar day navigation touch targets · Chromium + WebKit + axe
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-61-mobile-calendar-day-controls-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
