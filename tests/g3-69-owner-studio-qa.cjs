@@ -108,12 +108,15 @@ async function verify(engine,label,url){
   await page.locator('#ownerAddFeatured').click();
   await page.waitForFunction(()=>document.getElementById('ownerFeatured').querySelectorAll('.os-product').length===3);
   await page.locator('#os-item-owner-draft-1-input-name').fill('봄의 신상품');
+  await page.waitForFunction(()=>[...document.querySelector('#ownerPreview')?.contentDocument?.querySelectorAll('#featured .card strong')||[]].some(el=>el.textContent==='봄의 신상품'));
   assert.ok((await productNames(preview,'featured')).includes('봄의 신상품'),label+' dynamically appended product visible in actual customer page');
   await page.locator('#ownerAddRegular').click();
   await page.waitForFunction(()=>document.getElementById('ownerRegular').querySelectorAll('.os-product').length===4);
+  await page.waitForFunction(()=>document.querySelector('#ownerPreview')?.contentDocument?.querySelectorAll('#regular .card').length===4);
   assert.equal(await preview.locator('#regular .card').count(),4,label+' regular collection expanded');
   await page.locator('#ownerRegular [data-product-id="owner-draft-2"] button[data-remove]').click();
   await page.waitForFunction(()=>document.getElementById('ownerRegular').querySelectorAll('.os-product').length===3);
+  await page.waitForFunction(()=>document.querySelector('#ownerPreview')?.contentDocument?.querySelectorAll('#regular .card').length===3);
   assert.equal(await preview.locator('#regular .card').count(),3,label+' draft product deletion live');
   await page.locator('#ownerFeatured [data-product-id="owner-draft-1"] button[data-remove]').click();
   await page.waitForFunction(()=>document.querySelector('#ownerPreview')?.contentDocument?.querySelectorAll('#featured .card').length===2);
