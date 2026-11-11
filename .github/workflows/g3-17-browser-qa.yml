@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-69
+name: Flower shop consolidated Chromium + WebKit QA · G3-70
 on:
   pull_request:
     paths:
@@ -111,6 +111,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-69-owner-studio-qa.cjs
+      - name: G3-70 owner catalogue ordering, compact edit and isolation · Chromium + WebKit + axe
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-70-owner-catalog-order-qa.cjs
       - name: G3-42 Safari early swipe and idle hero peek · Chromium + WebKit
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}

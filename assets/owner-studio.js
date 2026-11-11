@@ -7,6 +7,7 @@
  const featured=document.getElementById('ownerFeatured');
  const regular=document.getElementById('ownerRegular');
  let baseline=null,draft=null,serial=0;
+ const foldedProducts=new Set();
  const maxProducts=30;
  const fields={name:'ownerBusinessName',address:'ownerAddress',phone:'ownerPhone',hours:'ownerHours',pickup:'ownerPickup'};
  const byId=id=>document.getElementById(id);
@@ -46,9 +47,25 @@
  function renderProduct(product){
   const wrap=document.createElement('article');wrap.className='os-product';wrap.dataset.productId=product.id;
   const title=document.createElement('div');title.className='os-product-header';
+  const heading=document.createElement('div');heading.className='os-product-title';
   const strong=document.createElement('strong');strong.textContent=product.name||'새 꽃다발';
-  const del=document.createElement('button');del.type='button';del.className='os-action os-remove';del.dataset.remove=product.id;del.textContent='상품 삭제';
-  title.append(strong,del);
+  const meta=document.createElement('span');meta.className='os-product-meta';
+  meta.textContent=(Number(String(product.price).replace(/\D/g,'')||0)).toLocaleString('ko-KR')+'원 · '+(product.available?'예약 가능':'품절');
+  heading.append(strong,meta);
+  const actions=document.createElement('div');actions.className='os-product-actions';
+  const sameSection=draft.products.filter(p=>p.section===product.section);
+  const position=sameSection.findIndex(p=>p.id===product.id);
+  function control(label,key,value){
+   const button=document.createElement('button');button.type='button';button.className='os-action';button.textContent=label;
+   button.dataset[key]=value;return button;
+  }
+  const up=control('위로','move','up');up.disabled=position===0;up.setAttribute('aria-label',product.name+' 위로 이동');
+  const down=control('아래로','move','down');down.disabled=position===sameSection.length-1;down.setAttribute('aria-label',product.name+' 아래로 이동');
+  const fold=control(foldedProducts.has(product.id)?'펼치기':'접기','fold',product.id);
+  fold.setAttribute('aria-expanded',String(!foldedProducts.has(product.id)));
+  fold.setAttribute('aria-controls','os-product-details-'+product.id);
+  const del=control('삭제','remove',product.id);del.classList.add('os-remove');
+  actions.append(up,down,fold,del);title.append(heading,actions);
   const photo=document.createElement('div');photo.className='os-image-row';
   const thumb=document.createElement('img');thumb.className='os-thumbnail';thumb.src=product.image;thumb.alt=product.name+' 선택 사진';thumb.dataset.thumb=product.id;
   const photoWrap=document.createElement('div');photoWrap.className='os-image-actions';
@@ -81,8 +98,37 @@
   const box=document.createElement('input');box.type='checkbox';box.checked=product.available;box.dataset.field='available';
   const toggleLabel=document.createElement('span');toggleLabel.textContent='가상 예약 가능 (체크 해제 시 품절 표시)';
   toggle.append(box,toggleLabel);
-  wrap.append(title,photo,col,description,second,third,toggle);
+  const details=document.createElement('div');details.className='os-product-details';
+  details.id='os-product-details-'+product.id;
+  details.hidden=foldedProducts.has(product.id);
+  details.append(photo,col,description,second,third,toggle);
+  wrap.append(title,details);
   return wrap;
+ }
+ function setFolded(article,folded){
+  const details=article.querySelector('.os-product-details');
+  const control=article.querySelector('[data-fold]');
+  if(details)details.hidden=folded;
+  if(control){control.setAttribute('aria-expanded',String(!folded));control.textContent=folded?'펼치기':'접기';}
+ }
+ function foldAll(folded){
+  if(!draft)return;
+  foldedProducts.clear();
+  if(folded)draft.products.forEach(p=>foldedProducts.add(p.id));
+  document.querySelectorAll('.os-product').forEach(article=>setFolded(article,folded));
+ }
+ function moveProduct(id,direction){
+  if(!draft)return false;
+  const index=draft.products.findIndex(p=>p.id===id),step=direction==='up'?-1:direction==='down'?1:0;
+  if(index<0||step===0)return false;
+  const section=draft.products[index].section;
+  let neighbor=index+step;
+  while(neighbor>=0&&neighbor<draft.products.length&&draft.products[neighbor].section!==section)neighbor+=step;
+  if(neighbor<0||neighbor>=draft.products.length)return false;
+  [draft.products[index],draft.products[neighbor]]=[draft.products[neighbor],draft.products[index]];
+  renderProducts();send();
+  document.querySelector('.os-product[data-product-id="'+id+'"] [data-move="'+direction+'"]')?.focus();
+  return true;
  }
  function renderProducts(){
   featured.replaceChildren();regular.replaceChildren();
@@ -107,12 +153,12 @@
   serial++;
   const id='owner-draft-'+serial;
   const product={id,name:'새 꽃다발',latin:'New Bouquet',description:'가상 상품 미리보기',price:'35,000',colors:'시즌 컬러',lead:'120분',available:true,section,image:baseline.products[0].image};
-  draft.products.push(product);renderProducts();send();
+  draft.products.push(product);foldedProducts.delete(id);renderProducts();send();
   document.getElementById('os-item-'+id+'-input-name')?.focus();
  }
  function reset(){
   if(!baseline)return;
-  draft=clone(baseline);renderAll();send();announce('기본 시연 내용으로 초기화했습니다. 공개 사이트에는 영향이 없습니다.');
+  draft=clone(baseline);foldedProducts.clear();renderAll();send();announce('기본 시연 내용으로 초기화했습니다. 공개 사이트에는 영향이 없습니다.');
  }
  function loadBaseline(msg){
   if(baseline||!Array.isArray(msg.products)||msg.products.length<1)return;
@@ -143,6 +189,11 @@
   if(key==='name'){
    item.querySelector('.os-product-header strong').textContent=product.name||'새 꽃다발';
    item.querySelector('input[type="file"]').setAttribute('aria-label',(product.name||'꽃다발')+' 사진 파일 선택');
+   item.querySelector('[data-move="up"]').setAttribute('aria-label',(product.name||'꽃다발')+' 위로 이동');
+   item.querySelector('[data-move="down"]').setAttribute('aria-label',(product.name||'꽃다발')+' 아래로 이동');
+  }
+  if(key==='name'||key==='price'||key==='available'){
+   item.querySelector('.os-product-meta').textContent=(Number(String(product.price).replace(/\D/g,'')||0)).toLocaleString('ko-KR')+'원 · '+(product.available?'예약 가능':'품절');
   }
   send();
  });
@@ -167,9 +218,21 @@
   const button=event.target.closest('button');if(!button||!draft)return;
   if(button.dataset.remove){
    draft.products=draft.products.filter(p=>p.id!==button.dataset.remove);
-   renderProducts();send();
+   foldedProducts.delete(button.dataset.remove);
+   renderProducts();send();return;
+  }
+  if(button.dataset.move){
+   moveProduct(button.closest('.os-product')?.dataset.productId,button.dataset.move);return;
+  }
+  if(button.dataset.fold){
+   const id=button.dataset.fold,article=button.closest('.os-product');
+   if(!article)return;
+   if(foldedProducts.has(id))foldedProducts.delete(id);else foldedProducts.add(id);
+   setFolded(article,foldedProducts.has(id));
   }
  });
+ byId('ownerCollapseAll').addEventListener('click',()=>foldAll(true));
+ byId('ownerExpandAll').addEventListener('click',()=>foldAll(false));
  byId('ownerAddFeatured').addEventListener('click',()=>add('featured'));
  byId('ownerAddRegular').addEventListener('click',()=>add('regular'));
  byId('ownerHeroRestore').addEventListener('click',()=>{if(!draft)return;draft.hero=baseline.hero;byId('ownerHeroThumb').src=baseline.hero;send();});
