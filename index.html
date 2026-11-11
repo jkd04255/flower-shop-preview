@@ -2536,7 +2536,7 @@ let adminSequence=5;
 /* Synthetic booking metadata only; never persist the form's name, telephone or note. */
 const DEMO_BOOKINGS_KEY='afternoon-garden-calendar-demo-v1';
 /* Owner preview uses only in-memory synthetic data; never share/write normal demo storage. */
-const OWNER_PREVIEW_ONLY=new URLSearchParams(window.location.search).get('owner-preview')==='1'&&window.parent!==window;
+const OWNER_PREVIEW_ONLY=!!(typeof window!=='undefined'&&window.location&&typeof window.location.search==='string'&&new URLSearchParams(window.location.search).get('owner-preview')==='1'&&window.parent!==window);
 /* G3-12: bounded, client-only synthetic history; reject new demo requests before saved data becomes unreadable. */
 const DEMO_BOOKINGS_LIMIT=500;
 const DEMO_ID_LIMIT=999999;
