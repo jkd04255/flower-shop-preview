@@ -102,6 +102,7 @@ async function verify(engine,label,url){
 
   await page.locator('#os-section-rosy-moment').selectOption('regular');
   await page.waitForFunction(()=>document.getElementById('ownerFeatured').querySelectorAll('.os-product').length===2);
+  await page.waitForFunction(()=>document.querySelector('#ownerPreview')?.contentDocument?.querySelectorAll('#featured .card').length===2);
   assert.equal(await preview.locator('#featured .card').count(),2,label+' section switch removes featured card');
   assert.equal(await preview.locator('#regular .card').count(),3,label+' section switch adds regular card');
   await page.locator('#ownerAddFeatured').click();
@@ -115,10 +116,12 @@ async function verify(engine,label,url){
   await page.waitForFunction(()=>document.getElementById('ownerRegular').querySelectorAll('.os-product').length===3);
   assert.equal(await preview.locator('#regular .card').count(),3,label+' draft product deletion live');
   await page.locator('#ownerFeatured [data-product-id="owner-draft-1"] button[data-remove]').click();
+  await page.waitForFunction(()=>document.querySelector('#ownerPreview')?.contentDocument?.querySelectorAll('#featured .card').length===2);
   assert.equal(await preview.locator('#featured .card').count(),2,label+' featured deletion live');
   assert.match(await preview.locator('#curation > p.muted').innerText(),/오늘의 추천은 2개/,label+' original count caption updated for flexible collection');
 
   await page.locator('#ownerHeroRestore').click();
+  await page.waitForFunction(()=>document.querySelector('#ownerPreview')?.contentDocument?.querySelector('#home>.hero')?.style.backgroundImage.includes('hero-original.webp'));
   assert.ok((await preview.locator('#home>.hero').evaluate(el=>el.style.backgroundImage)).includes('hero-original.webp'),label+' hero photo restoration');
   assert.equal(await page.evaluate(()=>JSON.stringify(localStorage)),originalStored,label+' owner draft never persists to localStorage');
 
@@ -133,6 +136,7 @@ async function verify(engine,label,url){
   await page.setViewportSize({width:1440,height:900});
   await page.locator('#ownerReset').click();
   await page.waitForFunction(()=>document.getElementById('ownerBusinessName').value==='오후의 정원');
+  await page.waitForFunction(()=>document.querySelector('#ownerPreview')?.contentDocument?.querySelector('#home .hero .brand strong')?.textContent==='오후의 정원');
   assert.equal(await preview.locator('#home .hero .brand strong').innerText(),'오후의 정원',label+' reset restores original brand');
   assert.equal(await preview.locator('#featured .card').count(),3,label+' reset restores featured count');
   assert.equal(await preview.locator('#regular .card').count(),2,label+' reset restores regular count');
