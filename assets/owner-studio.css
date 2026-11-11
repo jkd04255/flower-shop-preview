@@ -8,7 +8,7 @@
 #ownerStudio .os-top a{font-size:13px;color:#425d48;text-decoration:underline;text-underline-offset:4px}
 #ownerStudio .os-workspace{display:grid;grid-template-columns:minmax(325px,43%) minmax(0,1fr);height:calc(100dvh - 98px);min-height:560px}
 #ownerStudio .os-controls{overflow-y:auto;overscroll-behavior:contain;background:#f8f6ef;border-right:1px solid #ccd1c6;padding:29px clamp(20px,3vw,40px) 45px}
-#ownerStudio .os-kicker{margin:0 0 8px;font-size:11px;letter-spacing:.1em;color:#687b6d}
+#ownerStudio .os-kicker{margin:0 0 8px;font-size:11px;letter-spacing:.1em;color:#4e6452}
 #ownerStudio h1{font-size:clamp(27px,2.5vw,39px);font-weight:600;letter-spacing:-.045em;line-height:1.32;margin:0 0 12px}
 #ownerStudio .os-note{font-size:13px;line-height:1.7;color:#516153;max-width:560px;margin:0 0 12px}
 #ownerStudio .os-important{padding:13px 15px;border-left:3px solid #6f866d;background:#edf0e7;font-size:12px;line-height:1.65;color:#364a3b;margin:17px 0 26px}
@@ -28,7 +28,7 @@
 #ownerStudio .os-action.os-remove{color:#824c43;border-color:#d5b7b0;background:transparent}
 #ownerStudio .os-subheading{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 12px}
 #ownerStudio .os-subheading h3{font-size:14px;margin:0;font-weight:650;letter-spacing:-.015em}
-#ownerStudio .os-count{font-size:12px;color:#69786a}
+#ownerStudio .os-count{font-size:12px;color:#4e6352}
 #ownerStudio .os-product{border-top:1px solid #d0d6cc;padding:17px 0 16px}
 #ownerStudio .os-product:first-child{border-top:0}
 #ownerStudio .os-product-header{display:flex;align-items:center;gap:10px;margin:0 0 12px;justify-content:space-between}
@@ -45,7 +45,7 @@
 #ownerStudio .os-preview-panel{display:flex;flex-direction:column;min-width:0;min-height:0;background:#e1e5db}
 #ownerStudio .os-preview-head{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:64px;padding:12px 20px;border-bottom:1px solid #c8cfc3}
 #ownerStudio .os-preview-head strong{font-size:15px;font-weight:650}
-#ownerStudio .os-preview-head span{font-size:11px;color:#55705b}
+#ownerStudio .os-preview-head span{font-size:11px;color:#405a46}
 #ownerStudio .os-preview-surround{min-height:0;flex:1;padding:19px 20px 22px;display:flex;align-items:stretch}
 #ownerStudio .os-preview-frame{width:100%;height:100%;display:block;border:1px solid #c9d1c7;background:white;box-shadow:0 3px 20px #27352b15}
 #ownerStudio .os-bottom{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:15px 0 0;border-top:1px solid #c8cec3}
