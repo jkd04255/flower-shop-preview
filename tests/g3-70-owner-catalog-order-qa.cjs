@@ -29,6 +29,10 @@ async function verify(engine,label,url){
   await page.waitForFunction(()=>document.querySelectorAll('#ownerFeatured .os-product').length===3);
   const preview=page.frameLocator('#ownerPreview');
   const names=()=>preview.locator('#featured .card strong').allInnerTexts();
+  const waitNames=(section,expected)=>page.waitForFunction(({section,expected})=>{
+   const frame=document.getElementById('ownerPreview')?.contentDocument;
+   return JSON.stringify([...frame?.querySelectorAll('#'+section+' .card strong')||[]].map(x=>x.textContent))===JSON.stringify(expected);
+  },{section,expected});
   assert.deepEqual(await names(),['로지 모먼트','멜로우 선데이','퍼플 레터']);
   assert.ok(await page.locator('#ownerFeatured [data-product-id="rosy-moment"] [data-move="up"]').isDisabled());
   assert.ok(await page.locator('#ownerFeatured [data-product-id="purple-letter"] [data-move="down"]').isDisabled());
@@ -49,7 +53,7 @@ async function verify(engine,label,url){
   await page.locator('#ownerFeatured [data-product-id="mellow-sunday"] [data-field="available"]').uncheck();
   assert.match(await page.locator('#ownerFeatured [data-product-id="mellow-sunday"] .os-product-meta').innerText(),/42,000원 · 품절/,label+' live compact metadata');
   await page.locator('#ownerFeatured [data-product-id="mellow-sunday"] [data-move="up"]').click();
-  await page.waitForFunction(()=>document.querySelector('#featured .card strong')===null||true);
+  await waitNames('featured',['순서가 바뀐 꽃','로지 모먼트','퍼플 레터']);
   assert.deepEqual(await names(),['순서가 바뀐 꽃','로지 모먼트','퍼플 레터'],label+' reordering updates real customer cards');
   const first=page.locator('#ownerFeatured .os-product').first();
   assert.equal(await first.getAttribute('data-product-id'),'mellow-sunday',label+' editor ordering');
@@ -58,24 +62,29 @@ async function verify(engine,label,url){
   assert.match(await preview.locator('#featured .card').first().innerText(),/품절/,label+' stock travels with reordered product');
   assert.ok(await first.locator('[data-move="up"]').isDisabled(),label+' new first boundary disabled');
   await first.locator('[data-move="down"]').click();
+  await waitNames('featured',['로지 모먼트','순서가 바뀐 꽃','퍼플 레터']);
   assert.deepEqual(await names(),['로지 모먼트','순서가 바뀐 꽃','퍼플 레터'],label+' moves can reverse without data loss');
   await page.locator('#ownerAddFeatured').click();
   assert.equal(await page.locator('#ownerFeatured .os-product').count(),4,label+' add item');
   assert.ok(await page.locator('#os-item-owner-draft-1-input-name').isVisible(),label+' newly added item opens even with compact mode');
   await page.locator('#os-item-owner-draft-1-input-name').fill('추가한 꽃');
   await page.locator('#ownerFeatured [data-product-id="owner-draft-1"] [data-move="up"]').click();
+  await waitNames('featured',['로지 모먼트','순서가 바뀐 꽃','추가한 꽃','퍼플 레터']);
   assert.deepEqual(await names(),['로지 모먼트','순서가 바뀐 꽃','추가한 꽃','퍼플 레터'],label+' new item can reorder immediately');
   await page.locator('#ownerFeatured [data-product-id="owner-draft-1"] [data-fold]').click();
   await page.locator('#ownerExpandAll').click();
   assert.equal(await page.locator('.os-product-details[hidden]').count(),0,label+' expand all');
   await page.locator('#os-section-owner-draft-1').selectOption('regular');
   assert.equal(await page.locator('#ownerRegular .os-product').count(),3,label+' switch section persists');
+  await page.waitForFunction(()=>document.querySelector('#ownerPreview')?.contentDocument?.querySelectorAll('#regular .card').length===3);
   assert.equal(await preview.locator('#regular .card').count(),3,label+' section switch real customer');
   await page.locator('#ownerRegular [data-product-id="owner-draft-1"] [data-move="up"]').click();
+  await waitNames('regular',['추가한 꽃','아이보리 데이','코랄 다이어리']);
   const regularNames=await preview.locator('#regular .card strong').allInnerTexts();
-  assert.deepEqual(regularNames,['추가한 꽃','계절의 꽃다발','입고 소식'],label+' regular ordering stays inside its section');
+  assert.deepEqual(regularNames,['추가한 꽃','아이보리 데이','코랄 다이어리'],label+' regular ordering stays inside its section');
   // Reset removes the local draft; independently opened customer site never changes.
   await page.locator('#ownerReset').click();
+  await waitNames('featured',['로지 모먼트','멜로우 선데이','퍼플 레터']);
   assert.deepEqual(await names(),['로지 모먼트','멜로우 선데이','퍼플 레터'],label+' reset restores order and fields');
   assert.equal(await page.locator('#ownerFeatured .os-product').count(),3);
   assert.equal(await page.locator('#ownerRegular .os-product').count(),2);
