@@ -10,3 +10,11 @@
 - QA: 문서 전용 PR이므로 HTML·assets·tests·workflow 경로만 감시하는 G3-66 CI는 실행되지 않을 수 있다. 이 경우 QA 미실행으로 보고. 과거 CI PASS를 새로운 실행으로 주장하지 않는다.
 - 실제 iPhone Safari/Instagram 인앱 브라우저 검증은 여전히 별개 미완료 항목.
 - 다음 후보: 모바일 화면에서 실제로 중복되거나 동작을 방해하는 안내 한 군데만 선정하여 별도 G3 변경으로 검토.
+
+## 추가로 저장한 원본 Frontend Design Skill
+
+- 사용자가 첨부한 `SKILL.md`를 글자 내용 수정 없이 `.agents/skills/frontend-design/SKILL.md`에 저장했습니다.
+- Anthropic `frontend-design`의 Apache-2.0 라이선스를 `.agents/skills/frontend-design/LICENSE.txt`에 동봉했습니다. 참고: https://github.com/anthropics/skills/tree/main/skills/frontend-design
+- 기존 `.agents/skills/human-web-design/SKILL.md`와 병행합니다. **승인된 디자인·프로젝트별 운영/Gate·QA 정책 > Human Web Design 프로젝트 보호 규칙 > 원본 Frontend Design 일반 심미 지침** 순으로 적용합니다.
+- 이 변경은 문서·에이전트 지침 추가일 뿐이며 기존 UI·제품 코드·테스트·배포를 변경하거나 기존 HOLD를 해제하지 않습니다.
+- 사용자가 본 PR의 병합을 별도로 승인하기 전에는 main 반영 및 공개 배포를 진행하지 않습니다.
