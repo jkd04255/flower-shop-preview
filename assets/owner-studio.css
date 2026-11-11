@@ -1,7 +1,8 @@
 
 /* G3-69 owner content studio — demo-only, no authentication or publication.
    A split workspace and the actual pre-existing customer page in an iframe. */
-#ownerStudio{background:#eae9e2;color:#27352b;min-height:calc(100svh - 28px);font-family:inherit}
+#ownerStudio,#ownerStudio *,#ownerStudio *::before,#ownerStudio *::after{box-sizing:border-box}
+#ownerStudio{background:#eae9e2;color:#27352b;min-height:calc(100svh - 28px);font-family:inherit;max-width:100%}
 #ownerStudio[hidden]{display:none!important}
 #ownerStudio .os-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 25px;border-bottom:1px solid #c8cdc0;background:#f8f6ef}
 #ownerStudio .os-top .os-brand{font-family:Georgia,serif;letter-spacing:.035em;font-size:19px}
@@ -36,8 +37,8 @@
 #ownerStudio .os-product-header button{min-height:36px}
 #ownerStudio .os-image-row{display:flex;align-items:center;gap:12px;margin-bottom:13px}
 #ownerStudio .os-thumbnail{flex:0 0 65px;width:65px;height:72px;object-fit:cover;border-radius:2px;border:1px solid #d1d6cc}
-#ownerStudio .os-image-actions{display:flex;flex-direction:column;align-items:flex-start;gap:7px}
-#ownerStudio .os-image-actions input[type="file"]{font-size:12px;max-width:100%;width:210px}
+#ownerStudio .os-image-actions{display:flex;flex:1 1 150px;min-width:0;flex-direction:column;align-items:flex-start;gap:7px}
+#ownerStudio .os-image-actions input[type="file"]{font-size:12px;max-width:100%;width:100%;min-width:0}
 #ownerStudio .os-image-actions small{font-size:11px;color:#617165;line-height:1.5}
 #ownerStudio .os-toggle{display:flex;flex-direction:row;align-items:center;gap:8px;font-size:13px;font-weight:500;margin:0 0 11px}
 #ownerStudio .os-toggle input{width:18px;height:18px;accent-color:#486b51}
@@ -60,6 +61,12 @@
  #ownerStudio .os-preview-head{padding:12px 5%;min-height:62px}
 }
 @media(max-width:420px){
+ #ownerStudio .os-top{flex-wrap:wrap}
+ #ownerStudio .os-top > *{min-width:0;overflow-wrap:anywhere}
+ #ownerStudio .os-preview-head{flex-wrap:wrap}
+ #ownerStudio .os-preview-head > *{min-width:0;overflow-wrap:anywhere}
+ #ownerStudio .os-image-row{flex-wrap:wrap}
+ #ownerStudio .os-image-actions{flex-basis:150px}
  #ownerStudio .os-top{padding:15px 5%}
  #ownerStudio .os-top .os-brand{font-size:17px}
  #ownerStudio .os-row{grid-template-columns:minmax(0,1fr);gap:0}
