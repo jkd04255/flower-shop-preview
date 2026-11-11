@@ -3792,4 +3792,11 @@ route();
   document.addEventListener('click',userTappedLink,{passive:true});
   window.addEventListener('pageshow',userScrolled,{passive:true});
 })();
-</script><script src="./assets/owner-preview.js"></script></body></html>
+/* Load the owner preview bridge only for the explicit in-frame demo;
+   preserve the original three inline script blocks and all public behaviors. */
+if(new URLSearchParams(location.search).get('owner-preview')==='1'&&window.parent!==window){
+ var ownerPreviewBridge=document.createElement('script');
+ ownerPreviewBridge.src='./assets/owner-preview.js';
+ document.head.appendChild(ownerPreviewBridge);
+}
+</script></body></html>
