@@ -12,6 +12,7 @@
 - `assets/owner-studio.js`: 상품 카테고리 안에서만 순서 이동, 접힌 상품 ID 관리, 정렬 버튼 접근성, 메타정보 실시간 갱신.
 - `assets/owner-studio.css`: 편집 제목과 순서/접기 제어의 줄바꿈 및 접힌 상태 표시.
 - `owner-studio.html`: 전체 접기/펼치기 명령과 사용법 한 줄.
+- `index.html`: 2026-11-12 통합 CI에서 발견한 기존 모바일 달력 `.cal-more` 대비 4.12:1 문제를 해결하기 위해 **해당 한 CSS 색상만** `#647769` → `#465c4b`로 진하게 조정했습니다. 기능·레이아웃·사진·고정 CTA는 변경하지 않았습니다.
 - `tests/g3-70-owner-catalog-order-qa.cjs`: Chromium + WebKit 실제 고객 iframe 검증(정렬, 접기, 가격/품절 동기화, 분류 이동, 초기화, 비게시, 320/390/1080/1440px 레이아웃, axe).
 - `.github/workflows/g3-17-browser-qa.yml`: **기존 모든 테스트 유지**, G3-70 검사만 추가.
 
