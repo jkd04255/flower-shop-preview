@@ -85,6 +85,10 @@ async function check(engine,name,url){
   assert.equal(await page.evaluate(()=>JSON.stringify(localStorage)),initialStorage,name+' no storage writes');
   const visual=page.locator('#adminList .admin-request').first();
   await visual.focus();
+  /* Trigger real keyboard modality: focus-visible does not have to apply to
+     programmatic focus immediately following a pointer click. */
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Shift+Tab');
   const focus=await visual.evaluate(el=>({active:document.activeElement===el,style:getComputedStyle(el).outlineStyle,width:parseFloat(getComputedStyle(el).outlineWidth)}));
   assert.ok(focus.active&&focus.style==='solid'&&focus.width>=2,name+' visible keyboard focus');
   await page.addScriptTag({path:require.resolve('axe-core/axe.min.js')});
