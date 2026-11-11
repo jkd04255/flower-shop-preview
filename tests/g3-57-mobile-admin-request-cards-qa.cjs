@@ -48,7 +48,7 @@ async function check(engine,name,url){
    assert.equal(state.count,4,name+' booking count preserved');
    assert.ok(state.metaText.includes(' · '),name+' date/time/alias/payment metadata preserved');
    assert.equal(state.allMetadata.length,4);
-   assert.ok(state.allMetadata.every(s=>s.includes(' · ')&&/\\d{4}-\\d{2}-\\d{2}/.test(s)),name+' original four metadata strings');
+   assert.ok(state.allMetadata.every(s=>s.includes(' · ')&&/\d{4}-\d{2}-\d{2}/.test(s)),name+' original four metadata strings');
    assert.ok(state.allStatus.every(Boolean),name+' all status badges present');
    if(width<=600){
     assert.ok(state.cardPadding>=17&&state.cardPadding<=19,name+' '+width+'px compact editorial padding');
@@ -92,7 +92,7 @@ async function check(engine,name,url){
   assert.deepEqual(report.violations.map(v=>({id:v.id,target:v.nodes.map(n=>n.target)})),[],name+' axe WCAG2.1 AA');
   fs.mkdirSync('qa-artifacts',{recursive:true});
   await page.screenshot({path:'qa-artifacts/g3-57-admin-cards-'+name.toLowerCase()+'-390.png',fullPage:true});
-  const version=(await page.locator('footer').innerText()).match(/G3-(\\d+) STATIC DEMO/);
+  const version=(await page.locator('footer').innerText()).match(/G3-(\d+) STATIC DEMO/);
   assert.ok(version&&Number(version[1])>=57,name+' G3-57 or later demo footer');
   assert.deepEqual(errors,[],name+' JavaScript runtime errors');
   await ctx.close();
