@@ -2535,6 +2535,8 @@ let activeDemoLookupCode=''; /* Never persisted or put into the route URL. */
 let adminSequence=5;
 /* Synthetic booking metadata only; never persist the form's name, telephone or note. */
 const DEMO_BOOKINGS_KEY='afternoon-garden-calendar-demo-v1';
+/* Owner preview uses only in-memory synthetic data; never share/write normal demo storage. */
+const OWNER_PREVIEW_ONLY=new URLSearchParams(window.location.search).get('owner-preview')==='1'&&window.parent!==window;
 /* G3-12: bounded, client-only synthetic history; reject new demo requests before saved data becomes unreadable. */
 const DEMO_BOOKINGS_LIMIT=500;
 const DEMO_ID_LIMIT=999999;
@@ -2544,6 +2546,7 @@ function bookingAlias(request){
  return number>=1&&number<=4?samples[number-1]:'체험 고객 '+String(number).padStart(3,'0')+' (가상)';
 }
 function saveDemoBookings(){
+ if(OWNER_PREVIEW_ONLY)return;
  try{
   const records=adminRequests.map(item=>({
    id:item.id,productIndex:item.productIndex,date:item.date,time:item.time,
@@ -2553,6 +2556,7 @@ function saveDemoBookings(){
  }catch(err){/* Private browsing or storage denial: in-memory demo still works. */}
 }
 function restoreDemoBookings(){
+ if(OWNER_PREVIEW_ONLY){adminRequests=initialAdminRequests();adminSequence=5;return false;}
  try{
   const raw=window.localStorage.getItem(DEMO_BOOKINGS_KEY);
   if(!raw){adminRequests=initialAdminRequests();adminSequence=5;return false;}
