@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-58
+name: Flower shop consolidated Chromium + WebKit QA · G3-59
 on:
   pull_request:
     paths:
@@ -219,6 +219,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-58-mobile-admin-detail-qa.cjs
+      - name: G3-59 mobile calendar status filter rail · Chromium + WebKit + axe
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-59-mobile-calendar-status-filters-qa.cjs
       - name: Screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
