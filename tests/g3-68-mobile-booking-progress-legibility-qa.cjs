@@ -27,7 +27,7 @@ async function check(engine,label,url){
    const steps=await page.locator('#reserveProgress li').evaluateAll(els=>els.map(el=>({
     key:el.dataset.reservationStep,current:el.getAttribute('aria-current'),
     active:el.classList.contains('is-current'),done:el.classList.contains('is-complete'),
-    label:el.innerText.trim().replace(/\s+/g,' ')
+    label:el.querySelector('span:last-child').innerText.trim().replace(/\s+/g,' ')
    })));
    assert.deepEqual(steps.map(s=>s.key),names,label+' original stage identifiers and order');
    assert.deepEqual(steps.map(s=>s.label),labels,label+' all original Korean step names');
