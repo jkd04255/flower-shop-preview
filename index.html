@@ -1830,6 +1830,46 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  }
 }
 </style>
+<style id="g3-59-calendar-status-rail">
+/* G3-59 — Keep all five calendar-day status filters, but avoid multi-line
+   controls obscuring the timeline on a small screen. Native swipe/keyboard
+   scrolling stays inside this rail; counts and click semantics are unchanged. */
+@media(max-width:600px){
+ #calendarDemo .cal-status-filters{
+  display:flex;
+  flex-wrap:nowrap;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  min-height:54px;
+  margin:12px 0 17px;
+  padding:2px 1px 8px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  overscroll-behavior-x:contain;
+  scroll-padding-inline:1px;
+  scrollbar-width:thin;
+  scrollbar-color:#aeb9ab transparent;
+  -webkit-overflow-scrolling:touch;
+ }
+ #calendarDemo .cal-status-filters button{
+  flex:0 0 auto;
+  min-width:0;
+  min-height:44px;
+  padding:10px 14px;
+  font-size:12px;
+  font-weight:600;
+  line-height:1.45;
+  white-space:nowrap;
+ }
+ #calendarDemo .cal-status-filters button:focus-visible{
+  outline:2px solid #405b45;
+  outline-offset:-3px;
+ }
+}
+</style>
 </head><body>
 <div class="banner">G3-02 · 가상 예약 시연 · 실제 접수·결제 불가</div><main id="home">
 <section class="hero" id="top"><header class="nav"><a href="#top" class="brand">AFTERNOON<strong>오후의 정원</strong>FLOWER ATELIER</a><nav aria-label="쇼윈도 주요 메뉴"><a href="#curation">오늘의 꽃</a><a href="#arrivals">최근 입고</a><a href="#store">매장 안내</a><a href="#/booking-status">예약 조회</a></nav></header><div class="heroText"><div class="micro">FLOWERS FOR THE MOMENTS WE KEEP.</div><h1 class="reveal-copy"><span class="motion-line">마음이 머무는 곳에</span><span class="motion-line">꽃을 놓아요.</span></h1><p>소중한 하루에, 오래도록 기억될 한 다발.</p><a class="call" href="#curation">오늘의 꽃 만나기 ↗</a></div></section>
@@ -2122,7 +2162,7 @@ html:has(#reservation:not([hidden])){scroll-behavior:auto}
  <p id="calRefreshStatus" class="cal-persist-note" role="status" aria-live="polite" aria-atomic="true"></p>
  <p class="cal-persist-note">이 화면은 가상 예약 시연입니다. 실제 고객정보를 저장하지 않으며, 예약 정보는 이 브라우저에만 보존됩니다. 새로고침 버튼으로 최신 상태를 다시 불러올 수 있습니다. 실제 사용에는 관리자 로그인과 서버 데이터베이스가 필요합니다.</p>
 </section>
-<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-58 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
+<footer class="foot"><b>오후의 정원</b> · FLOWERS FOR THE MOMENTS WE KEEP.<br><small>G3-59 STATIC DEMO · 가상 계좌 안내/입금 확인/알림 시연 · 실제 접수·연락·결제 불가</small><br><a class="admin-footer-link" href="#/admin-demo">관리자 데모 살펴보기 ↗</a> · <a class="admin-footer-link" href="#/calendar-demo">예약 캘린더 보기 ↗</a></footer>
 <script>
 /* G3-41: Only a *home-page reload* starts from the hero.
    Preserve user-clicked in-page anchors, subpage deep links, and back/forward visits. */
