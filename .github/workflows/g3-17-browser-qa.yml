@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-71
+name: Flower shop consolidated Chromium + WebKit QA · G3-72
 on:
   pull_request:
     paths:
@@ -119,6 +119,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-71-owner-management-qa.cjs
+      - name: G3-72 owner mobile touch, keyboard and stale photo race protection · Chromium + WebKit + axe
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-72-owner-mobile-race-qa.cjs
       - name: G3-42 Safari early swipe and idle hero peek · Chromium + WebKit
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
