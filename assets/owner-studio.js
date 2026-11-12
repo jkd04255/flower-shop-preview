@@ -179,6 +179,17 @@
    }
   }
   const target=byId(targetId);
+  // At the 20-arrival limit both Add and one-step Undo may be disabled.
+  // A review link must never silently lead to a disabled, unfocusable control.
+  if((targetId==='ownerAddArrival'||targetId==='ownerUndoArrival')&&target?.disabled){
+   const summary=byId('ownerArrivalCount');
+   document.querySelector('.os-jump-target')?.classList.remove('os-jump-target');
+   summary.classList.add('os-jump-target');
+   summary.focus({preventScroll:true});
+   summary.scrollIntoView({block:'center',inline:'nearest',behavior:'auto'});
+   announce('최근 입고는 최대 20개입니다. 지금은 이 항목의 추가·삭제 취소를 사용할 수 없습니다. 전체를 원복하려면 편집 내용 초기화를 사용해 주세요.');
+   return;
+  }
   if(!target||target.disabled||target.closest('[hidden]')){
    announce('해당 편집 위치를 현재 표시할 수 없습니다. 상품 목록을 확인해 주세요.');
    return;
