@@ -8,7 +8,13 @@
  const regular=document.getElementById('ownerRegular');
  let baseline=null,draft=null,serial=0,draftEpoch=0,lastRemoval=null;
  const foldedProducts=new Set();
+ const photoRequests=new Map();
  const maxProducts=30;
+ function invalidatePhoto(id){
+  const next=(photoRequests.get(id)||0)+1;
+  photoRequests.set(id,next);
+  return next;
+ }
  const fields={name:'ownerBusinessName',address:'ownerAddress',phone:'ownerPhone',hours:'ownerHours',pickup:'ownerPickup'};
  const byId=id=>document.getElementById(id);
  const clone=obj=>JSON.parse(JSON.stringify(obj));
@@ -19,15 +25,18 @@
   announce('고객 화면 미리보기에 반영됨 · 공개 게시되지 않음');
  }
  const imgTypes=['image/jpeg','image/png','image/webp'];
- function filePhoto(file,onSuccess){
+ function filePhoto(file,onSuccess,isCurrent){
   if(!file)return;
   if(!imgTypes.includes(file.type)||file.size>3*1024*1024||file.size<1){
    announce('사진은 3MB 이하 JPG·PNG·WebP 파일만 선택할 수 있습니다.');
    return;
   }
   const reader=new FileReader();
-  reader.onerror=()=>announce('사진을 읽지 못했습니다. 다른 파일을 선택해 주세요.');
+  reader.onerror=()=>{
+   if(isCurrent())announce('사진을 읽지 못했습니다. 다른 파일을 선택해 주세요.');
+  };
   reader.onload=()=>{
+   if(!isCurrent())return;
    const value=typeof reader.result==='string'?reader.result:'';
    if(!/^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(value)){
     announce('선택한 이미지의 형식을 확인할 수 없습니다.');
@@ -35,7 +44,8 @@
    }
    if(onSuccess(value)!==false)send();
   };
-  reader.readAsDataURL(file);
+  try{reader.readAsDataURL(file);}
+  catch{if(isCurrent())announce('사진을 읽지 못했습니다. 다른 파일을 선택해 주세요.');}
  }
  function originalPhoto(id){
   return baseline?.products.find(p=>p.id===id)?.image||baseline?.products[0]?.image||'';
@@ -223,14 +233,14 @@
  }
  function reset(){
   if(!baseline)return;
-  draftEpoch++;draft=clone(baseline);foldedProducts.clear();
+  draftEpoch++;photoRequests.clear();draft=clone(baseline);foldedProducts.clear();
   byId('ownerCatalogSearch').value='';clearUndo();
   renderAll();send();announce('기본 시연 내용으로 초기화했습니다. 공개 사이트에는 영향이 없습니다.');
  }
  function loadBaseline(msg){
   if(baseline||!Array.isArray(msg.products)||msg.products.length<1)return;
   baseline={name:msg.name,address:msg.address,phone:msg.phone||'',hours:msg.hours,pickup:msg.pickup,hero:msg.hero,products:msg.products};
-  draftEpoch++;draft=clone(baseline);clearUndo();renderAll();
+  draftEpoch++;photoRequests.clear();draft=clone(baseline);clearUndo();renderAll();
   byId('ownerAddFeatured').disabled=false;byId('ownerAddRegular').disabled=false;byId('ownerReset').disabled=false;
   send();
  }
@@ -269,19 +279,21 @@
   if(target.matches('input[type=file][data-photo]')){
    if(!draft)return;
    const id=target.dataset.photo,file=target.files?.[0];
-   const epoch=draftEpoch;
+   if(!file)return;
+   const ticket=invalidatePhoto(id),epoch=draftEpoch;
+   const isCurrent=()=>epoch===draftEpoch&&photoRequests.get(id)===ticket&&!!draft;
    if(id==='hero'){
     filePhoto(file,url=>{
-     if(epoch!==draftEpoch||!draft)return false;
+     if(!isCurrent())return false;
      draft.hero=url;byId('ownerHeroThumb').src=url;
-    });
+    },isCurrent);
    }else if(draft.products.some(p=>p.id===id)){
     filePhoto(file,url=>{
-     if(epoch!==draftEpoch||!draft)return false;
+     if(!isCurrent())return false;
      const current=draft.products.find(p=>p.id===id);
      if(!current)return false;
      current.image=url;refreshPhotoControls(id);
-    });
+    },()=>isCurrent()&&draft.products.some(p=>p.id===id));
    }
    target.value='';
   }else if(target.matches('select[data-field=section]')){
@@ -295,7 +307,9 @@
  document.addEventListener('click',event=>{
   const button=event.target.closest('button');if(!button||!draft)return;
   if(button.dataset.restorePhoto){
-   const product=draft.products.find(p=>p.id===button.dataset.restorePhoto);
+   const id=button.dataset.restorePhoto;
+   invalidatePhoto(id);
+   const product=draft.products.find(p=>p.id===id);
    if(product){product.image=originalPhoto(product.id);refreshPhotoControls(product.id);send();
     announce('기본 상품 사진으로 복원했습니다. 고객 미리보기에서만 변경됩니다.');}
    return;
@@ -326,12 +340,22 @@
   }
  });
  byId('ownerCatalogSearch').addEventListener('input',applyCatalogFilter);
+ byId('ownerCatalogSearch').addEventListener('keydown',event=>{
+  if(event.key==='Escape'&&byId('ownerCatalogSearch').value){
+   event.preventDefault();clearCatalogSearch();
+   announce('상품 검색을 지웠습니다. 전체 상품이 다시 표시됩니다.');
+  }
+ });
  byId('ownerCatalogClear').addEventListener('click',()=>{clearCatalogSearch();byId('ownerCatalogSearch').focus();});
  byId('ownerUndoDelete').addEventListener('click',undoDelete);
  byId('ownerCollapseAll').addEventListener('click',()=>foldAll(true));
  byId('ownerExpandAll').addEventListener('click',()=>foldAll(false));
  byId('ownerAddFeatured').addEventListener('click',()=>add('featured'));
  byId('ownerAddRegular').addEventListener('click',()=>add('regular'));
- byId('ownerHeroRestore').addEventListener('click',()=>{if(!draft)return;draft.hero=baseline.hero;byId('ownerHeroThumb').src=baseline.hero;send();});
+ byId('ownerHeroRestore').addEventListener('click',()=>{
+  if(!draft)return;
+  invalidatePhoto('hero');
+  draft.hero=baseline.hero;byId('ownerHeroThumb').src=baseline.hero;send();
+ });
  byId('ownerReset').addEventListener('click',reset);
 })();
