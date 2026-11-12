@@ -10,6 +10,20 @@
     image:U[i],section:i<3?'featured':'regular'
   }));
   const infoCells=[...document.querySelectorAll('#home #store table tr')];
+  // Only the owner-preview iframe needs this bridge. The original customer
+  // page and its CSS stay untouched. On medium-sized iframe widths the
+  // CTA and horizontal flex row can squeeze Korean text to single glyphs.
+  const previewLayoutFix=document.createElement('style');
+  previewLayoutFix.id='owner-preview-width-fix';
+  previewLayoutFix.textContent='@media (min-width:701px) and (max-width:900px){#home .store .booking-info{flex-direction:column;align-items:stretch}#home .store .booking-info>div{width:100%;min-width:0}#home .store .booking-info .booking-demo-link{max-width:100%}}';
+  document.head.appendChild(previewLayoutFix);
+  const BASE_ARRIVALS=[...document.querySelectorAll('#arrivalList .arrival')].map((el,i)=>({
+    id:'arrival-'+(i+1),
+    tag:el.querySelector('small')?.textContent||'NEW',
+    name:el.querySelector('strong')?.textContent||'입고 꽃',
+    price:el.querySelectorAll('small')[1]?.textContent||'문의',
+    image:el.querySelector('img')?.getAttribute('src')||''
+  }));
   const base={
     type:'AFG_OWNER_BASELINE_V1',
     name:document.querySelector('#home .hero .nav .brand strong')?.textContent||'오후의 정원',
@@ -18,7 +32,8 @@
     hours:infoCells[1]?.cells[1]?.textContent||'월–금 11:00–20:00 (예시)',
     pickup:infoCells[3]?.cells[1]?.textContent||'예약 요청 → 계좌이체 → 매장 입금 확인 → 예약 확정',
     hero:'./assets/hero-original.webp',
-    products:BASE_PRODUCTS
+    products:BASE_PRODUCTS,
+    arrivals:BASE_ARRIVALS
   };
   const allowedLocalImage=/^\.\/assets\/[a-z0-9-]+\.(?:webp|jpg|jpeg|png)$/i;
   const allowedUnsplash=/^https:\/\/images\.unsplash\.com\/photo-[\w-]+(?:\?[a-z0-9_=&%-]+)?$/i;
@@ -44,6 +59,30 @@
     row.append(left,price);
     const link=document.createElement('span');link.className='card-detail-link';link.textContent='상품 상세 보기 ↗';
     a.append(img,row,link);return a;
+  }
+  function renderArrivals(arrivals){
+    const list=document.querySelector('#arrivalList');
+    if(!list)return;
+    const nodes=[],seen=new Set();
+    for(const item of arrivals){
+      if(!item||typeof item!=='object'||typeof item.id!=='string'||!/^[a-z0-9-]{2,56}$/.test(item.id)||seen.has(item.id))continue;
+      seen.add(item.id);
+      const el=document.createElement('div');el.className='arrival';
+      const img=document.createElement('img');img.loading='lazy';img.alt=value(item.name,60)+' 입고 꽃 사진';
+      img.src=safeImage(item.image)||BASE_ARRIVALS[0]?.image||'';
+      const details=document.createElement('div');
+      const tag=document.createElement('small');tag.textContent=value(item.tag,35);
+      const name=document.createElement('strong');name.textContent=value(item.name,60)||'입고 꽃';
+      const price=document.createElement('small');price.textContent=value(item.price,50);
+      details.append(tag,name,price);
+      const mark=document.createElement('em');mark.textContent='문의 전용';
+      el.append(img,details,mark);nodes.push(el);
+    }
+    if(!nodes.length){
+      const empty=document.createElement('p');empty.className='muted';empty.textContent='현재 새로 들어온 꽃 소식이 없습니다.';
+      nodes.push(empty);
+    }
+    list.replaceChildren(...nodes);
   }
   function applyDraft(payload){
     if(!payload||!Array.isArray(payload.products)||payload.products.length>30)return;
@@ -82,6 +121,7 @@
     }
     const note=document.querySelector('#curation > p.muted');
     if(note)note.textContent='* 사진과 가격은 가상 자료입니다. 오늘의 추천은 '+featuredCount+'개입니다.';
+    if(Array.isArray(payload.arrivals)&&payload.arrivals.length<=20)renderArrivals(payload.arrivals);
     if(location.hash.startsWith('#/flower/')||location.hash.startsWith('#/reserve/'))route();
   }
   function respondBaseline(){
