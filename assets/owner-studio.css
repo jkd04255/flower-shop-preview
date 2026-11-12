@@ -55,6 +55,17 @@
 #ownerStudio .os-count{font-size:12px;color:#4e6352}
 #ownerStudio .os-product{border-top:1px solid #d0d6cc;padding:17px 0 16px}
 #ownerStudio .os-product:first-child{border-top:0}
+#ownerStudio .os-arrival{border-top:1px solid #d0d6cc;padding:17px 0 16px;min-width:0}
+#ownerStudio .os-arrival:first-child{border-top:0}
+#ownerStudio .os-arrival-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin:0 0 13px}
+#ownerStudio .os-arrival-header strong{font-size:14px;font-weight:650;overflow-wrap:anywhere}
+#ownerStudio .os-arrival-header .os-action{min-height:44px}
+#ownerStudio .os-arrival-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}
+#ownerStudio .os-arrival-actions .os-action{min-height:44px}
+#ownerStudio .os-arrival-photo-restore{min-height:40px;font-size:12px;padding:8px 11px}
+#ownerStudio .os-arrival-photo-restore:disabled{opacity:.55;cursor:not-allowed}
+#ownerStudio #ownerArrivalsEmpty{margin:8px 0 16px}
+
 #ownerStudio .os-product-header{display:flex;align-items:center;gap:10px;margin:0 0 12px;justify-content:space-between}
 #ownerStudio .os-product-header strong{font-size:14px;font-weight:650;overflow-wrap:anywhere}
 #ownerStudio .os-product-header button{min-height:36px}
@@ -112,6 +123,7 @@
  #ownerStudio .os-product-header{gap:12px}
  #ownerStudio .os-product-actions{width:100%;gap:6px}
  #ownerStudio .os-photo-restore{min-height:44px!important;font-size:12px!important}
+ #ownerStudio .os-arrival-photo-restore{min-height:44px}
  #ownerStudio .os-image-actions input[type="file"]{min-height:44px;font-size:14px;padding:8px 0}
  #ownerStudio input[type="text"],#ownerStudio input[type="tel"],#ownerStudio input[type="search"],#ownerStudio textarea,#ownerStudio select{font-size:16px}
 
