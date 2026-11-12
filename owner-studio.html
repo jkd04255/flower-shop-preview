@@ -58,6 +58,17 @@
     </div>
    </div>
   </fieldset>
+  <fieldset id="ownerArrivalEditor">
+   <legend>오늘 들어온 꽃 · 최근 입고</legend>
+   <p class="os-editor-hint">입고 꽃은 판매 꽃다발과 별개인 문의 전용 소식입니다. 사진·이름·입고 날짜·가격 안내를 바꾸고 항목을 추가하거나 0개까지 삭제할 수 있습니다.</p>
+   <div class="os-subheading"><h3>현재 입고 소식</h3><span id="ownerArrivalCount" class="os-count"></span></div>
+   <div id="ownerArrivals" aria-label="최근 입고 꽃 편집 목록"></div>
+   <p id="ownerArrivalsEmpty" class="os-no-results" hidden>표시할 입고 소식이 없습니다. 원하시면 아래에서 새 항목을 추가하세요.</p>
+   <div class="os-arrival-actions">
+    <button type="button" id="ownerAddArrival" class="os-action os-add" disabled>입고 소식 추가 +</button>
+    <button type="button" id="ownerUndoArrival" class="os-action" hidden>최근 입고 삭제 취소</button>
+   </div>
+  </fieldset>
   <fieldset>
    <legend>판매 상품 구성</legend>
    <p class="os-editor-hint">노출 순서를 바꾸거나 상세 편집을 접을 수 있습니다. 아래 검색은 왼쪽 관리 목록에만 적용되며 고객 화면에는 영향을 주지 않습니다.</p>
