@@ -150,6 +150,11 @@ async function verify(engine,label,url){
   await page.locator('#ownerReset').click();
   assert.match(await page.locator('#ownerChangesCount').innerText(),/변경사항 없음/);
   assert.equal(await page.locator('#ownerFeatured .os-product').count(),3);
+  await page.waitForFunction(()=>{
+   const doc=document.querySelector('#ownerPreview')?.contentDocument;
+   const names=[...doc?.querySelectorAll('#featured .card strong')||[]].map(el=>el.textContent);
+   return JSON.stringify(names)===JSON.stringify(['로지 모먼트','멜로우 선데이','퍼플 레터']);
+  });
   assert.deepEqual(await preview.locator('#featured .card strong').allInnerTexts(),['로지 모먼트','멜로우 선데이','퍼플 레터']);
   assert.equal(await page.evaluate(()=>JSON.stringify(localStorage)),originalStore,label+' draft did not persist');
   const independent=await context.newPage();
