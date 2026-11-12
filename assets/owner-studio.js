@@ -6,10 +6,11 @@
  const status=document.getElementById('ownerStatus');
  const featured=document.getElementById('ownerFeatured');
  const regular=document.getElementById('ownerRegular');
- let baseline=null,draft=null,serial=0,draftEpoch=0,lastRemoval=null;
+ const arrivals=document.getElementById('ownerArrivals');
+ let baseline=null,draft=null,serial=0,arrivalSerial=0,draftEpoch=0,lastRemoval=null,lastArrivalRemoval=null;
  const foldedProducts=new Set();
  const photoRequests=new Map();
- const maxProducts=30;
+ const maxProducts=30,maxArrivals=20;
  function invalidatePhoto(id){
   const next=(photoRequests.get(id)||0)+1;
   photoRequests.set(id,next);
@@ -91,6 +92,26 @@
     const movedId=current.find((id,i)=>id!==original[i]);
     record(sectionText(section)+': 기존 상품 진열 순서 변경','진열 순서','os-item-'+movedId+'-input-name',movedId,'order:'+section);
    }
+  }
+  const oldArrivals=new Map((baseline.arrivals||[]).map(a=>[a.id,a]));
+  const newArrivals=new Map((draft.arrivals||[]).map(a=>[a.id,a]));
+  for(const old of baseline.arrivals||[]){
+   if(!newArrivals.has(old.id))record('입고 소식 삭제: '+shortText(old.name),'최근 입고',
+    lastArrivalRemoval?.arrival.id===old.id?'ownerUndoArrival':'ownerAddArrival','','arrival-deleted:'+old.id);
+  }
+  for(const item of draft.arrivals||[]){
+   const old=oldArrivals.get(item.id),nameId='os-arrival-'+item.id+'-name';
+   if(!old){record('입고 소식 추가: '+shortText(item.name),'최근 입고',nameId,'','arrival:'+item.id);continue;}
+   const edits=[];let target='';
+   for(const [key,label] of [['name','이름'],['tag','입고 표기'],['price','가격 안내']]){
+    if(item[key]!==old[key]){
+     edits.push(label+' '+shortText(old[key])+' → '+shortText(item[key]));
+     if(!target)target='os-arrival-'+item.id+'-'+key;
+    }
+   }
+   if(item.image!==old.image){edits.push('사진 교체');if(!target)target='os-arrival-file-'+item.id;}
+   if(edits.length)record('입고 꽃 '+shortText(item.name)+': '+edits.join(' · '),'최근 입고',
+    target||nameId,'','arrival:'+item.id);
   }
   return changes;
  }
@@ -212,6 +233,73 @@
   if(restore)restore.disabled=!changed;
   const img=article.querySelector('[data-thumb]');
   if(img)img.src=product.image;
+ }
+ function originalArrivalPhoto(id){
+  return baseline?.arrivals.find(a=>a.id===id)?.image||baseline?.arrivals[0]?.image||'';
+ }
+ function arrivalField(label,value,key,id,max=60){
+  const wrapper=field(label,value,key,id,'text',max);
+  wrapper.querySelector('input').dataset.arrivalField=key;
+  return wrapper;
+ }
+ function renderArrival(item){
+  const article=document.createElement('article');article.className='os-arrival';article.dataset.arrivalId=item.id;
+  const head=document.createElement('div');head.className='os-arrival-header';
+  const title=document.createElement('strong');title.textContent=item.name||'입고 꽃';
+  const del=document.createElement('button');del.type='button';del.className='os-action os-remove';
+  del.textContent='입고 항목 삭제';del.dataset.removeArrival=item.id;
+  del.setAttribute('aria-label',(item.name||'입고 꽃')+' 입고 소식 삭제');head.append(title,del);
+  const photo=document.createElement('div');photo.className='os-image-row';
+  const thumb=document.createElement('img');thumb.className='os-thumbnail';thumb.src=item.image;
+  thumb.alt=item.name+' 입고 사진';thumb.dataset.arrivalThumb=item.id;
+  const actions=document.createElement('div');actions.className='os-image-actions';
+  const uploadId='os-arrival-file-'+item.id;
+  const label=document.createElement('label');label.textContent='입고 사진 바꾸기';label.htmlFor=uploadId;
+  const file=document.createElement('input');file.type='file';file.id=uploadId;
+  file.accept='image/png,image/jpeg,image/webp';file.dataset.photo='arrival:'+item.id;
+  file.setAttribute('aria-label',(item.name||'입고 꽃')+' 입고 사진 파일 선택');
+  const note=document.createElement('small');note.textContent='JPG·PNG·WebP 3MB 이하 · 임시 미리보기';
+  const restore=document.createElement('button');restore.type='button';restore.className='os-action os-arrival-photo-restore';
+  restore.textContent='기본 입고 사진으로';restore.dataset.restoreArrivalPhoto=item.id;
+  restore.disabled=item.image===originalArrivalPhoto(item.id);
+  actions.append(label,file,note,restore);photo.append(thumb,actions);
+  const row=document.createElement('div');row.className='os-row';
+  row.append(
+   arrivalField('꽃 이름',item.name,'name','os-arrival-'+item.id+'-name',60),
+   arrivalField('입고 날짜 · NEW 표기',item.tag,'tag','os-arrival-'+item.id+'-tag',35));
+  article.append(head,photo,row,arrivalField('가격 안내 (문의 전용)',item.price,'price','os-arrival-'+item.id+'-price',50));
+  return article;
+ }
+ function renderArrivals(){
+  if(!draft)return;
+  arrivals.replaceChildren(...draft.arrivals.map(renderArrival));
+  byId('ownerArrivalCount').textContent=draft.arrivals.length+'개';
+  byId('ownerArrivalsEmpty').hidden=draft.arrivals.length!==0;
+  byId('ownerAddArrival').disabled=draft.arrivals.length>=maxArrivals;
+  byId('ownerUndoArrival').hidden=!lastArrivalRemoval;
+ }
+ function addArrival(){
+  if(!draft||draft.arrivals.length>=maxArrivals){announce('입고 소식은 최대 '+maxArrivals+'개까지 편집할 수 있습니다.');return;}
+  const id='owner-arrival-'+(++arrivalSerial);
+  draft.arrivals.push({id,name:'새로 들어온 꽃',tag:'NEW',price:'가격 문의',image:originalArrivalPhoto(id)});
+  renderArrivals();send();byId('os-arrival-'+id+'-name')?.focus();
+ }
+ function deleteArrival(id){
+  const index=draft?.arrivals.findIndex(a=>a.id===id);
+  if(index==null||index<0)return;
+  lastArrivalRemoval={arrival:clone(draft.arrivals[index]),index};
+  invalidatePhoto('arrival:'+id);
+  draft.arrivals.splice(index,1);
+  renderArrivals();send();byId('ownerUndoArrival').focus();
+  announce('입고 소식을 삭제했습니다. 최근 삭제 취소로 복원할 수 있습니다. 공개 사이트에는 영향이 없습니다.');
+ }
+ function undoArrival(){
+  if(!draft||!lastArrivalRemoval||draft.arrivals.length>=maxArrivals)return;
+  const saved=lastArrivalRemoval;
+  if(draft.arrivals.some(a=>a.id===saved.arrival.id))return;
+  draft.arrivals.splice(Math.min(saved.index,draft.arrivals.length),0,saved.arrival);
+  lastArrivalRemoval=null;renderArrivals();send();
+  byId('os-arrival-'+saved.arrival.id+'-name')?.focus();
  }
  function applyCatalogFilter(){
   if(!draft)return;
@@ -373,7 +461,7 @@
  function renderAll(){
   for(const [key,id] of Object.entries(fields))byId(id).value=draft[key]||'';
   byId('ownerHeroThumb').src=draft.hero;
-  renderProducts();
+  renderProducts();renderArrivals();
  }
  function add(section){
   if(!draft||draft.products.length>=maxProducts){announce('이 시연에서는 최대 '+maxProducts+'개까지 편집할 수 있습니다.');return;}
@@ -388,13 +476,14 @@
  function reset(){
   if(!baseline)return;
   draftEpoch++;photoRequests.clear();draft=clone(baseline);foldedProducts.clear();
-  byId('ownerCatalogSearch').value='';clearUndo();
+  byId('ownerCatalogSearch').value='';clearUndo();lastArrivalRemoval=null;
   renderAll();send();announce('기본 시연 내용으로 초기화했습니다. 공개 사이트에는 영향이 없습니다.');
  }
  function loadBaseline(msg){
   if(baseline||!Array.isArray(msg.products)||msg.products.length<1)return;
-  baseline={name:msg.name,address:msg.address,phone:msg.phone||'',hours:msg.hours,pickup:msg.pickup,hero:msg.hero,products:msg.products};
-  draftEpoch++;photoRequests.clear();draft=clone(baseline);clearUndo();renderAll();
+  baseline={name:msg.name,address:msg.address,phone:msg.phone||'',hours:msg.hours,pickup:msg.pickup,
+   hero:msg.hero,products:msg.products,arrivals:Array.isArray(msg.arrivals)?msg.arrivals:[]};
+  draftEpoch++;photoRequests.clear();draft=clone(baseline);clearUndo();lastArrivalRemoval=null;renderAll();
   byId('ownerAddFeatured').disabled=false;byId('ownerAddRegular').disabled=false;byId('ownerReset').disabled=false;
   send();
  }
@@ -410,6 +499,18 @@
   byId(id).addEventListener('input',event=>{if(!draft)return;draft[key]=event.target.value;send();});
  }
  document.addEventListener('input',event=>{
+  const arrival=event.target.closest('.os-arrival');
+  if(arrival&&draft&&event.target.dataset.arrivalField){
+   const item=draft.arrivals.find(a=>a.id===arrival.dataset.arrivalId);
+   if(!item)return;
+   const key=event.target.dataset.arrivalField;item[key]=event.target.value;
+   if(key==='name'){
+    arrival.querySelector('.os-arrival-header strong').textContent=item.name||'입고 꽃';
+    arrival.querySelector('[data-remove-arrival]').setAttribute('aria-label',(item.name||'입고 꽃')+' 입고 소식 삭제');
+    arrival.querySelector('[data-photo]').setAttribute('aria-label',(item.name||'입고 꽃')+' 입고 사진 파일 선택');
+   }
+   send();return;
+  }
   const item=event.target.closest('.os-product');if(!item||!draft)return;
   const product=draft.products.find(p=>p.id===item.dataset.productId);
   if(!product||!event.target.dataset.field)return;
@@ -436,7 +537,18 @@
    if(!file)return;
    const ticket=invalidatePhoto(id),epoch=draftEpoch;
    const isCurrent=()=>epoch===draftEpoch&&photoRequests.get(id)===ticket&&!!draft;
-   if(id==='hero'){
+   if(id.startsWith('arrival:')){
+    const arrivalId=id.slice('arrival:'.length);
+    filePhoto(file,url=>{
+     if(!isCurrent())return false;
+     const current=draft.arrivals.find(a=>a.id===arrivalId);
+     if(!current)return false;
+     current.image=url;
+     const img=document.querySelector('[data-arrival-thumb="'+arrivalId+'"]');if(img)img.src=url;
+     const restore=document.querySelector('[data-restore-arrival-photo="'+arrivalId+'"]');
+     if(restore)restore.disabled=url===originalArrivalPhoto(arrivalId);
+    },()=>isCurrent()&&draft.arrivals.some(a=>a.id===arrivalId));
+   }else if(id==='hero'){
     filePhoto(file,url=>{
      if(!isCurrent())return false;
      draft.hero=url;byId('ownerHeroThumb').src=url;
@@ -469,6 +581,18 @@
   if(button.dataset.reviewTarget){
    jumpToReviewTarget(button);return;
   }
+  if(button.dataset.restoreArrivalPhoto){
+   const id=button.dataset.restoreArrivalPhoto;
+   invalidatePhoto('arrival:'+id);
+   const item=draft.arrivals.find(a=>a.id===id);
+   if(item){
+    item.image=originalArrivalPhoto(id);
+    const img=document.querySelector('[data-arrival-thumb="'+id+'"]');if(img)img.src=item.image;
+    button.disabled=true;send();
+   }
+   return;
+  }
+  if(button.dataset.removeArrival){deleteArrival(button.dataset.removeArrival);return;}
   if(button.dataset.restorePhoto){
    const id=button.dataset.restorePhoto;
    invalidatePhoto(id);
@@ -520,6 +644,8 @@
  byId('ownerUndoDelete').addEventListener('click',undoDelete);
  byId('ownerCollapseAll').addEventListener('click',()=>foldAll(true));
  byId('ownerExpandAll').addEventListener('click',()=>foldAll(false));
+ byId('ownerAddArrival').addEventListener('click',addArrival);
+ byId('ownerUndoArrival').addEventListener('click',undoArrival);
  byId('ownerAddFeatured').addEventListener('click',()=>add('featured'));
  byId('ownerAddRegular').addEventListener('click',()=>add('regular'));
  byId('ownerHeroRestore').addEventListener('click',()=>{
