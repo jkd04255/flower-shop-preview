@@ -272,11 +272,49 @@
  }
  function renderArrivals(){
   if(!draft)return;
-  arrivals.replaceChildren(...draft.arrivals.map(renderArrival));
-  byId('ownerArrivalCount').textContent=draft.arrivals.length+'개';
+  // Rebuilding all 20 cards after a single add/delete detached otherwise
+  // unchanged focused inputs and photos, and disturbed Safari scroll anchoring.
+  // Reuse cards by immutable arrival id; only create/remove changed cards.
+  const existing=new Map([...arrivals.children]
+   .filter(card=>card.classList.contains('os-arrival')&&card.dataset.arrivalId)
+   .map(card=>[card.dataset.arrivalId,card]));
+  const cards=draft.arrivals.map(item=>{
+   let card=existing.get(item.id);
+   if(!card)return renderArrival(item);
+   const name=item.name||'입고 꽃';
+   const heading=card.querySelector('.os-arrival-header strong');
+   if(heading.textContent!==name)heading.textContent=name;
+   const remove=card.querySelector('[data-remove-arrival]');
+   const removeLabel=name+' 입고 소식 삭제';
+   if(remove.getAttribute('aria-label')!==removeLabel)remove.setAttribute('aria-label',removeLabel);
+   const upload=card.querySelector('[data-photo]');
+   const uploadLabel=name+' 입고 사진 파일 선택';
+   if(upload.getAttribute('aria-label')!==uploadLabel)upload.setAttribute('aria-label',uploadLabel);
+   const thumb=card.querySelector('[data-arrival-thumb]');
+   if(thumb.getAttribute('src')!==item.image)thumb.setAttribute('src',item.image);
+   const alt=name+' 입고 사진';
+   if(thumb.alt!==alt)thumb.alt=alt;
+   for(const key of ['name','tag','price']){
+    const input=card.querySelector('[data-arrival-field="'+key+'"]');
+    if(input&&input.value!==item[key])input.value=item[key];
+   }
+   const restore=card.querySelector('[data-restore-arrival-photo]');
+   restore.disabled=item.image===originalArrivalPhoto(item.id);
+   return card;
+  });
+  // Avoid touching stable siblings (including a currently focused input).
+  if(cards.length!==arrivals.children.length||cards.some((card,i)=>card!==arrivals.children[i])){
+   for(let i=0;i<cards.length;i++){
+    if(arrivals.children[i]!==cards[i])arrivals.insertBefore(cards[i],arrivals.children[i]||null);
+   }
+   const keep=new Set(cards);
+   for(const old of [...arrivals.children])if(!keep.has(old))old.remove();
+  }
+  byId('ownerArrivalCount').textContent=draft.arrivals.length+'개 · 최대 '+maxArrivals+'개';
   byId('ownerArrivalsEmpty').hidden=draft.arrivals.length!==0;
   byId('ownerAddArrival').disabled=draft.arrivals.length>=maxArrivals;
   byId('ownerUndoArrival').hidden=!lastArrivalRemoval;
+  byId('ownerUndoArrival').disabled=!!lastArrivalRemoval&&draft.arrivals.length>=maxArrivals;
  }
  function addArrival(){
   if(!draft||draft.arrivals.length>=maxArrivals){announce('입고 소식은 최대 '+maxArrivals+'개까지 편집할 수 있습니다.');return;}
