@@ -1,4 +1,4 @@
-name: Flower shop consolidated Chromium + WebKit QA · G3-77
+name: Flower shop consolidated Chromium + WebKit QA · G3-78
 on:
   pull_request:
     paths:
@@ -147,6 +147,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node tests/g3-77-arrival-editor-stability-qa.cjs
+      - name: G3-78 capped arrival review navigation and photo retries · Chromium + WebKit + axe
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node tests/g3-78-arrival-long-edit-qa.cjs
       - name: G3-42 Safari early swipe and idle hero peek · Chromium + WebKit
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
