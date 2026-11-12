@@ -19,8 +19,74 @@
  const byId=id=>document.getElementById(id);
  const clone=obj=>JSON.parse(JSON.stringify(obj));
  function announce(s){status.textContent=s;}
+ function priceDigits(v){return String(v??'').replace(/\D/g,'');}
+ function shortText(v){
+  const text=String(v??'').replace(/\s+/g,' ').trim();
+  return text.length>52?text.slice(0,51)+'…':text||'(비어 있음)';
+ }
+ function sectionText(value){return value==='featured'?'오늘의 꽃':'매일의 꽃다발';}
+ function reviewEntries(){
+  if(!draft||!baseline)return [];
+  const changes=[];
+  const storeFields=[['name','가게 이름'],['address','매장 주소'],['phone','전화번호'],['hours','운영 시간'],['pickup','픽업 안내']];
+  for(const [key,label] of storeFields){
+   if(String(draft[key]||'')!==String(baseline[key]||'')){
+    changes.push(label+': '+shortText(baseline[key])+' → '+shortText(draft[key]));
+   }
+  }
+  if(draft.hero!==baseline.hero)changes.push('메인 사진: 기본 사진 → 선택한 사진');
+  const baseById=new Map(baseline.products.map(p=>[p.id,p]));
+  const draftById=new Map(draft.products.map(p=>[p.id,p]));
+  for(const before of baseline.products){
+   if(!draftById.has(before.id))changes.push('상품 삭제: '+shortText(before.name));
+  }
+  for(const after of draft.products){
+   const before=baseById.get(after.id);
+   if(!before){
+    changes.push('상품 추가: '+shortText(after.name)+' · '+sectionText(after.section));
+    continue;
+   }
+   const edits=[];
+   const labelFields=[['name','이름'],['latin','영문 이름'],['description','설명'],['colors','색상·구성'],['lead','준비시간']];
+   for(const [key,label] of labelFields){
+    if(String(after[key]||'')!==String(before[key]||'')){
+     edits.push(label+' '+shortText(before[key])+' → '+shortText(after[key]));
+    }
+   }
+   if(priceDigits(after.price)!==priceDigits(before.price)){
+    edits.push('가격 '+shortText(before.price)+'원 → '+shortText(after.price)+'원');
+   }
+   if(after.section!==before.section)edits.push('진열 위치 '+sectionText(before.section)+' → '+sectionText(after.section));
+   if(after.available!==before.available)edits.push('예약 상태 '+(before.available?'예약 가능':'품절')+' → '+(after.available?'예약 가능':'품절'));
+   if(after.image!==before.image)edits.push('상품 사진 교체');
+   if(edits.length)changes.push('상품 '+shortText(after.name)+': '+edits.join(' · '));
+  }
+  // Compare only items that remained in the same group; removing one
+  // product or moving it to another group must not create a false reorder.
+  for(const section of ['featured','regular']){
+   const stable=new Set(baseline.products.filter(p=>p.section===section&&draftById.get(p.id)?.section===section).map(p=>p.id));
+   const original=baseline.products.filter(p=>stable.has(p.id)).map(p=>p.id);
+   const current=draft.products.filter(p=>stable.has(p.id)).map(p=>p.id);
+   if(original.some((id,i)=>id!==current[i]))changes.push(sectionText(section)+': 기존 상품 진열 순서 변경');
+  }
+  return changes;
+ }
+ function renderReview(){
+  if(!draft||!baseline)return;
+  const entries=reviewEntries();
+  byId('ownerChangesCount').textContent=entries.length?
+   '기본 시연 대비 '+entries.length+'건 변경 · 미리보기 전용':
+   '변경사항 없음 · 기본 시연과 동일';
+  const list=byId('ownerChangesList');
+  const lines=entries.length?entries:['변경사항이 없습니다.'];
+  const nodes=lines.map(item=>{
+   const li=document.createElement('li');li.textContent=item;return li;
+  });
+  list.replaceChildren(...nodes);
+ }
  function send(){
   if(!draft)return;
+  renderReview();
   if(frame.contentWindow)frame.contentWindow.postMessage({type:'AFG_OWNER_DRAFT_V1',draft:clone(draft)},window.location.origin);
   announce('고객 화면 미리보기에 반영됨 · 공개 게시되지 않음');
  }
@@ -338,6 +404,13 @@
    if(foldedProducts.has(id))foldedProducts.delete(id);else foldedProducts.add(id);
    setFolded(article,foldedProducts.has(id));
   }
+ });
+ byId('ownerChangesToggle').addEventListener('click',()=>{
+  const panel=byId('ownerChangesDetails'),button=byId('ownerChangesToggle');
+  const expand=panel.hidden;
+  panel.hidden=!expand;
+  button.setAttribute('aria-expanded',String(expand));
+  button.textContent=expand?'변경 내역 접기':'변경 내역 펼치기';
  });
  byId('ownerCatalogSearch').addEventListener('input',applyCatalogFilter);
  byId('ownerCatalogSearch').addEventListener('keydown',event=>{

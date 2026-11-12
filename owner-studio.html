@@ -20,6 +20,20 @@
   <p class="os-note">가게 정보와 꽃다발 구성을 직접 수정하면 오른쪽 고객 화면에 바로 반영됩니다.</p>
   <a class="os-mobile-preview-jump" href="#ownerPreviewPanel">고객 화면 미리보기로 이동 ↓</a>
   <p class="os-important">가상 편집 시연입니다. 입력한 내용과 사진은 현재 브라우저 탭의 미리보기에만 반영되며, 고객 사이트나 서버에는 게시·저장되지 않습니다. 관리자 로그인·업로드·실제 주문은 연결되지 않았습니다.</p>
+  <section class="os-change-review" aria-labelledby="ownerChangesHeading">
+   <div class="os-change-review-head">
+    <div>
+     <p class="os-kicker">DRAFT REVIEW · LOCAL ONLY</p>
+     <h2 id="ownerChangesHeading">편집 변경사항</h2>
+    </div>
+    <button type="button" class="os-action" id="ownerChangesToggle" aria-controls="ownerChangesDetails" aria-expanded="false">변경 내역 펼치기</button>
+   </div>
+   <p id="ownerChangesCount" class="os-change-count" role="status" aria-live="polite">변경 내역을 확인하는 중입니다.</p>
+   <div id="ownerChangesDetails" class="os-change-details" hidden>
+    <p class="os-change-help">처음 불러온 기본 시연과 현재 편집 내용을 비교합니다. 변경 내역은 현재 탭 안에서만 표시되며 게시하거나 저장하지 않습니다.</p>
+    <ul id="ownerChangesList" class="os-change-list"></ul>
+   </div>
+  </section>
   <fieldset>
    <legend>매장 기본 정보</legend>
    <div class="os-field"><label for="ownerBusinessName">가게 이름</label><input id="ownerBusinessName" type="text" maxlength="50" placeholder="가게 이름"></div>
