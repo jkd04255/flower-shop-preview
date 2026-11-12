@@ -11,11 +11,11 @@
   }));
   const infoCells=[...document.querySelectorAll('#home #store table tr')];
   // Only the owner-preview iframe needs this bridge. The original customer
-  // page and its CSS stay untouched. At 701–750px the original CTA was 100%
-  // wide while its flex parent stayed horizontal, shrinking text to 1 glyph.
+  // page and its CSS stay untouched. On medium-sized iframe widths the
+  // CTA and horizontal flex row can squeeze Korean text to single glyphs.
   const previewLayoutFix=document.createElement('style');
   previewLayoutFix.id='owner-preview-width-fix';
-  previewLayoutFix.textContent='@media (min-width:701px) and (max-width:750px){#home .store .booking-info{flex-direction:column;align-items:stretch}#home .store .booking-info>div{width:100%;min-width:0}#home .store .booking-info .booking-demo-link{max-width:100%}}';
+  previewLayoutFix.textContent='@media (min-width:701px) and (max-width:900px){#home .store .booking-info{flex-direction:column;align-items:stretch}#home .store .booking-info>div{width:100%;min-width:0}#home .store .booking-info .booking-demo-link{max-width:100%}}';
   document.head.appendChild(previewLayoutFix);
   const BASE_ARRIVALS=[...document.querySelectorAll('#arrivalList .arrival')].map((el,i)=>({
     id:'arrival-'+(i+1),
