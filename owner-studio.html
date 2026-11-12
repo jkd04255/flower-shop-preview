@@ -43,7 +43,20 @@
   </fieldset>
   <fieldset>
    <legend>판매 상품 구성</legend>
-   <p class="os-editor-hint">노출 순서를 위·아래로 조정하거나 상세 편집을 접을 수 있습니다. 오른쪽 고객 화면에 즉시 반영됩니다.</p>
+   <p class="os-editor-hint">노출 순서를 바꾸거나 상세 편집을 접을 수 있습니다. 아래 검색은 왼쪽 관리 목록에만 적용되며 고객 화면에는 영향을 주지 않습니다.</p>
+   <div class="os-catalog-toolbar">
+    <div class="os-field os-search-field">
+     <label for="ownerCatalogSearch">상품 빠르게 찾기</label>
+     <input id="ownerCatalogSearch" type="search" autocomplete="off" placeholder="상품명 · 영문 이름 · 색상 검색" aria-describedby="ownerCatalogSummary">
+    </div>
+    <button class="os-action" type="button" id="ownerCatalogClear" disabled>검색 지우기</button>
+   </div>
+   <p id="ownerCatalogSummary" class="os-catalog-summary" role="status" aria-live="polite">상품 목록을 불러오는 중입니다.</p>
+   <p id="ownerNoResults" class="os-no-results" hidden>검색된 상품이 없습니다. 검색어를 지우면 모든 상품이 표시됩니다.</p>
+   <div id="ownerUndoBar" class="os-undo-bar" hidden>
+    <span id="ownerUndoText"></span>
+    <button type="button" id="ownerUndoDelete" class="os-action">최근 삭제 취소</button>
+   </div>
    <div class="os-section-actions" aria-label="상품 상세 편집 펼치기">
     <button type="button" class="os-action" id="ownerCollapseAll">상품 상세 모두 접기</button>
     <button type="button" class="os-action" id="ownerExpandAll">모두 펼치기</button>
