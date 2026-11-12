@@ -54,6 +54,9 @@ async function verify(engine,label,url){
   assert.equal(metrics.direction,'column',label+' medium iframe uses vertical booking layout');
   assert.ok(metrics.paragraphWidth>=250,label+' description readable '+JSON.stringify(metrics));
   assert.ok(metrics.paragraphHeight<=250,label+' description not one-letter columns '+JSON.stringify(metrics));
+  // The forced 730px width is only for reproducing the iPad breakpoint;
+  // remove it before checking natural 320/390px responsive reflow.
+  await page.evaluate(()=>document.getElementById('ownerPreview').style.removeProperty('width'));
   const announcement=preview.locator('#arrivalList .arrival').first();
   assert.match(await announcement.locator('em').innerText(),/문의 전용/);
   assert.equal(await preview.locator('#arrivalList a').count(),0,label+' arrival never becomes booking link');
