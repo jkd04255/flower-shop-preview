@@ -30,8 +30,10 @@
    </div>
    <p id="ownerChangesCount" class="os-change-count" role="status" aria-live="polite">변경 내역을 확인하는 중입니다.</p>
    <div id="ownerChangesDetails" class="os-change-details" hidden>
-    <p class="os-change-help">처음 불러온 기본 시연과 현재 편집 내용을 비교합니다. 변경 내역은 현재 탭 안에서만 표시되며 게시하거나 저장하지 않습니다.</p>
-    <ul id="ownerChangesList" class="os-change-list"></ul>
+    <p class="os-change-help">기본 시연과 비교한 항목입니다. 각 항목의 ‘위치로 이동’을 누르면 왼쪽의 편집 위치로 이동합니다. 아래 목록은 스크롤할 수 있으며 공개 사이트에는 게시되지 않습니다.</p>
+    <div class="os-change-scroll" role="region" aria-label="변경된 편집 항목 목록" aria-describedby="ownerChangesCount" tabindex="0">
+     <ul id="ownerChangesList" class="os-change-list"></ul>
+    </div>
    </div>
   </section>
   <fieldset>

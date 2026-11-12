@@ -28,46 +28,67 @@
  function reviewEntries(){
   if(!draft||!baseline)return [];
   const changes=[];
+  const record=(text,kind,target,productId='')=>changes.push({text,kind,target,productId});
   const storeFields=[['name','가게 이름'],['address','매장 주소'],['phone','전화번호'],['hours','운영 시간'],['pickup','픽업 안내']];
   for(const [key,label] of storeFields){
    if(String(draft[key]||'')!==String(baseline[key]||'')){
-    changes.push(label+': '+shortText(baseline[key])+' → '+shortText(draft[key]));
+    record(label+': '+shortText(baseline[key])+' → '+shortText(draft[key]),'매장 정보',fields[key]);
    }
   }
-  if(draft.hero!==baseline.hero)changes.push('메인 사진: 기본 사진 → 선택한 사진');
+  if(draft.hero!==baseline.hero)record('메인 사진: 기본 사진 → 선택한 사진','메인 사진','ownerHeroUpload');
   const baseById=new Map(baseline.products.map(p=>[p.id,p]));
   const draftById=new Map(draft.products.map(p=>[p.id,p]));
   for(const before of baseline.products){
-   if(!draftById.has(before.id))changes.push('상품 삭제: '+shortText(before.name));
+   if(!draftById.has(before.id)){
+    const recent=lastRemoval?.product.id===before.id;
+    record('상품 삭제: '+shortText(before.name),'상품 구성',recent?'ownerUndoDelete':(before.section==='featured'?'ownerAddFeatured':'ownerAddRegular'));
+   }
   }
   for(const after of draft.products){
    const before=baseById.get(after.id);
+   const itemId='os-item-'+after.id+'-input-name';
    if(!before){
-    changes.push('상품 추가: '+shortText(after.name)+' · '+sectionText(after.section));
+    record('상품 추가: '+shortText(after.name)+' · '+sectionText(after.section),'상품 구성',itemId,after.id);
     continue;
    }
    const edits=[];
+   let target='';
+   function change(label,key,value){
+    edits.push(label+' '+shortText(before[key])+' → '+shortText(value));
+    if(!target)target='os-item-'+after.id+'-input-'+key;
+   }
    const labelFields=[['name','이름'],['latin','영문 이름'],['description','설명'],['colors','색상·구성'],['lead','준비시간']];
    for(const [key,label] of labelFields){
-    if(String(after[key]||'')!==String(before[key]||'')){
-     edits.push(label+' '+shortText(before[key])+' → '+shortText(after[key]));
-    }
+    if(String(after[key]||'')!==String(before[key]||''))change(label,key,after[key]);
    }
    if(priceDigits(after.price)!==priceDigits(before.price)){
     edits.push('가격 '+shortText(before.price)+'원 → '+shortText(after.price)+'원');
+    if(!target)target='os-item-'+after.id+'-input-price';
    }
-   if(after.section!==before.section)edits.push('진열 위치 '+sectionText(before.section)+' → '+sectionText(after.section));
-   if(after.available!==before.available)edits.push('예약 상태 '+(before.available?'예약 가능':'품절')+' → '+(after.available?'예약 가능':'품절'));
-   if(after.image!==before.image)edits.push('상품 사진 교체');
-   if(edits.length)changes.push('상품 '+shortText(after.name)+': '+edits.join(' · '));
+   if(after.section!==before.section){
+    edits.push('진열 위치 '+sectionText(before.section)+' → '+sectionText(after.section));
+    if(!target)target='os-section-'+after.id;
+   }
+   if(after.available!==before.available){
+    edits.push('예약 상태 '+(before.available?'예약 가능':'품절')+' → '+(after.available?'예약 가능':'품절'));
+    if(!target)target='os-available-'+after.id;
+   }
+   if(after.image!==before.image){
+    edits.push('상품 사진 교체');
+    if(!target)target='os-file-'+after.id;
+   }
+   if(edits.length)record('상품 '+shortText(after.name)+': '+edits.join(' · '),'상품 수정',target||itemId,after.id);
   }
-  // Compare only items that remained in the same group; removing one
-  // product or moving it to another group must not create a false reorder.
+  // Ignore products removed or moved between sections when comparing
+  // relative order; their structural change is already reported above.
   for(const section of ['featured','regular']){
    const stable=new Set(baseline.products.filter(p=>p.section===section&&draftById.get(p.id)?.section===section).map(p=>p.id));
    const original=baseline.products.filter(p=>stable.has(p.id)).map(p=>p.id);
    const current=draft.products.filter(p=>stable.has(p.id)).map(p=>p.id);
-   if(original.some((id,i)=>id!==current[i]))changes.push(sectionText(section)+': 기존 상품 진열 순서 변경');
+   if(original.some((id,i)=>id!==current[i])){
+    const movedId=current.find((id,i)=>id!==original[i]);
+    record(sectionText(section)+': 기존 상품 진열 순서 변경','진열 순서','os-item-'+movedId+'-input-name',movedId);
+   }
   }
   return changes;
  }
@@ -77,12 +98,46 @@
   byId('ownerChangesCount').textContent=entries.length?
    '기본 시연 대비 '+entries.length+'건 변경 · 미리보기 전용':
    '변경사항 없음 · 기본 시연과 동일';
-  const list=byId('ownerChangesList');
-  const lines=entries.length?entries:['변경사항이 없습니다.'];
-  const nodes=lines.map(item=>{
-   const li=document.createElement('li');li.textContent=item;return li;
-  });
+  const list=byId('ownerChangesList'),scroller=document.querySelector('.os-change-scroll');
+  const previousScroll=scroller?.scrollTop||0;
+  const nodes=entries.length?entries.map(entry=>{
+   const li=document.createElement('li');
+   const description=document.createElement('div');
+   description.className='os-change-entry';
+   const kind=document.createElement('span');kind.className='os-change-kind';kind.textContent=entry.kind;
+   const text=document.createElement('span');text.className='os-change-entry-text';text.textContent=entry.text;
+   description.append(kind,text);
+   const jump=document.createElement('button');jump.type='button';jump.className='os-action os-change-jump';
+   jump.textContent='위치로 이동';jump.dataset.reviewTarget=entry.target;
+   if(entry.productId)jump.dataset.reviewProduct=entry.productId;
+   jump.setAttribute('aria-label',entry.kind+' · '+shortText(entry.text)+' 위치로 이동');
+   li.append(description,jump);return li;
+  }):[document.createElement('li')];
+  if(!entries.length)nodes[0].textContent='변경사항이 없습니다.';
   list.replaceChildren(...nodes);
+  if(scroller)scroller.scrollTop=previousScroll;
+ }
+ function jumpToReviewTarget(button){
+  const targetId=button.dataset.reviewTarget,productId=button.dataset.reviewProduct;
+  if(!targetId)return;
+  if(productId){
+   const article=[...document.querySelectorAll('.os-product')].find(el=>el.dataset.productId===productId);
+   if(!article){announce('상품 편집 위치를 찾지 못했습니다. 목록을 확인해 주세요.');return;}
+   if(article.hidden)clearCatalogSearch();
+   if(foldedProducts.has(productId)){
+    foldedProducts.delete(productId);setFolded(article,false);
+   }
+  }
+  const target=byId(targetId);
+  if(!target||target.disabled||target.closest('[hidden]')){
+   announce('해당 편집 위치를 현재 표시할 수 없습니다. 상품 목록을 확인해 주세요.');
+   return;
+  }
+  document.querySelector('.os-jump-target')?.classList.remove('os-jump-target');
+  target.classList.add('os-jump-target');
+  target.focus({preventScroll:true});
+  target.scrollIntoView({block:'center',inline:'nearest',behavior:'auto'});
+  announce('변경 항목의 편집 위치로 이동했습니다. 수정 내용은 미리보기에서만 사용됩니다.');
  }
  function send(){
   if(!draft)return;
@@ -233,7 +288,7 @@
   const lead=field('최소 준비시간',product.lead,'lead','os-item-'+product.id+'-input-lead','text',35);
   third.append(sectionWrap,lead);
   const toggle=document.createElement('label');toggle.className='os-toggle';
-  const box=document.createElement('input');box.type='checkbox';box.checked=product.available;box.dataset.field='available';
+  const box=document.createElement('input');box.type='checkbox';box.id='os-available-'+product.id;box.checked=product.available;box.dataset.field='available';
   const toggleLabel=document.createElement('span');toggleLabel.textContent='가상 예약 가능 (체크 해제 시 품절 표시)';
   toggle.append(box,toggleLabel);
   const details=document.createElement('div');details.className='os-product-details';
@@ -372,6 +427,9 @@
  });
  document.addEventListener('click',event=>{
   const button=event.target.closest('button');if(!button||!draft)return;
+  if(button.dataset.reviewTarget){
+   jumpToReviewTarget(button);return;
+  }
   if(button.dataset.restorePhoto){
    const id=button.dataset.restorePhoto;
    invalidatePhoto(id);
