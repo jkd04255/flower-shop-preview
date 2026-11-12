@@ -135,6 +135,7 @@ async function race(browser,label,url){
   assert.equal(await photo(),URL_B,label+' latest product selection applies');
   await complete(0,URL_A);
   assert.equal(await photo(),URL_B,label+' obsolete earlier result ignored');
+  await page.waitForFunction(expected=>document.querySelector('#ownerPreview')?.contentDocument?.querySelector('#featured .card img')?.getAttribute('src')===expected,URL_B);
   assert.equal(await preview.locator('#featured .card img').first().getAttribute('src'),URL_B);
   // Restoring cancels pending read. Error from obsolete read must be ignored too.
   await page.locator('#os-file-rosy-moment').setInputFiles(imageFile('third.png'));
@@ -172,6 +173,11 @@ async function race(browser,label,url){
   await complete(7,URL_A);
   assert.equal(await photo(),URL_A,label+' product final read');
   assert.equal(await page.locator('#ownerHeroThumb').getAttribute('src'),URL_B,label+' hero final read');
+  await page.waitForFunction(({product,hero})=>{
+   const doc=document.querySelector('#ownerPreview')?.contentDocument;
+   return doc?.querySelector('#featured .card img')?.getAttribute('src')===product
+    &&doc.querySelector('#home>.hero')?.style.backgroundImage.includes(hero);
+  },{product:URL_A,hero:URL_B});
   assert.equal(await preview.locator('#featured .card img').first().getAttribute('src'),URL_A);
   assert.ok((await preview.locator('#home>.hero').evaluate(el=>el.style.backgroundImage)).includes(URL_B));
   await page.locator('#ownerReset').click();
