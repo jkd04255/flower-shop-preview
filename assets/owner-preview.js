@@ -63,26 +63,52 @@
   function renderArrivals(arrivals){
     const list=document.querySelector('#arrivalList');
     if(!list)return;
+    // Reuse entry nodes: changing a name, tag or photo must not tear down
+    // every image or reset Safari's scroll anchoring inside the preview iframe.
+    const existing=new Map([...list.children]
+      .filter(el=>el.classList.contains('arrival')&&el.dataset.ownerArrivalId)
+      .map(el=>[el.dataset.ownerArrivalId,el]));
     const nodes=[],seen=new Set();
     for(const item of arrivals){
       if(!item||typeof item!=='object'||typeof item.id!=='string'||!/^[a-z0-9-]{2,56}$/.test(item.id)||seen.has(item.id))continue;
       seen.add(item.id);
-      const el=document.createElement('div');el.className='arrival';
-      const img=document.createElement('img');img.loading='lazy';img.alt=value(item.name,60)+' 입고 꽃 사진';
-      img.src=safeImage(item.image)||BASE_ARRIVALS[0]?.image||'';
-      const details=document.createElement('div');
-      const tag=document.createElement('small');tag.textContent=value(item.tag,35);
-      const name=document.createElement('strong');name.textContent=value(item.name,60)||'입고 꽃';
-      const price=document.createElement('small');price.textContent=value(item.price,50);
-      details.append(tag,name,price);
-      const mark=document.createElement('em');mark.textContent='문의 전용';
-      el.append(img,details,mark);nodes.push(el);
+      let el=existing.get(item.id);
+      if(!el){
+        el=document.createElement('div');el.className='arrival';el.dataset.ownerArrivalId=item.id;
+        const img=document.createElement('img');img.loading='lazy';
+        const details=document.createElement('div');
+        details.append(document.createElement('small'),document.createElement('strong'),document.createElement('small'));
+        const mark=document.createElement('em');mark.textContent='문의 전용';
+        el.append(img,details,mark);
+      }
+      const img=el.querySelector('img'),details=el.querySelector('div');
+      const image=safeImage(item.image)||BASE_ARRIVALS[0]?.image||'';
+      // Avoid reassigning the same image src on every keystroke.
+      if(img.getAttribute('src')!==image)img.setAttribute('src',image);
+      const name=value(item.name,60)||'입고 꽃';
+      const alt=name+' 입고 꽃 사진';
+      if(img.alt!==alt)img.alt=alt;
+      const fields=details.children;
+      const texts=[value(item.tag,35),name,value(item.price,50)];
+      for(let i=0;i<texts.length;i++){
+        if(fields[i].textContent!==texts[i])fields[i].textContent=texts[i];
+      }
+      nodes.push(el);
     }
     if(!nodes.length){
-      const empty=document.createElement('p');empty.className='muted';empty.textContent='현재 새로 들어온 꽃 소식이 없습니다.';
+      const unchanged=list.children.length===1&&list.firstElementChild?.classList.contains('muted');
+      if(unchanged)return;
+      const empty=document.createElement('p');empty.className='muted';
+      empty.textContent='현재 새로 들어온 꽃 소식이 없습니다.';
       nodes.push(empty);
     }
-    list.replaceChildren(...nodes);
+    // Do not reorder or detach stable rows when only the content changes.
+    if(nodes.length===list.children.length&&nodes.every((node,i)=>list.children[i]===node))return;
+    for(let i=0;i<nodes.length;i++){
+      if(list.children[i]!==nodes[i])list.insertBefore(nodes[i],list.children[i]||null);
+    }
+    const wanted=new Set(nodes);
+    for(const old of [...list.children])if(!wanted.has(old))old.remove();
   }
   function applyDraft(payload){
     if(!payload||!Array.isArray(payload.products)||payload.products.length>30)return;
