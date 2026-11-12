@@ -25,6 +25,16 @@
 #ownerStudio .os-change-list{margin:0;padding:0 0 0 18px;font-size:12px;color:#2f4a37;line-height:1.7;overflow-wrap:anywhere}
 #ownerStudio .os-change-list li{padding:7px 0;border-top:1px solid #dce1d8}
 #ownerStudio .os-change-list li:first-child{border-top:0}
+#ownerStudio .os-change-scroll{max-height:340px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;border:1px solid #d5ddd2;background:#fffefa;min-width:0}
+#ownerStudio .os-change-scroll:focus-visible{outline:3px solid #4b7357;outline-offset:2px}
+#ownerStudio .os-change-list{padding:0 12px;list-style:none}
+#ownerStudio .os-change-list li{display:flex;align-items:center;justify-content:space-between;gap:13px;min-width:0;flex-wrap:wrap;padding:12px 0}
+#ownerStudio .os-change-entry{min-width:0;flex:1 1 180px;display:flex;flex-direction:column;gap:5px;overflow-wrap:anywhere}
+#ownerStudio .os-change-kind{font-size:10px;letter-spacing:.03em;color:#4b6d53;font-weight:700}
+#ownerStudio .os-change-entry-text{font-size:12px;line-height:1.65;color:#2f4a37;overflow-wrap:anywhere}
+#ownerStudio .os-change-jump{flex:0 0 auto;min-height:44px;font-size:11px;padding:8px 12px}
+#ownerStudio .os-jump-target{outline:3px solid #4b7357!important;outline-offset:3px}
+
 
 #ownerStudio fieldset{border:0;padding:0;margin:0 0 27px;min-width:0}
 #ownerStudio legend{display:block;width:100%;border-bottom:1px solid #c8cec3;padding:0 0 12px;margin:0 0 19px;font-size:18px;font-weight:650;letter-spacing:-.035em}
@@ -92,6 +102,9 @@
 #adminDemo .owner-studio-entry{font-size:13px;margin:-15px 0 28px;line-height:1.7}
 #adminDemo .owner-studio-entry a{display:inline-flex;align-items:center;min-height:44px;color:#31513b;text-decoration:underline;text-underline-offset:4px}
 @media(max-width:830px){
+ #ownerStudio .os-change-scroll{max-height:290px}
+ #ownerStudio .os-change-jump{min-height:44px}
+
  #ownerStudio .os-mobile-preview-jump{display:inline-flex;align-items:center;min-height:44px;margin:-5px 0 18px;border-bottom:1px solid #536a56;font-size:13px;font-weight:650;color:#31583e;text-decoration:none}
  #ownerStudio .os-mobile-preview-back{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border-bottom:1px solid #536a56;font-size:12px;font-weight:650;text-decoration:none;color:#31583e}
  #ownerStudio .os-preview-head{flex-wrap:wrap}
@@ -109,6 +122,10 @@
  #ownerStudio .os-preview-head{padding:12px 5%;min-height:62px}
 }
 @media(max-width:420px){
+ #ownerStudio .os-change-list{padding:0 10px}
+ #ownerStudio .os-change-entry{flex-basis:100%}
+ #ownerStudio .os-change-jump{width:100%;font-size:12px}
+
  #ownerStudio .os-change-review{padding:15px 13px}
  #ownerStudio .os-change-review-head .os-action{width:100%;font-size:13px}
 
