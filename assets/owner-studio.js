@@ -28,7 +28,9 @@
  function reviewEntries(){
   if(!draft||!baseline)return [];
   const changes=[];
-  const record=(text,kind,target,productId='')=>changes.push({text,kind,target,productId});
+  const record=(text,kind,target,productId='',key='')=>changes.push({
+   text,kind,target,productId,key:key||kind+'|'+(productId||target)
+  });
   const storeFields=[['name','가게 이름'],['address','매장 주소'],['phone','전화번호'],['hours','운영 시간'],['pickup','픽업 안내']];
   for(const [key,label] of storeFields){
    if(String(draft[key]||'')!==String(baseline[key]||'')){
@@ -41,7 +43,7 @@
   for(const before of baseline.products){
    if(!draftById.has(before.id)){
     const recent=lastRemoval?.product.id===before.id;
-    record('상품 삭제: '+shortText(before.name),'상품 구성',recent?'ownerUndoDelete':(before.section==='featured'?'ownerAddFeatured':'ownerAddRegular'));
+    record('상품 삭제: '+shortText(before.name),'상품 구성',recent?'ownerUndoDelete':(before.section==='featured'?'ownerAddFeatured':'ownerAddRegular'),'','deleted:'+before.id);
    }
   }
   for(const after of draft.products){
@@ -87,7 +89,7 @@
    const current=draft.products.filter(p=>stable.has(p.id)).map(p=>p.id);
    if(original.some((id,i)=>id!==current[i])){
     const movedId=current.find((id,i)=>id!==original[i]);
-    record(sectionText(section)+': 기존 상품 진열 순서 변경','진열 순서','os-item-'+movedId+'-input-name',movedId);
+    record(sectionText(section)+': 기존 상품 진열 순서 변경','진열 순서','os-item-'+movedId+'-input-name',movedId,'order:'+section);
    }
   }
   return changes;
@@ -100,21 +102,48 @@
    '변경사항 없음 · 기본 시연과 동일';
   const list=byId('ownerChangesList'),scroller=document.querySelector('.os-change-scroll');
   const previousScroll=scroller?.scrollTop||0;
+  const focused=list.contains(document.activeElement)?document.activeElement:null;
+  const focusedKey=focused?.closest('li')?.dataset.reviewKey||'';
+  const focusedIndex=focused?[...list.children].indexOf(focused.closest('li')):-1;
+  const existing=new Map([...list.children].filter(li=>li.dataset.reviewKey)
+   .map(li=>[li.dataset.reviewKey,li]));
   const nodes=entries.length?entries.map(entry=>{
-   const li=document.createElement('li');
-   const description=document.createElement('div');
-   description.className='os-change-entry';
-   const kind=document.createElement('span');kind.className='os-change-kind';kind.textContent=entry.kind;
-   const text=document.createElement('span');text.className='os-change-entry-text';text.textContent=entry.text;
-   description.append(kind,text);
-   const jump=document.createElement('button');jump.type='button';jump.className='os-action os-change-jump';
-   jump.textContent='위치로 이동';jump.dataset.reviewTarget=entry.target;
-   if(entry.productId)jump.dataset.reviewProduct=entry.productId;
-   jump.setAttribute('aria-label',entry.kind+' · '+shortText(entry.text)+' 위치로 이동');
-   li.append(description,jump);return li;
+   let li=existing.get(entry.key);
+   if(!li){
+    li=document.createElement('li');li.dataset.reviewKey=entry.key;
+    const description=document.createElement('div');description.className='os-change-entry';
+    const kind=document.createElement('span');kind.className='os-change-kind';
+    const value=document.createElement('span');value.className='os-change-entry-text';
+    description.append(kind,value);
+    const jump=document.createElement('button');jump.type='button';jump.className='os-action os-change-jump';
+    jump.textContent='위치로 이동';
+    li.append(description,jump);
+   }
+   li.querySelector('.os-change-kind').textContent=entry.kind;
+   const value=li.querySelector('.os-change-entry-text');
+   if(value.textContent!==entry.text)value.textContent=entry.text;
+   const control=li.querySelector('.os-change-jump');
+   control.dataset.reviewTarget=entry.target;
+   if(entry.productId)control.dataset.reviewProduct=entry.productId;
+   else delete control.dataset.reviewProduct;
+   const name=entry.kind+' · '+shortText(entry.text)+' 위치로 이동';
+   if(control.getAttribute('aria-label')!==name)control.setAttribute('aria-label',name);
+   return li;
   }):[document.createElement('li')];
   if(!entries.length)nodes[0].textContent='변경사항이 없습니다.';
-  list.replaceChildren(...nodes);
+  const oldNodes=[...list.children];
+  const unchanged=oldNodes.length===nodes.length&&oldNodes.every((node,i)=>node===nodes[i]);
+  // Avoid replacing focusable rows on every keystroke. If a row actually
+  // disappeared, return focus to the next available action or scroll region.
+  if(!unchanged){
+   list.replaceChildren(...nodes);
+   if(focused){
+    const matching=focusedKey?nodes.find(li=>li.dataset.reviewKey===focusedKey):null;
+    const fallback=matching||nodes[Math.min(Math.max(0,focusedIndex),nodes.length-1)];
+    const target=fallback?.querySelector('.os-change-jump')||scroller;
+    target?.focus({preventScroll:true});
+   }
+  }
   if(scroller)scroller.scrollTop=previousScroll;
  }
  function jumpToReviewTarget(button){
@@ -320,7 +349,11 @@
   if(neighbor<0||neighbor>=draft.products.length)return false;
   [draft.products[index],draft.products[neighbor]]=[draft.products[neighbor],draft.products[index]];
   renderProducts();send();
-  document.querySelector('.os-product[data-product-id="'+id+'"] [data-move="'+direction+'"]')?.focus();
+  const article=[...document.querySelectorAll('.os-product')].find(el=>el.dataset.productId===id);
+  const preferred=article?.querySelector('[data-move="'+direction+'"]');
+  const target=preferred&&!preferred.disabled?preferred:article?.querySelector('[data-fold]');
+  target?.focus({preventScroll:true});
+  target?.scrollIntoView({block:'nearest',inline:'nearest',behavior:'auto'});
   return true;
  }
  function renderProducts(){
@@ -419,7 +452,13 @@
    target.value='';
   }else if(target.matches('select[data-field=section]')){
    const item=target.closest('.os-product'),product=draft?.products.find(p=>p.id===item?.dataset.productId);
-   if(product){product.section=target.value;renderProducts();send();}
+   if(product){
+    const id=product.id;
+    product.section=target.value;renderProducts();send();
+    const relocated=byId('os-section-'+id);
+    relocated?.focus({preventScroll:true});
+    relocated?.scrollIntoView({block:'nearest',inline:'nearest',behavior:'auto'});
+   }
   }
  });
  document.addEventListener('change',event=>{
