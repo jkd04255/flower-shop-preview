@@ -120,6 +120,8 @@ async function verify(engine,label,url){
   await page.locator('#os-item-owner-draft-25-input-name').fill('마지막 수정 꽃');
   assert.equal(await review().count(),25,label+' rename does not duplicate additions');
   assert.ok(await review().last().innerText().then(v=>v.includes('마지막 수정 꽃')));
+  await page.waitForFunction(()=>[...document.querySelector('#ownerPreview')?.contentDocument?.querySelectorAll('#featured .card strong')||[]]
+   .some(el=>el.textContent==='마지막 수정 꽃'));
   const siteNames=await preview.locator('#featured .card strong').allInnerTexts();
   assert.ok(siteNames.includes('마지막 수정 꽃'),label+' preview still updates even after 30 products');
   for(const width of [1440,1080,780,390,320]){
